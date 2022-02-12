@@ -8,12 +8,11 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset("assets\sass\app.css") }}">
 
         <!-- Styles -->
         <style>
             html, body {
-                background-color: #fff;
-                color: #636b6f;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
                 height: 100vh;
@@ -49,7 +48,6 @@
             }
 
             .links > a {
-                color: #636b6f;
                 padding: 0 25px;
                 font-size: 13px;
                 font-weight: 600;
@@ -64,6 +62,26 @@
         </style>
     </head>
     <body>
+        <div>
+            <input id="darkmode-switch" type="checkbox">
+            <script>
+                const head = document.querySelector("head");
+                const darkmode_switch = document.querySelector("#darkmode-switch");
+                darkmode_switch.addEventListener("click", () => {
+                    const dark_css = head.querySelector("#dark-css");
+                    if (!dark_css) {
+                        const link = document.createElement("link");
+                        link.id = "dark-css";
+                        link.rel = "stylesheet";
+                        link.type = "text/css";
+                        link.href = @json(asset("assets/sass/_dark.css"));
+                        head.appendChild(link);
+                    } else {
+                        dark_css.remove();
+                    }
+                });
+            </script>
+        </div>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">

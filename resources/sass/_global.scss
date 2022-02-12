@@ -1,0 +1,26 @@
+// Define global css for all the app here
+
+
+// Reminder
+// Theme files define colors in variables.
+// _global.scss and pages use the variables.
+
+
+
+html, body {
+    background-color: $body-bg;
+    color: $font-color-primary;
+}
+.links>a {
+    color: $font-color-primary;
+}
+
+
+
+// --- Import components styles ------- //
+@import "./pages/pages";
+// --- END Import components styles --- //
+
+// --- Import components styles ------- //
+@import "./components/components";
+// --- END Import components styles --- //

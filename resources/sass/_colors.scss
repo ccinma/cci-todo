@@ -1,0 +1,15 @@
+// Set colors into css variables here.
+// When declaring a new color, don't forget
+// to declare its SASS variable !
+
+:root {
+    --lightblue: lightblue;
+    --gray: gray;
+    --black: rgb(24, 24, 24);
+    --lightgray: rgb(230, 227, 227);
+}
+
+$lightblue: var(--lightblue);
+$gray: var(--gray);
+$lightgray: var(--lightgray);
+$black: var(--black);

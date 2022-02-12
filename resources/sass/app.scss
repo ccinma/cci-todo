@@ -1,1 +1,7 @@
-//
+/* --------- Default theme ----------*/
+/*      Default theme of the app     */
+/* --------------------------------- */
+
+@import "./colors"; // Import colors to use them
+@import "./themes/default"; // Import the theme
+@import "./global"; // Extends to global style

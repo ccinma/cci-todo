@@ -1,0 +1,19 @@
+/* --------- Dark theme -----------*/
+/*  Dark theme for night time use  */
+/* ------------------------------- */
+
+
+// Reminder
+// Theme files define colors in variables.
+// _global.scss and pages use the variables.
+
+
+@import "../colors";
+@import "./default";
+
+
+$body-bg: $gray;
+$font-color-primary: $lightgray;
+
+
+@import "../global"; // Extends to global style
