@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateLanesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('lanes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('email', 255)->unique();
-            $table->string('name', 20);
-            $table->string('password');
-            $table->string("picture", 255)->nullable();
-            $table->rememberToken();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string("name", 25);
+            $table->unsignedBigInteger('board_id');
+            $table->foreign('board_id')->references('id')->on('boards')->onDelete("cascade");
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('lanes');
     }
 }

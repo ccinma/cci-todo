@@ -36,4 +36,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function workspaces() {
+        return $this->belongsToMany(Workspace::class, "users_workspaces");
+    }
+
+    public function boards() {
+        return $this->hasMany(Board::class);
+    }
 }
