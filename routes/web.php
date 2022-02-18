@@ -11,7 +11,14 @@
 |
 */
 
+use App\User;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/test', function () {
+    $user = User::with(["workspaces", "workspaces.boards", "workspaces.boards.lanes"])->where("id", "=", 1)->firstOrFail();
+    dd($user->workspaces);
+    dd($user);
 });
