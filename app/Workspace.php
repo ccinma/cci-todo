@@ -9,7 +9,7 @@ class Workspace extends Model
     public function users() {
         return $this->belongsToMany(User::class, "users_workspaces");
     }
-    public function creator() {
-        return $this->hasOne(User::class);
+    public function boards() {
+        return $this->hasMany(Board::class);
     }
 }
