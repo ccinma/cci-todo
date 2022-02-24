@@ -1,5 +1,5 @@
 @extends("layouts.app")
 
-@include("components.header")
+@include("components.layout.header")
 
-@include("components.footer")
+@include("components.layout.footer")
