@@ -1,52 +1,46 @@
-<header>
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<header id="header">
+    @if (Route::has('login'))
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav mr-auto">
-
-                </ul>
-
-                <!-- Right Side Of Navbar -->
-                <ul class="navbar-nav ml-auto">
-                    <!-- Authentication Links -->
-                    @guest
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @if (Route::has('register'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @endif
-                    @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
-                    @endguest
-                </ul>
-            </div>
+        <div class="logo">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1140px"
+                height="360px" viewBox="0 0 1140 360"  xml:space="preserve">
+                <g>
+                    <g>
+                        <g>
+                            <path d="M640,120c0-33.1-26.9-60-60-60c0-33.1-26.9-60-60-60H280c-33.1,0-60,26.9-60,60v120c0,33.1,26.9,60,60,60h240
+                                c33.1,0,60-26.9,60-60v-80c11,0,20,9,20,20v120c0,11-9,20-20,20H340c-11,0-20,9-20,20c0,11,9,20,20,20h240c33.1,0,60-26.9,60-60
+                                v-80c11,0,20,9,20,20v120c0,11-9,20-20,20H400c-11,0-20,9-20,20c0,11,9,20,20,20h240c33.1,0,60-26.9,60-60V180
+                                C700,146.9,673.1,120,640,120z M540,180c0,11-9,20-20,20H280c-11,0-20-9-20-20V60c0-11,9-20,20-20h240c11,0,20,9,20,20V180z"/>
+                        </g>
+                    </g>
+                    <g>
+                        <path d="M860,240H740c-11,0-20-9-20-20V20c0-11,9-20,20-20h120c33.1,0,60,26.9,60,60v120C920,213.1,893.1,240,860,240z M760,200
+                            h100c11,0,20-9,20-20V60c0-11-9-20-20-20H760V200z"/>
+                    </g>
+                    <g>
+                        <path d="M1080,240h-80c-33.1,0-60-26.9-60-60V60c0-33.1,26.9-60,60-60h80c33.1,0,60,26.9,60,60v120
+                            C1140,213.1,1113.1,240,1080,240z M1000,40c-11,0-20,9-20,20v120c0,11,9,20,20,20h80c11,0,20-9,20-20V60c0-11-9-20-20-20H1000z"/>
+                    </g>
+                    <g>
+                        <g>
+                            <path d="M200,20c0,11-9,20-20,20h-60v180c0,11-9,20-20,20s-20-9-20-20V40H20C9,40,0,31,0,20C0,9,9,0,20,0h160C191,0,200,9,200,20
+                                z"/>
+                        </g>
+                    </g>
+                </g>
+            </svg>
         </div>
-    </nav>
+
+        <div class="nav">
+            @auth
+                <a href="{{ url('/home') }}">Home</a>
+            @else
+                <a href="{{ route('login') }}">Login</a>
+
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}">Register</a>
+                @endif
+            @endauth
+        </div>
+    @endif
 </header>

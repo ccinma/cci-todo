@@ -11,6 +11,10 @@ html, body {
     background-color: $body-bg;
     color: $font-color-primary;
 }
+body {
+    margin: 0;
+    padding: 0;
+}
 .links>a {
     color: $font-color-primary;
 }

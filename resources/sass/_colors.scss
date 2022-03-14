@@ -7,9 +7,17 @@
     --gray: gray;
     --black: rgb(24, 24, 24);
     --lightgray: rgb(230, 227, 227);
+
+    --cyanprocess: #06BEE1;
+    --venetianred: #D01114;
+    --royalbluedark: #032877;
 }
 
 $lightblue: var(--lightblue);
 $gray: var(--gray);
 $lightgray: var(--lightgray);
 $black: var(--black);
+
+$cyanprocess: var(--cyanprocess);
+$venetianred: var(--venetianred);
+$royalbluedark: var(--royalbluedark);
