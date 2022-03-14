@@ -12,10 +12,14 @@
 </head>
 <body>
 
+  @include("layouts.components.header")
+
   <!-- Content -->
   <main>
-    @yield("content")
+    @yield("container")
   </main>
+
+  @include("layouts.components.footer")
 
   <!-- Script -->
   @yield("script")
