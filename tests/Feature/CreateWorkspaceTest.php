@@ -17,20 +17,21 @@ class CreateWorkspaceTest extends TestCase
      * 
      * @return void
      */
-    public function testInsertWorkspace()
+    public function testStoreWorkspace()
     {
 
         $this->withoutExceptionHandling();
 
         // Insert new user and get it
-        $user = $this->generateAndInsertNewUser($this->faker->sentence(), $this->faker->email, $this->faker->userName, true);
+        $user = factory(User::class)->create();
+        $this->actingAs($user);
 
         // Insert new workspace by ajax method
         $workspaceAttributes = [
             'user_id' => $user->id,
             'name' => $this->faker->text(50),
         ];
-        $this->postJSON('/workspace/insert', $workspaceAttributes, $this->ajaxHeader);
+        $this->postJSON('/workspace/store', $workspaceAttributes, $this->ajaxHeader);
 
         // ASSERTIONS
         // The workspace should exists in the database

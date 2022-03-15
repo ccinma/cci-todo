@@ -14,11 +14,10 @@ class ReadWorkspaceController extends Controller
         
     }
 
-    public function findAllByUserId()
+    public function listAllUserWorkspaces()
     {
         // Get workspaces by user id
-        $user_id = Auth::user()->id;
-        $workspaces = Workspace::where(['user_id' => $user_id])->get();
+        $workspaces = Workspace::findAllByLoggedUser(Auth::user()->id);
 
         // Return response
         return view('workspace.listing', ['workspaces' => $workspaces]);

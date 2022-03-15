@@ -37,13 +37,13 @@ Route::prefix('workspace')->as('workspace.')->group(function() {
      * Validate AJAX Request body, try insert Workspace then returns JSON.
      * A Http request will result a 403 Forbidden response.
      */
-    Route::name('insert')->middleware('ajax')->post('insert', 'Workspace\CreateWorkspaceController@insert_async');
+    Route::name('store')->middleware('ajax')->post('store', 'Workspace\CreateWorkspaceController@store');
 
     /**
      * Route: "/workspace"
      * 
      * Display the list of created workspaces by the user.
      */
-    Route::name('index')->middleware('auth')->get('/', 'Workspace\ReadWorkspaceController@findAllByUserId');
+    Route::name('index')->get('/', 'Workspace\ReadWorkspaceController@listAllUserWorkspaces');
     
 });

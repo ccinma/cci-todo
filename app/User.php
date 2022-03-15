@@ -37,7 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function workspaces() {
+    public function teams() {
         return $this->belongsToMany(Workspace::class, "users_workspaces");
     }
 

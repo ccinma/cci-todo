@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Workspace;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Workspace;
+use Illuminate\Http\Request;
+use App\Services\WorkspaceServices;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreWorkspaceRequest;
 
 class CreateWorkspaceController extends Controller
 {
@@ -13,19 +15,14 @@ class CreateWorkspaceController extends Controller
         
     }
 
-    public function insert_async(Request $request)
+    public function store(StoreWorkspaceRequest $request)
     {
-        // Validate
-        $validated = Workspace::validate($request);
+        $validated = $request->validated();
 
-        // Persist
-        Workspace::create($validated);
+        $workspace = Workspace::create($validated);
 
-        // Return response
         return response()->json([
-            'code' => 201,
-            'status' => 'Created',
-            'message' => 'Successfully created Workspace.'
+            'data' => $workspace->toArray()
         ], 201);
     }
 }
