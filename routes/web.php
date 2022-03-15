@@ -18,3 +18,24 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+/**
+ * Route: "/workspace"
+ * 
+ * The Workspace controllers for Workspace CRUD.
+ */
+Route::prefix('workspace')->as('workspace.')->group(function() {
+    /**
+     * Route: "/workspace/create"
+     * 
+     * Display the new workspace form.
+     */
+    Route::name('create')->get('create', 'Workspace\CreateWorkspaceController@create');
+    /**
+     * Route: "/workspace/insert"
+     * 
+     * Validate AJAX Request body, try insert Workspace then returns JSON.
+     * A Http request will result a 403 Forbidden response.
+     */
+    Route::name('insert')->middleware('ajax')->post('insert', 'Workspace\CreateWorkspaceController@insert_async');
+});
