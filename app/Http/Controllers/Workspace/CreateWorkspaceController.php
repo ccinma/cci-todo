@@ -23,9 +23,9 @@ class CreateWorkspaceController extends Controller
 
         // Return response
         return response()->json([
-            'code' => 200,
-            'status' => 'OK',
-            'message' => 'Insert async route in progress!'
-        ]);
+            'code' => 201,
+            'status' => 'Created',
+            'message' => 'Successfully created Workspace.'
+        ], 201);
     }
 }

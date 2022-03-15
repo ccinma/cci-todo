@@ -12,8 +12,6 @@ class CreateWorkspaceTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
-    private array $ajaxHeader = ['X-Requested-With' => 'XMLHttpRequest'];
-
     /**
      * It should insert a new Workspace
      * 
@@ -24,18 +22,8 @@ class CreateWorkspaceTest extends TestCase
 
         $this->withoutExceptionHandling();
 
-        // Insert new user
-        $password = $this->faker->password;
-        $userAttributes = [
-            'name' => $this->faker->userName,
-            'email' => $this->faker->email,
-            'password' => $password,
-            'password_confirmation' => $password,
-        ];
-        $this->postJSON('/register', $userAttributes);
-
-        // Get the user inserted
-        $user = User::where('email', $userAttributes['email'])->firstOrFail();
+        // Insert new user and get it
+        $user = $this->generateAndInsertNewUser($this->faker->sentence(), $this->faker->email, $this->faker->userName, true);
 
         // Insert new workspace by ajax method
         $workspaceAttributes = [

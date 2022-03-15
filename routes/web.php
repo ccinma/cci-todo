@@ -38,4 +38,12 @@ Route::prefix('workspace')->as('workspace.')->group(function() {
      * A Http request will result a 403 Forbidden response.
      */
     Route::name('insert')->middleware('ajax')->post('insert', 'Workspace\CreateWorkspaceController@insert_async');
+
+    /**
+     * Route: "/workspace"
+     * 
+     * Display the list of created workspaces by the user.
+     */
+    Route::name('index')->middleware('auth')->get('/', 'Workspace\ReadWorkspaceController@findAllByUserId');
+    
 });
