@@ -27,6 +27,7 @@ class UpdateWorkspaceRequest extends FormRequest
             'name' => [
                 'string',
                 'max:50',
+                'min:3',
                 'nullable',
             ],
         ];

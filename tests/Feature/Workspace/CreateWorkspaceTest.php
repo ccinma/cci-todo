@@ -28,7 +28,6 @@ class CreateWorkspaceTest extends TestCase
 
         // Insert new workspace by ajax method
         $workspaceAttributes = [
-            'user_id' => $user->id,
             'name' => $this->faker->text(50),
         ];
         $this->postJSON('/workspace', $workspaceAttributes, $this->ajaxHeader)->assertCreated();

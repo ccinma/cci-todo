@@ -16,13 +16,10 @@ class CreateWorkspaceController extends Controller
 
     public function store(StoreWorkspaceRequest $request)
     {
-        $validated = $request->validated();
-
-        if (Auth::user()->id != $validated['user_id']) {
-            return response()->json([], 401);
-        }
+        $attributes = $request->validated();
+        $attributes['user_id'] = Auth::user()->id;
         
-        $workspace = Workspace::create($validated);
+        $workspace = Workspace::create($attributes);
 
         return response()->json([
             'data' => $workspace->toArray()

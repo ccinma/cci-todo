@@ -27,11 +27,8 @@ class StoreWorkspaceRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
+                'min:3',
                 'max:50',
-            ],
-            'user_id' => [
-                'required',
-                'string',
             ]
         ];
     }
