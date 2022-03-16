@@ -4,6 +4,7 @@
     color: $font-color-secondary;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
+    text-align: center;
 
     background-color: $btn-bg-primary;
     border: 0.15rem solid $btn-bg-primary;
@@ -15,8 +16,6 @@
     p {
         margin: 0;
     }
-
-    
 }
 
 .todo-btn:hover {
