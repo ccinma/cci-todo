@@ -32,6 +32,7 @@ class UpdateWorkspaceTest extends TestCase
 
         $this->putJson('/workspace'.'/'.$workspace->id, $attributes, $this->ajaxHeader)->assertOk();
         $this->putJson('/workspace'.'/'.$workspace->id, $attributes)->assertForbidden(); // Not ajax request
+        $this->putJson('/workspace'.'/'.$workspace->id)->assertForbidden();
         $this->putJson('/workspace/2', $attributes, $this->ajaxHeader)->assertNotFound();
 
         $workspace = Workspace::find($workspace->id);

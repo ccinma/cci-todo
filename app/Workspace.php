@@ -35,6 +35,16 @@ class Workspace extends Model
     }
 
     /**
+     * Determine if the User is the creator of the Workspace
+     * 
+     * @return bool
+     */
+    public function isCreator(User $user) : bool
+    {
+        return $this->user_id == $user->id;
+    }
+
+    /**
      * Determine if the User is the creator or a member of the Workspace
      * 
      * @return bool

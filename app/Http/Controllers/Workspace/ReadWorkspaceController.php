@@ -16,7 +16,7 @@ class ReadWorkspaceController extends Controller
     public function index()
     {
         // Get workspaces by user id
-        $workspaces = Workspace::findAllByLoggedUser(Auth::user()->id);
+        $workspaces = Workspace::findAllByLoggedUser();
 
         // Return response
         return view('workspace.listing', ['workspaces' => $workspaces]);

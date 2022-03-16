@@ -56,5 +56,12 @@ Route::prefix('workspace')->as('workspace.')->middleware('auth')->group(function
      * Update a workspace.
      */
     Route::name('update')->middleware('ajax')->put('{workspace}', 'Workspace\UpdateWorkspaceController@update');
+
+    /**
+     * Route: DELETE "/workspace/{workspace}"
+     * 
+     * Delete a workspace
+     */
+    Route::name('delete')->middleware('ajax')->delete('{workspace}', 'Workspace\DeleteWorkspaceController@delete');
     
 });

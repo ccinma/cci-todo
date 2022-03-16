@@ -32,6 +32,8 @@ class CreateWorkspaceTest extends TestCase
             'name' => $this->faker->text(50),
         ];
         $this->postJSON('/workspace', $workspaceAttributes, $this->ajaxHeader)->assertCreated();
+        $this->postJSON('/workspace', $workspaceAttributes)->assertForbidden();
+        $this->postJSON('/workspace')->assertForbidden();
 
         // ASSERTIONS
         // The workspace should exists in the database
