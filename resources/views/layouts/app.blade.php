@@ -33,6 +33,8 @@
         <!-- Content -->
         <main>
             @yield("container")
+
+            @include("layouts.components.mobile_nav")
         </main>
 
         @include("layouts.components.footer")
