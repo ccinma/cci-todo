@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Workspace;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Workspace;
 use Auth;
@@ -23,9 +22,9 @@ class ReadWorkspaceController extends Controller
         return view('workspace.listing', ['workspaces' => $workspaces]);
     }
 
-    public function show(int $id)
+    public function show(int $workspace)
     {
-        $workspace = Workspace::find($id);
+        $workspace = Workspace::find($workspace);
 
         if (!$workspace || !$workspace->hasMember(Auth::user())) {
             return view('errors.404');
