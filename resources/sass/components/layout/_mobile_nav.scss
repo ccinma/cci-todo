@@ -8,13 +8,14 @@
   padding: 1rem;
 
   color: $font-color-primary;
-  background: red;
 
   background: rgba( 255, 255, 255, 0.5 );
   box-shadow: 0 0.5rem 2rem 0 $shadow;
   backdrop-filter: blur( 5px );
   -webkit-backdrop-filter: blur( 5px );
   border-radius: 1rem;
+
+  z-index: 1;
 
   nav {
     width: 100%;
