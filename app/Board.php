@@ -2,10 +2,15 @@
 
 namespace App;
 
+use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Board extends Model
 {
+    use Uuids;
+
+    protected $guarded = [];
+    
     public function creator() {
         return $this->hasOne(User::class);
     }

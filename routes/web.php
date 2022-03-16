@@ -65,3 +65,10 @@ Route::prefix('workspace')->as('workspace.')->middleware('auth')->group(function
     Route::name('delete')->middleware('ajax')->delete('{workspace}', 'Workspace\DeleteWorkspaceController@delete');
     
 });
+
+
+Route::prefix('board')->as('board.')->middleware('auth')->group(function() {
+
+    Route::name('store')->middleware('ajax')->post('/', 'Board\CreateBoardController@store');
+    
+});
