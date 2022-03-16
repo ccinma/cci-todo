@@ -14,9 +14,9 @@ class CreateLanesTable extends Migration
     public function up()
     {
         Schema::create('lanes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
             $table->string("name", 25);
-            $table->unsignedBigInteger('board_id');
+            $table->string('board_id');
             $table->foreign('board_id')->references('id')->on('boards')->onDelete("cascade");
             $table->timestamps();
         });
