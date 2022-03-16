@@ -11,6 +11,8 @@
 |
 */
 
+use App\Workspace;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -44,6 +46,8 @@ Route::prefix('workspace')->as('workspace.')->group(function() {
      * 
      * Display the list of created workspaces by the user.
      */
-    Route::name('index')->get('/', 'Workspace\ReadWorkspaceController@listAllUserWorkspaces');
+    Route::name('index')->get('/', 'Workspace\ReadWorkspaceController@index');
+
+    Route::name('show')->get('{id}', 'Workspace\ReadWorkspaceController@show');
     
 });

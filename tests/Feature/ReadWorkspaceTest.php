@@ -70,11 +70,23 @@ class ReadWorkspaceTest extends TestCase
      * 
      * @return void
      */
-    // public function testFindOneWorkspaceByLoggedUserId()
-    // {
-    //     // Generate 2 different users and log the first user
-    //     $user = $this->generateAndInsertNewUser(true);
-    //     $workspace = Workspace::findOneByLoggedUser();
-    //     $this->assertEquals(true, $workspace->hasMember($user));
-    // }
+    public function testFindOneWorkspaceByLoggedUserId()
+    {
+        // Generate 2 different users and log the first user
+        $users = factory(User::class, 2)->create();
+        $this->actingAs($users[0]);
+
+        // Generate 1 workspace for each user
+        $workspaces = [
+            factory(Workspace::class)->create([
+                'user_id' => $users[0]->id
+            ]),
+            factory(Workspace::class)->create([
+                'user_id' => $users[1]->id
+            ]),
+        ];
+
+        $this->get('/workspace' . '/' . $workspaces[0]->id)->assertSee($workspaces[0]->name);
+        $this->get('/workspace' . '/' . $workspaces[1]->id)->assertDontSee($workspaces[1]->name);
+    }
 }
