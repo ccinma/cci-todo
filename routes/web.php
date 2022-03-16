@@ -70,5 +70,7 @@ Route::prefix('workspace')->as('workspace.')->middleware('auth')->group(function
 Route::prefix('board')->as('board.')->middleware('auth')->group(function() {
 
     Route::name('store')->middleware('ajax')->post('/', 'Board\CreateBoardController@store');
+
+    Route::name('show')->get('{board}', 'Board\ReadBoardController@show');
     
 });

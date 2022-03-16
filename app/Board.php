@@ -15,7 +15,7 @@ class Board extends Model
         return $this->hasOne(User::class);
     }
     public function workspace() {
-        return $this->hasOne(Workspace::class);
+        return $this->hasOne(Workspace::class, 'id', 'workspace_id');
     }
     public function lanes() {
         return $this->hasMany(Lane::class);
