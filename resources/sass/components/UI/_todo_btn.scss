@@ -1,6 +1,41 @@
 .todo-btn {
+    padding: 0.5rem 0.75rem;
+
+    color: $font-color-secondary;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+
     background-color: $btn-bg-primary;
-    border: 1px solid $btn-bg-primary;
-    padding: 0.75rem 1.2rem;
-    width: 100%;
+    border: 0.15rem solid $btn-bg-primary;
+    border-radius: 0.75rem;
+
+    display: flex;
+    justify-content: center;
+
+    p {
+        margin: 0;
+    }
+
+    
+}
+
+.todo-btn:hover {
+    cursor: pointer;
+}
+
+.todo-btn-secondary {
+    @extend .todo-btn;
+    background: #00000000;
+    color: $font-color-primary;
+    border-color: $font-color-primary; 
+}
+
+.todo-btn-round {
+    @extend .todo-btn;
+    border-radius: 10rem;
+}
+
+.todo-btn-secondary-round {
+    @extend .todo-btn-secondary;
+    @extend .todo-btn-round;
 }
