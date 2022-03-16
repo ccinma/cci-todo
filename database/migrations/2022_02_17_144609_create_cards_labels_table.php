@@ -14,8 +14,8 @@ class CreateCardsLabelsTable extends Migration
     public function up()
     {
         Schema::create('cards_labels', function (Blueprint $table) {
-            $table->unsignedBigInteger('card_id');
-            $table->unsignedBigInteger('label_id');
+            $table->string('card_id');
+            $table->string('label_id');
             $table->primary(["card_id", "label_id"]);
             $table->foreign('card_id')->references('id')->on('cards')->onDelete("cascade");
             $table->foreign('label_id')->references('id')->on('labels')->onDelete("cascade");

@@ -14,8 +14,8 @@ class CreateLabelsTable extends Migration
     public function up()
     {
         Schema::create('labels', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('board_id');
+            $table->uuid('id')->primary();
+            $table->string('board_id');
             $table->foreign('board_id')->references('id')->on('boards')->onDelete("cascade");
             $table->string("name", 20);
             $table->string("color", 25);

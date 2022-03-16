@@ -14,10 +14,10 @@ class CreateCardsTable extends Migration
     public function up()
     {
         Schema::create('cards', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
             $table->string("name", 255);
             $table->text("description")->nullable();
-            $table->unsignedBigInteger('lane_id');
+            $table->string('lane_id');
             $table->foreign('lane_id')->references('id')->on('lanes')->onDelete("cascade");
             $table->timestamps();
         });

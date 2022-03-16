@@ -31,8 +31,7 @@ class StoreWorkspaceRequest extends FormRequest
             ],
             'user_id' => [
                 'required',
-                'numeric',
-                'integer',
+                'string',
             ]
         ];
     }

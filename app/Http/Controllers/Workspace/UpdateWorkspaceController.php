@@ -9,7 +9,7 @@ use Auth;
 
 class UpdateWorkspaceController extends Controller
 {
-    public function update(int $workspace, UpdateWorkspaceRequest $request)
+    public function update($workspace, UpdateWorkspaceRequest $request)
     {
         $workspace = Workspace::find($workspace);
 

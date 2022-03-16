@@ -22,7 +22,7 @@ class ReadWorkspaceController extends Controller
         return view('workspace.listing', ['workspaces' => $workspaces]);
     }
 
-    public function show(int $workspace)
+    public function show($workspace)
     {
         $workspace = Workspace::find($workspace);
 

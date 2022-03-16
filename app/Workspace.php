@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Uuids;
 use Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,8 @@ use Illuminate\Http\Request;
 
 class Workspace extends Model
 {
+    use Uuids;
+
     protected $guarded = [];
 
     public function members() {
