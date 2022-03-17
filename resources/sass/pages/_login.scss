@@ -1,0 +1,77 @@
+#login {
+  height: 100%;
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  h3, .form, .register {
+    margin-inline: 2rem;
+  }
+
+  h3 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .hr {
+    width: calc(100% - 4rem);
+    height: 0.15rem;
+
+    background: $font-color-secondary;
+  }
+
+  svg {
+    width: 8rem;
+    * {
+      fill: $font-color-secondary;
+    }
+  }
+
+  .form {
+    width: 20rem;
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      div {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .email {
+        margin-top: 0;
+      }
+
+      .email, .password {
+        max-width: 20rem;
+      }
+
+      .forget {
+        align-self: flex-end;
+      }
+
+      .remember {
+        flex-direction: row;
+        align-items: center;
+
+        input {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px){
+    h3 {
+      font-size: 1.5rem;
+    }
+    svg {
+      width: 5rem;
+    }
+  }
+}

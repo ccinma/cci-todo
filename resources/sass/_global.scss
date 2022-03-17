@@ -10,6 +10,7 @@
 html, body {
     background-color: $body-bg;
     color: $font-color-primary;
+    font-family: 'Poppins', sans-serif;
 }
 body {
     margin: 0;
@@ -21,9 +22,6 @@ body * {
 }
 .links>a {
     color: $font-color-primary;
-}
-h1, h2, h3, p {
-    font-family: 'Poppins', sans-serif;
 }
 a, a:visited, a:hover, a:active {
     text-decoration: none;
