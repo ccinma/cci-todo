@@ -1,4 +1,4 @@
-.container {
+.all_container {
   position: absolute;
   top: 0;
   left: 0;
@@ -17,7 +17,7 @@
 }
 
 #big_container {
-  @extend .container;
+  @extend .all_container;
   margin: 3rem;
 
   @media screen and (max-width: 500px){
@@ -26,7 +26,7 @@
 }
 
 #small_container {
-  @extend .container;
+  @extend .all_container;
   margin: 3rem;
   max-width: 35rem;
   margin-inline: auto;
