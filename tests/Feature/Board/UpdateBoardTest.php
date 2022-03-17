@@ -24,7 +24,7 @@ class UpdateBoardTest extends TestCase
      */
     public function testUpdateBoard()
     {
-        $users = factory(User::class, 3)->create();
+        $users = factory(User::class, 2)->create();
 
         $workspace = factory(Workspace::class)->create([
             'user_id' => $users[0]->id
@@ -58,24 +58,15 @@ class UpdateBoardTest extends TestCase
         $this->putJson('/board'.'/'.$board->id, [], $this->ajaxHeader)->assertUnauthorized();
         $this->putJson('/board'.'/'.$board->id, $newAttributes, $this->ajaxHeader)->assertUnauthorized();
 
-        // LOGGED WITH CREATOR USER
-        $this->actingAs($users[0]);
-        $this->putJson('/board'.'/'.$board->id, [], $this->ajaxHeader)->assertStatus(304);
-        $this->putJson('/board'.'/'.$board->id, $newAttributes, $this->ajaxHeader)->assertOk();
-        $this->assertDatabaseHas('boards', $newAttributes);
-        $updatedBoard = Board::with(['workspace', 'workspace.members'])->find($board->id);
-        $this->putJson('/board'.'/'.$board->id, $newAttributes, $this->ajaxHeader)->assertJsonFragment([
-            'data' => $updatedBoard->toArray()
-        ]);
-
         // LOGGED WITH MEMBER USER
-        $this->actingAs($users[2]);
-        $workspace->addMember($users[2]);
+        $this->actingAs($users[1]);
+        $workspace->addMember($users[1]);
         $this->putJson('/board'.'/'.$board->id, [], $this->ajaxHeader)->assertStatus(304);
-        $this->putJson('/board'.'/'.$board->id, $newAttributes, $this->ajaxHeader)->assertOk();
+        $request = $this->putJson('/board'.'/'.$board->id, $newAttributes, $this->ajaxHeader);
+        $request->assertOk();
         $this->assertDatabaseHas('boards', $newAttributes);
         $updatedBoard = Board::with(['workspace', 'workspace.members'])->find($board->id);
-        $this->putJson('/board'.'/'.$board->id, $newAttributes, $this->ajaxHeader)->assertJsonFragment([
+        $request->assertJsonFragment([
             'data' => $updatedBoard->toArray()
         ]);
 
