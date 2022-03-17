@@ -18,11 +18,11 @@ class CreateWorkspaceController extends Controller
     {
         $attributes = $request->validated();
         $attributes['user_id'] = Auth::user()->id;
-        
+
         $workspace = Workspace::create($attributes);
 
         return response()->json([
-            'data' => $workspace->toArray()
+            'data' => $workspace
         ], 201);
     }
 }
