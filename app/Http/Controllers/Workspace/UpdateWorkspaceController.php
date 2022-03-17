@@ -21,9 +21,14 @@ class UpdateWorkspaceController extends Controller
         } else if ($workspace->user_id != Auth::user()->id) { // If the user is not the creator
             $code = 401;
         } else {
-            $workspace = Workspace::where('id', $workspace->id)->update($request->toArray());
-            $code = 200;
-            $data['data'] = $workspace;
+            $attributes = $request->validated();
+            if (empty($attributes)) {
+                $code = 304;
+            } else {
+                $workspace = Workspace::where('id', $workspace->id)->update($attributes);
+                $code = 200;
+                $data['data'] = $workspace;
+            }
         }
 
         return response()->json($data, $code);

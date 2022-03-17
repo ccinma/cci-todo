@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\Uuids;
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Board extends Model
@@ -12,7 +13,7 @@ class Board extends Model
     protected $guarded = [];
     
     public function creator() {
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
     public function workspace() {
         return $this->hasOne(Workspace::class, 'id', 'workspace_id');
@@ -22,5 +23,10 @@ class Board extends Model
     }
     public function labels() {
         return $this->hasMany(Label::class);
+    }
+
+    public function isCreator(User $user) : bool
+    {
+        return $this->user_id == $user->id;
     }
 }
