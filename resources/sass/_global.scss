@@ -6,11 +6,12 @@
 // _global.scss and pages use the variables.
 
 
-
+* {
+    font-family: 'Poppins', sans-serif;
+}
 html, body {
     background-color: $body-bg;
     color: $font-color-primary;
-    font-family: 'Poppins', sans-serif;
 }
 body {
     margin: 0;

@@ -45,15 +45,10 @@
                 </label>
             </div>
 
-            <div class="todo-btn-round" onclick="javascript:this.form.submit();">
-                <p>Connexion</p>
-            </div>
-
-            <!--
-            <button type="submit">
-                {{ __('Login') }}
+            <button type="submit" class="todo-btn-round">
+                Se connecter
             </button>
-            -->
+
         </form>
     </div>
     <div class="hr"></div>

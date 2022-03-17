@@ -3,6 +3,7 @@
 
     color: $font-color-secondary;
     font-weight: 600;
+    font-size: 1rem;
     text-align: center;
 
     background-color: $btn-bg-primary;
@@ -11,10 +12,6 @@
 
     display: flex;
     justify-content: center;
-
-    p {
-        margin: 0;
-    }
 }
 
 .todo-btn:hover {
