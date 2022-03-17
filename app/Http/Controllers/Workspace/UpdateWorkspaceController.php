@@ -6,31 +6,42 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateWorkspaceRequest;
 use App\Workspace;
 use Auth;
+use Str;
 
 class UpdateWorkspaceController extends Controller
 {
-    public function update($workspace, UpdateWorkspaceRequest $request)
+    public function update($workspace_id, UpdateWorkspaceRequest $request)
     {
-        $workspace = Workspace::find($workspace);
-
-        $code = 500;
-        $data = [];
-
-        if (! $workspace) {
-            $code = 404;
-        } else if ($workspace->user_id != Auth::user()->id) { // If the user is not the creator
-            $code = 401;
-        } else {
-            $attributes = $request->validated();
-            if (empty($attributes)) {
-                $code = 304;
-            } else {
-                $workspace = Workspace::where('id', $workspace->id)->update($attributes);
-                $code = 200;
-                $data['data'] = $workspace;
-            }
+        // NOT UUID
+        if ( ! Str::isUuid($workspace_id) ) {
+            return response()->json(['message' => 'Invalid UUID'], 400);
         }
 
-        return response()->json($data, $code);
+        $attributes = $request->validated();
+
+        $workspace = Workspace::find($workspace_id);
+
+        // NOT FOUND
+        if ( ! $workspace ) {
+            return response()->json([], 404);
+        }
+
+        // NOT AUTHORIZED
+        if ( ! $workspace->isCreator(Auth::user()) ) {
+            return response()->json([], 401);
+        }
+
+        // EMPTY BODY
+        if ( empty($attributes) ) {
+            return response()->json([], 304);
+        }
+
+        $attributes['user_id'] = Auth::user()->id;
+
+        $workspace->update($attributes);
+
+        return response()->json([
+            'data' => $workspace
+        ]);
     }
 }
