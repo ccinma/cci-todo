@@ -28,40 +28,33 @@ Route::get('/home', 'HomeController@index')->name('home');
  */
 Route::prefix('workspace')->as('workspace.')->middleware('auth')->group(function() {
 
-    /**
-     * Route: POST "/workspace"
-     * 
-     * Validate AJAX Request body, try insert Workspace then returns JSON.
-     * A Http request will result a 403 Forbidden response.
-     */
+    // CREATE
     Route::name('store')->middleware('ajax')->post('/', 'Workspace\CreateWorkspaceController@store');
 
-    /**
-     * Route: GET "/workspace"
-     * 
-     * Display the list of created workspaces by the user.
-     */
+    // READ
     Route::name('index')->get('/', 'Workspace\ReadWorkspaceController@index');
-
-    /**
-     * Route: GET "/workspace/{workspace}"
-     * 
-     * Display a specific workspace with all its informations.
-     */
     Route::name('show')->get('{workspace}', 'Workspace\ReadWorkspaceController@show');
 
-    /**
-     * Route: PUT "/workspace/{workspace}"
-     * 
-     * Update a workspace.
-     */
+    // UPDATE
     Route::name('update')->middleware('ajax')->put('{workspace}', 'Workspace\UpdateWorkspaceController@update');
 
-    /**
-     * Route: DELETE "/workspace/{workspace}"
-     * 
-     * Delete a workspace
-     */
+    // DELETE
     Route::name('delete')->middleware('ajax')->delete('{workspace}', 'Workspace\DeleteWorkspaceController@delete');
     
+});
+
+
+Route::prefix('board')->as('board.')->middleware('auth')->group(function() {
+
+    // CREATE
+    Route::name('store')->middleware('ajax')->post('/', 'Board\CreateBoardController@store');
+
+    // READ
+    Route::name('show')->get('{board}', 'Board\ReadBoardController@show');
+    
+    // UPDATE
+    Route::name('update')->middleware('ajax')->put('{board}', 'Board\UpdateBoardController@update');
+
+    // DELETE
+    Route::name('delete')->middleware('ajax')->delete('{board}', 'Board\DeleteBoardController@delete');
 });

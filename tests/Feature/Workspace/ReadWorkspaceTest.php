@@ -46,7 +46,7 @@ class ReadWorkspaceTest extends TestCase
         //  Workspace 3 = members: user1
         //  Workspace 4 = members: user1, user2
         //  Workspace 5 = members: user2
-        $workspaces[3]->addTrustedUser($users[0]);
+        $workspaces[3]->addMember($users[0]);
         
         // Get workspaces created by the logged user
         $userWorkspaces = Workspace::findAllByLoggedUser();

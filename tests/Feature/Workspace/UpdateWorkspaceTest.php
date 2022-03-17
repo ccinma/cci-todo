@@ -13,7 +13,7 @@ class UpdateWorkspaceTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
     /**
-     * A basic feature test example.
+     * It should update a workspace only when data is not empty and if the user is a workspace member
      *
      * @return void
      */
@@ -31,6 +31,7 @@ class UpdateWorkspaceTest extends TestCase
         ];
 
         $this->putJson('/workspace'.'/'.$workspace->id, $attributes, $this->ajaxHeader)->assertOk();
+        $this->putJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader)->assertStatus(304);
         $this->putJson('/workspace'.'/'.$workspace->id, $attributes)->assertForbidden(); // Not ajax request
         $this->putJson('/workspace'.'/'.$workspace->id)->assertForbidden();
         $this->putJson('/workspace/2', $attributes, $this->ajaxHeader)->assertNotFound();

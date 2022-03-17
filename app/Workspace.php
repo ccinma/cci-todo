@@ -70,7 +70,7 @@ class Workspace extends Model
      * 
      * @return void
      */
-    public function addTrustedUser(User $user) : void
+    public function addMember(User $user) : void
     {
         $this->members()->attach($user->id);
     }
