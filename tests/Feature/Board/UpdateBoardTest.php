@@ -42,11 +42,15 @@ class UpdateBoardTest extends TestCase
         // NOT LOGGED
         $this->putJson('/board'.'/'.$board->id, [])->assertUnauthorized();
         $this->putJson('/board'.'/'.$board->id, $newAttributes)->assertUnauthorized();
-        $this->putJson('/board'.'/'.$board->id, [], $this->ajaxHeader)->assertUnauthorized();
-        $this->putJson('/board'.'/'.$board->id, $newAttributes, $this->ajaxHeader)->assertUnauthorized();
-
+        
+        // NOT AJAX
+        $this->actingAs($users[0]);
+        $this->putJson('/board'.'/'.$board->id, [])->assertForbidden();
+        $this->putJson('/board'.'/'.$board->id, $newAttributes)->assertForbidden();
+        
         // NOT FOUND
         $this->actingAs($users[0]);
+        $this->putJson('/board/2', [], $this->ajaxHeader)->assertNotFound();
         $this->putJson('/board/2', $newAttributes, $this->ajaxHeader)->assertNotFound();
 
         // LOGGED WITH NON AUTHORIZED USER

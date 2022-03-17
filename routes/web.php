@@ -56,5 +56,5 @@ Route::prefix('board')->as('board.')->middleware('auth')->group(function() {
     Route::name('update')->middleware('ajax')->put('{board}', 'Board\UpdateBoardController@update');
 
     // DELETE
-
+    Route::name('delete')->middleware('ajax')->delete('{board}', 'Board\DeleteBoardController@delete');
 });
