@@ -1,9 +1,54 @@
-.todo-form {
-  width: 20rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 10rem;
-  border: 0;
 
-  font-family: 'Poppins', sans-serif;
-  font-size: 1rem;
+.todo-form-container {
+  margin-bottom: 2rem;
 }
+
+.todo-form {
+  max-width: 350px;
+  margin: 0 auto;
+  
+  &-group {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    &.first {
+      margin-top: 0;
+    }
+
+    .forget {
+      align-self: flex-end;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &.remember {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      *:hover {
+        cursor: pointer;
+      }
+    }
+
+  }
+  
+  &-text {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 10rem;
+    border: 0;
+  
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+  }
+
+  &-checkbox {
+    margin-right: 0.5rem;
+  }
+}
+

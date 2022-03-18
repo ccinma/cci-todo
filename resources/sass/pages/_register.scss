@@ -1,80 +1,40 @@
 #register {
   height: 100%;
-  
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-
-  h3, .form, .login {
-    margin-inline: 2rem;
-  }
 
   h3 {
+    margin: 2rem;
     font-size: 2rem;
     text-align: center;
   }
 
-  .hr {
-    width: calc(100% - 4rem);
-    height: 0.15rem;
-
-    background: $font-color-secondary;
-  }
-
-  svg {
-    width: 8rem;
-    * {
-      fill: $font-color-secondary;
+  .svg-container {
+    max-width: 8rem;
+    margin: 2rem auto;
+    svg {
+      width: 100%;
+      * {
+        fill: $font-color-secondary;
+      }
     }
   }
 
-  .form {
+  .link-container {
     width: 100%;
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    margin: 0 auto;
+    margin-top: 2rem;
 
-      div {
-        margin-top: 1rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-
-      .email {
-        margin-top: 0;
-      }
-
-      .forget {
-        align-self: flex-end;
-      }
-
-      .remember {
-        flex-direction: row;
-        align-items: center;
-
-        input {
-          margin-right: 0.5rem;
-        }
+    text-align: center;
+    &>* {
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
-
-  .login {
-    text-align: center;
-  }
+  
 
   @media screen and (max-width: 500px){
     h3 {
       font-size: 1.2rem;
-    }
-    svg {
-      width: 5rem;
-    }
-    .todo-form {
-      width: auto;
     }
   }
 }
