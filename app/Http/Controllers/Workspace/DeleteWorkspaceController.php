@@ -5,25 +5,28 @@ namespace App\Http\Controllers\Workspace;
 use App\Http\Controllers\Controller;
 use App\Workspace;
 use Auth;
+use Str;
 
 class DeleteWorkspaceController extends Controller
 {
-    public function delete($workspace)
+    public function delete($workspace_id)
     {
-        $code = 500;
-        $data = [];
-
-        $workspace = Workspace::find($workspace);
-
-        if ( ! $workspace) {
-            $code = 404;
-        } elseif ( ! $workspace->isCreator(Auth::user())) {
-            $code = 401;
-        } else {
-            $workspace->delete();
-            $code = 200;
+        if ( ! Str::isUuid($workspace_id) ) {
+            return response()->json([], 400);
         }
 
-        return response()->json($data, $code);
+        $workspace = Workspace::find($workspace_id);
+
+        if ( ! $workspace ) {
+            return response()->json([], 404);
+        }
+
+        if ( ! $workspace->isCreator(Auth::user()) ) {
+            return response()->json([], 401);
+        }
+
+        $workspace->delete();
+
+        return response()->json([], 204);
     }
 }
