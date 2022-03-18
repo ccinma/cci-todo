@@ -16,6 +16,8 @@ class CreateLanesTable extends Migration
         Schema::create('lanes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string("name", 25);
+            $table->string('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete("cascade");
             $table->string('board_id');
             $table->foreign('board_id')->references('id')->on('boards')->onDelete("cascade");
             $table->timestamps();

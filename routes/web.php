@@ -58,3 +58,15 @@ Route::prefix('board')->as('board.')->middleware('auth')->group(function() {
     // DELETE
     Route::name('delete')->middleware('ajax')->delete('{board}', 'Board\DeleteBoardController@delete');
 });
+
+Route::prefix('lane')->as('lane.')->middleware('auth')->group(function() {
+
+    // CREATE
+    Route::name('store')->middleware('ajax')->post('/', 'Lane\CreateLaneController@store');
+
+    // READ
+    
+    // UPDATE
+
+    // DELETE
+});
