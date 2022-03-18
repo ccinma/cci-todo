@@ -68,4 +68,6 @@ Route::prefix('lane')->as('lane.')->middleware('auth')->group(function() {
     Route::name('update')->middleware('ajax')->put('{lane}', 'Lane\UpdateLaneController@update');
 
     // DELETE
+    Route::name('delete')->middleware('ajax')->delete('{lane}', 'Lane\DeleteLaneController@delete');
+
 });
