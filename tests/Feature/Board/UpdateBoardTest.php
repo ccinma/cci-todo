@@ -21,6 +21,9 @@ class UpdateBoardTest extends TestCase
      *  - return 404 when board not found
      *  - return 401 when user not workspace member
      *  - return 304 when validated request is empty
+     *  - return 200 AND the board when valid request
+     * 
+     * @return void
      */
     public function testUpdateBoard()
     {
