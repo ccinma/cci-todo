@@ -45,10 +45,11 @@
                 </label>
             </div>
 
-            <button type="submit" class="todo-btn-round">
-                Se connecter
-            </button>
-
+            <div>
+                <button type="submit" class="todo-btn-round">
+                    Se connecter
+                </button>
+            </div>
         </form>
     </div>
     <div class="hr"></div>

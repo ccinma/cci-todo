@@ -1,4 +1,4 @@
-#login {
+#register {
   height: 100%;
   
   display: flex;
@@ -6,7 +6,7 @@
   justify-content: space-evenly;
   align-items: center;
 
-  h3, .form, .register {
+  h3, .form, .login {
     margin-inline: 2rem;
   }
 
@@ -30,7 +30,7 @@
   }
 
   .form {
-    width: 20rem;
+    width: 100%;
     form {
       display: flex;
       flex-direction: column;
@@ -62,7 +62,7 @@
     }
   }
 
-  .register {
+  .login {
     text-align: center;
   }
 
@@ -73,7 +73,6 @@
     svg {
       width: 5rem;
     }
-
     .todo-form {
       width: auto;
     }
