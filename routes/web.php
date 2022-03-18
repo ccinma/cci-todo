@@ -63,6 +63,7 @@ Route::prefix('lane')->as('lane.')->middleware('auth')->group(function() {
     Route::name('store')->middleware('ajax')->post('/', 'Lane\CreateLaneController@store');
 
     // READ
+    Route::name('show')->middleware('ajax')->get('{lane}', 'Lane\ReadLaneController@show');
     
     // UPDATE
     Route::name('update')->middleware('ajax')->put('{lane}', 'Lane\UpdateLaneController@update');
