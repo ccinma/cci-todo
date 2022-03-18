@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLaneRequest extends FormRequest
+class UpdateLaneRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,15 +26,9 @@ class StoreLaneRequest extends FormRequest
         return [
             'name' => [
                 'string',
-                'required',
                 'max:25',
                 'min:3',
             ],
-            'board_id' => [
-                'string',
-                'required',
-                'uuid',
-            ]
         ];
     }
 }

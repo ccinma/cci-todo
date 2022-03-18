@@ -11,8 +11,6 @@
 |
 */
 
-use App\Workspace;
-
 Route::get('/', function () {
     return view('anonymous.welcome');
 });
@@ -67,6 +65,7 @@ Route::prefix('lane')->as('lane.')->middleware('auth')->group(function() {
     // READ
     
     // UPDATE
+    Route::name('update')->middleware('ajax')->put('{lane}', 'Lane\UpdateLaneController@update');
 
     // DELETE
 });
