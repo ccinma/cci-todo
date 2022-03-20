@@ -84,6 +84,7 @@ Route::prefix('card')->as('card.')->middleware('auth')->group(function() {
     // READ
 
     // UPDATE
+    Route::name('update')->middleware('ajax')->put('{card}', 'Card\UpdateCardController@update');
 
     // DELETE
 
