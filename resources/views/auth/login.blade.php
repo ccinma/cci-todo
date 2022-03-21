@@ -2,7 +2,7 @@
 
 @section('content')
 <div id="login">
-    <h3>Bon retour parmis nous !</h3>
+    <h3>Bon retour parmis nous&nbsp!</h3>
     <div class="hr"></div>
 
     <div class='svg-container'>
