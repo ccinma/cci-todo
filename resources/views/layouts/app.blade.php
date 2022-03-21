@@ -31,7 +31,7 @@
         @include("layouts.components.header")
 
         <!-- Content -->
-        <main>
+        <main id='main'>
             @yield("container")
 
             @include("layouts.components.mobile_nav")

@@ -2,17 +2,19 @@
 
 @section('content')
 <div id="login">
-    <h3>Bon retour parmis nous !</h3>
+    <h3>Bon retour parmis nous&nbsp!</h3>
     <div class="hr"></div>
 
-    @include("layouts.components.svg.small_logo")
+    <div class='svg-container'>
+        @include("layouts.components.svg.small_logo")
+    </div>
 
-    <div class="form">
-        <form method="POST" action="{{ route('login') }}">
+    <div class="todo-form-container">
+        <form class="todo-form" method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div class="email">
-                <input class="todo-form" placeholder="Email" id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+            <div class="todo-form-group first">
+                <input class="todo-form-text" placeholder="Email" id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                 @error('email')
                     <span role="alert">
@@ -21,8 +23,8 @@
                 @enderror
             </div>
 
-            <div class="password">
-                <input class="todo-form" placeholder="Mot de passe" id="password" type="password" name="password" required autocomplete="current-password">
+            <div class="todo-form-group">
+                <input class="todo-form-text" placeholder="Mot de passe" id="password" type="password" name="password" required autocomplete="current-password">
 
                 @error('password')
                     <span role="alert">
@@ -37,26 +39,25 @@
                 @endif
             </div>
 
-            <div class="remember">
-                <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+            <div class="todo-form-group remember">
+                <input class='todo-form-checkbox' type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                 <label for="remember">
                     {{ __('Se souvenir de moi') }}
                 </label>
             </div>
 
-            <div class="todo-btn-round" onclick="javascript:this.form.submit();">
-                <p>Connexion</p>
+            <div class='todo-form-group'>
+                <button type="submit" class="todo-btn-round">
+                    Se connecter
+                </button>
             </div>
-
-            <!--
-            <button type="submit">
-                {{ __('Login') }}
-            </button>
-            -->
         </form>
     </div>
     <div class="hr"></div>
-    <a class="register" href="{{ route('register') }}">Pas encore inscrit ? C'est par ici !</a>
+
+    <div class="link-container">
+        <a class="register" href="{{ route('register') }}">Pas encore inscrit ? C'est par ici !</a>
+    </div>
 </div>
 @endsection
