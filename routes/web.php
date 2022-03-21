@@ -11,8 +11,6 @@
 |
 */
 
-use App\Workspace;
-
 Route::get('/', function () {
     return view('anonymous.welcome');
 });
@@ -57,4 +55,20 @@ Route::prefix('board')->as('board.')->middleware('auth')->group(function() {
 
     // DELETE
     Route::name('delete')->middleware('ajax')->delete('{board}', 'Board\DeleteBoardController@delete');
+});
+
+Route::prefix('lane')->as('lane.')->middleware('auth')->group(function() {
+
+    // CREATE
+    Route::name('store')->middleware('ajax')->post('/', 'Lane\CreateLaneController@store');
+
+    // READ
+    Route::name('show')->middleware('ajax')->get('{lane}', 'Lane\ReadLaneController@show');
+    
+    // UPDATE
+    Route::name('update')->middleware('ajax')->put('{lane}', 'Lane\UpdateLaneController@update');
+
+    // DELETE
+    Route::name('delete')->middleware('ajax')->delete('{lane}', 'Lane\DeleteLaneController@delete');
+
 });

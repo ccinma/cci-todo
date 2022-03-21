@@ -12,9 +12,13 @@ class Lane extends Model
     protected $guarded = [];
 
     public function board() {
-        return $this->hasOne(Board::class);
+        return $this->hasOne(Board::class, 'id', 'board_id');
     }
     public function cards() {
         return $this->hasMany(Card::class);
+    }
+
+    public function creator() {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }
