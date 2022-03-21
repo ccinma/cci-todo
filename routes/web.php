@@ -82,6 +82,7 @@ Route::prefix('card')->as('card.')->middleware('auth')->group(function() {
     Route::name('store')->middleware('ajax')->post('/', 'Card\CreateCardController@store');
 
     // READ
+    Route::name('show')->middleware('ajax')->get('{card}', 'Card\ReadCardController@show');
 
     // UPDATE
     Route::name('update')->middleware('ajax')->put('{card}', 'Card\UpdateCardController@update');
