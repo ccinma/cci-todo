@@ -1,0 +1,61 @@
+
+// Breakpoints values
+$screen-mobile-s-min: 320px;
+$screen-mobile-m-min: 375px;
+$screen-mobile-l-min: 425px;
+
+$screen-tablet-s-min: 564px;
+$screen-tablet-min: 768px;
+
+$screen-laptop-min: 1024px;
+$screen-laptop-l-min: 1440px;
+
+
+
+@mixin mobile-s {
+    @media (min-width: #{$screen-mobile-s-min}) {
+        @content;
+    }
+}
+
+@mixin mobile-m {
+    @media (min-width: #{$screen-mobile-m-min}) {
+        @content;
+    }
+}
+
+@mixin mobile-l {
+    @media (min-width: #{$screen-mobile-l-min}) {
+        @content;
+    }
+}
+
+@mixin tablet-s {
+    @media (min-width: #{$screen-tablet-s-min}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$screen-tablet-min}) {
+        @content;
+    }
+}
+
+@mixin laptop {
+    @media (min-width: #{$screen-laptop-min}) {
+        @content;
+    }
+}
+
+@mixin laptop-l {
+    @media (min-width: #{$screen-laptop-min}) {
+        @content;
+    }
+}
+
+// @mixin custom-breakpoint($screen) {
+//     @media (min-width: $screen+'px') {
+//         @content;
+//     }
+//  }

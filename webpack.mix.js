@@ -8,6 +8,14 @@ const public_js_path = "public/assets/js"
 const public_sass_path = "public/assets/css"
 const public_image_path = "public/assets/images"
 
+
+mix.webpackConfig({
+    stats: {
+        children: true
+    }
+});
+
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
