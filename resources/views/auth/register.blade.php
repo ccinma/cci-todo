@@ -14,7 +14,7 @@
             @csrf
 
             <div class="todo-form-group first">
-                <input class="todo-form-text" placeholder="Identifiant" id="name" type="text" @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                <input class="todo-form-text" placeholder="Nom d'utilisateur" id="name" type="text" @error('name') is-invalid @enderror name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                 @error('name')
                     <span role="alert">
