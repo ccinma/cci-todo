@@ -4,8 +4,11 @@
   left: 0;
   right: 0;
 
-  margin: 2rem;
+  margin: $header-margin-mobile;
   padding: 1rem;
+
+  display: flex;
+  justify-content: center;
 
   color: $font-color-primary;
   font-family: 'Poppins', sans-serif;
@@ -19,11 +22,32 @@
   -webkit-backdrop-filter: blur( 5px );
   border-radius: 1rem;
 
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
   z-index: 1;
+
+  @include tablet {
+    margin: $header-margin-tablet;
+  }
+
+  @include laptop {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    margin: $header-margin-laptop;
+  }
+
+  .nav {
+    display: none;
+    a {
+      margin-inline: 1rem;
+    }
+    @include laptop {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+    }
+    
+  }
 
   .logo {
     width: auto;
@@ -34,27 +58,6 @@
       height: 3rem;
 
       fill: $main-logo;
-    }
-  }
-  .nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-
-    a {
-      margin-inline: 1rem;
-    }
-  }
-
-  @media screen and (max-width: 500px){
-    justify-content: center;
-    margin-top: 1rem;
-
-    .nav {
-      width: 0;
-      height: 0;
-      visibility: hidden;
     }
   }
 }

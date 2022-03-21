@@ -1,24 +1,28 @@
 #main {
-  // padding-inline: clamp(0.5rem, 3vw, 3rem);
-  // padding-block: clamp(2rem, 3vw, 3rem);
-  padding-block: 3rem;
-  padding-inline: 1rem;
-  
-  @media screen and (max-width: 500px){
-    padding-block: 2rem;
+  padding-inline: $main-padding-inline-mobile;
+  padding-block: $main-padding-block-mobile;
+  @include tablet-s {
+    padding-inline: $main-padding-inline-tablet-s;
+  }
+  @include tablet {
+    padding-inline: $main-padding-inline-tablet;
+  }
+  @include laptop {
+    padding-block: $main-padding-block-laptop;
   }
 
   .all_container {
-    // position: absolute;
-    // top: 0;
-    // left: 0;
-    // right: 0;
-    // bottom: 0;
-    min-height: calc(100vh - 6rem);
+
+    min-height: $align-container-with-header-footer;
   
-    padding: 2rem;
+    padding-inline: 1.25rem;
     padding-top: 4rem;
-    // padding-bottom: 5rem;
+    padding-bottom: 5rem;
+
+    @include laptop {
+      padding-bottom: 2.5rem;
+      padding-inline: 2rem;
+    }
   
     background: rgba( 255, 255, 255, 0.5 );
     box-shadow: 0 0.5rem 2rem 0 $shadow;
@@ -27,18 +31,18 @@
     border-radius: 1rem;
   
     z-index: -1;
-
-    @media screen and (max-width: 500px){
-      margin-bottom: 5rem;
-    }
+    
   }
   
   #big_container {
     @extend .all_container;
-  
-    // @media screen and (max-width: 500px){
-    //   margin-bottom: 9rem;
-    // }
+  }
+
+  #big_centered_container {
+    @extend .all_container;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   
   #small_container {

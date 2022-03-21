@@ -38,10 +38,21 @@ a, a:visited, a:hover, a:active {
 
 
 
-// --- Import components styles ------- //
-@import "./pages/pages";
-// --- END Import components styles --- //
+
+
+// --- Import breakpoints ------- //
+@import "./breakpoints";
+// --- END Import breakpoints --- //
+// --- Import variables ------- //
+@import "./variables";
+// --- END Import variables --- //
+
+
+
 
 // --- Import components styles ------- //
 @import "./components/components";
+// --- END Import components styles --- //
+// --- Import components styles ------- //
+@import "./pages/pages";
 // --- END Import components styles --- //

@@ -7,7 +7,7 @@
             </div>
         </a>
 
-        <div class="nav">
+        <nav class="nav">
             @auth
                 <a href="{{ url('/home') }}">Home</a>
                 <a href="#" onclick="document.getElementById('logout-form').submit();">Deconnexion</a>
@@ -19,6 +19,6 @@
                     <a href="{{ route('register') }}">Inscription</a>
                 @endif
             @endauth
-        </div>
+        </nav>
     @endif
 </header>
