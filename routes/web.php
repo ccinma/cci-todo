@@ -91,3 +91,17 @@ Route::prefix('card')->as('card.')->middleware('auth')->group(function() {
     Route::name('delete')->middleware('ajax')->delete('{card}', 'Card\DeleteCardController@delete');
 
 });
+
+
+Route::prefix('label')->as('label.')->middleware('auth')->group(function() {
+
+    // CREATE
+    Route::name('store')->middleware('ajax')->post('/', 'Label\CreateLabelController@store');
+
+    // READ
+
+    // UPDATE
+
+    // DELETE
+
+});

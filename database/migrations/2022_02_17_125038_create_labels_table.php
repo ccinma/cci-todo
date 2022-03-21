@@ -17,6 +17,8 @@ class CreateLabelsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('board_id');
             $table->foreign('board_id')->references('id')->on('boards')->onDelete("cascade");
+            $table->string('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete("cascade");
             $table->string("name", 20);
             $table->string("color", 25);
             $table->timestamps();
