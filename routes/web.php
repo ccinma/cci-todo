@@ -99,6 +99,7 @@ Route::prefix('label')->as('label.')->middleware('auth')->group(function() {
     Route::name('store')->middleware('ajax')->post('/', 'Label\CreateLabelController@store');
 
     // READ
+    Route::name('show')->middleware('ajax')->get('{label}', 'Label\ReadLabelController@show');
 
     // UPDATE
 

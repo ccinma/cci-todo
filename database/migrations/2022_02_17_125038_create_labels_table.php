@@ -20,7 +20,7 @@ class CreateLabelsTable extends Migration
             $table->string('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete("cascade");
             $table->string("name", 20);
-            $table->string("color", 25);
+            $table->string("color", 7);
             $table->timestamps();
         });
     }
