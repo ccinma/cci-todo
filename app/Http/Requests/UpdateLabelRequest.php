@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLabelRequest extends FormRequest
+class UpdateLabelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,22 +25,16 @@ class StoreLabelRequest extends FormRequest
     {
         return [
             'name' => [
-                'required',
                 'string',
                 'min:1',
                 'max:20',
             ],
             'color' => [
-                'required',
                 'string',
                 'min:4',
                 'max:7',
                 'regex:/#([a-f0-9]{3}){1,2}\b/i',
             ],
-            'board_id' => [
-                'required',
-                'uuid',
-            ]
         ];
     }
 }

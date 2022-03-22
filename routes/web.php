@@ -102,6 +102,7 @@ Route::prefix('label')->as('label.')->middleware('auth')->group(function() {
     Route::name('show')->middleware('ajax')->get('{label}', 'Label\ReadLabelController@show');
 
     // UPDATE
+    Route::name('update')->middleware('ajax')->put('{label}', 'Label\UpdateLabelController@update');
 
     // DELETE
 
