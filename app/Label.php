@@ -11,7 +11,7 @@ class Label extends Model
     
     protected $guarded = [];
 
-    public function onCards() {
+    public function cards() {
         return $this->belongsToMany(Card::class, "cards_labels");
     }
     public function board() {

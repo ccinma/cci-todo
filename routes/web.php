@@ -103,6 +103,7 @@ Route::prefix('label')->as('label.')->middleware('auth')->group(function() {
 
     // UPDATE
     Route::name('update')->middleware('ajax')->put('{label}', 'Label\UpdateLabelController@update');
+    Route::name('attach')->middleware('ajax')->put('{label}/attach', 'Label\UpdateLabelController@attach');
 
     // DELETE
 

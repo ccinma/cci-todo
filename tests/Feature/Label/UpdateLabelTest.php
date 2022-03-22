@@ -105,4 +105,103 @@ class UpdateLabelTest extends TestCase
             'id' => $label->id,
         ]);
     }
+
+
+    /**
+     * It should:
+     *  - return 401 when not logged
+     *  - return 403 AJAX requests
+     *  - return 400 when not UUID
+     *  - return 404 when not found
+     *  - return 422 when bad data request
+     *  - return 401 when user not workspace member
+     *  - return 200 AND the card when valid request
+     * 
+     * @return void
+     */
+    public function testAttachLabelToCard()
+    {
+        $users = factory(User::class, 2)->create();
+
+        $workspace = factory(Workspace::class)->create([
+            'user_id' => $users[0]->id,
+        ]);
+
+        $boards = factory(Board::class, 2)->create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $users[0]->id,
+        ]);
+
+        $lanes = factory(Lane::class, 1)->create([
+            'board_id' => $boards[0]->id,
+            'user_id' => $users[0]->id,
+        ])->merge(
+            factory(Lane::class, 1)->create([
+                'board_id' => $boards[1]->id,
+                'user_id' => $users[0]->id,
+            ])
+        );
+
+        $cards = factory(Card::class, 1)->create([
+            'lane_id' => $lanes[0]->id,
+            'user_id' => $users[0]->id,
+        ])->merge(
+            factory(Card::class, 1)->create([
+                'lane_id' => $lanes[1]->id,
+                'user_id' => $users[0]->id,
+            ])
+        );
+
+        $label = factory(Label::class)->create([
+            'board_id' => $boards[0]->id,
+            'user_id' => $users[0]->id, 
+        ]);
+
+        $attributes = [
+            'card_id' => $cards[0]->id,
+        ];
+
+        
+        // NOT LOGGED
+        $this->putJson('/label'.'/'.$label->id.'/attach', $attributes, $this->ajaxHeader)->assertUnauthorized();
+
+        // NOT AJAX
+        $this->actingAs($users[0]);
+        $this->putJson('/label'.'/'.$label->id.'/attach', $attributes)->assertForbidden();
+
+        // UUID
+        $this->putJson('/label/notUUID/attach', $attributes, $this->ajaxHeader)->assertStatus(400);
+
+        // NOT FOUND
+        $this->putJson('/label'.'/'.$this->faker()->uuid().'/attach', $attributes, $this->ajaxHeader)->assertNotFound();
+
+        // BAD REQUEST DATA
+        $this->putJson('/label'.'/'.$label->id.'/attach', [], $this->ajaxHeader)->assertStatus(422);
+        $this->putJson('/label'.'/'.$label->id.'/attach', [
+            'card_id' => 'notUUID',
+        ], $this->ajaxHeader)->assertStatus(422);
+
+        // NOT AUTHORIZED
+        $this->actingAs($users[1]);
+        $this->putJson('/label'.'/'.$label->id.'/attach', $attributes, $this->ajaxHeader)->assertUnauthorized();
+
+        // NOT FOUND CARD
+        $this->actingAs($users[0]);
+        $this->putJson('/label'.'/'.$label->id.'/attach', ['card_id' => $this->faker()->uuid()], $this->ajaxHeader)->assertNotFound();
+
+        // CARD NOT ON SAME BOARD
+        $this->putJson('/label'.'/'.$label->id.'/attach', ['card_id' => $cards[1]->id], $this->ajaxHeader)->assertForbidden();
+
+        // VALID REQUEST
+        $this->actingAs($users[1]);
+        $workspace->addMember($users[1]);
+        $response = $this->putJson('/label'.'/'.$label->id.'/attach', $attributes, $this->ajaxHeader);
+        $response->assertStatus(204);
+        $this->assertDatabaseHas('cards_labels', [
+            'card_id' => $cards[0]->id,
+            'label_id' => $label->id,
+        ]);
+        
+
+    }
 }
