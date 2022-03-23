@@ -12,9 +12,12 @@ class Card extends Model
     protected $guarded = [];
     
     public function lane() {
-        return $this->hasOne(Lane::class);
+        return $this->hasOne(Lane::class, 'id', 'lane_id');
     }
     public function hasLabels() {
         return $this->belongsToMany(Label::class, "cards_labels");
+    }
+    public function creator() {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

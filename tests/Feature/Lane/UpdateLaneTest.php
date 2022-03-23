@@ -23,7 +23,7 @@ class UpdateLaneTest extends TestCase
      *  - return 422 when bad data request
      *  - return 401 when user not workspace member
      *  - return 304 when validated request is empty
-     *  - return 200 AND the board when valid request
+     *  - return 200 AND the lane when valid request
      * 
      * @return void
      */

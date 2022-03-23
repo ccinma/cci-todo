@@ -19,6 +19,8 @@ class CreateCardsTable extends Migration
             $table->text("description")->nullable();
             $table->string('lane_id');
             $table->foreign('lane_id')->references('id')->on('lanes')->onDelete("cascade");
+            $table->string('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete("cascade");
             $table->timestamps();
         });
     }

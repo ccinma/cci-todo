@@ -57,6 +57,8 @@ Route::prefix('board')->as('board.')->middleware('auth')->group(function() {
     Route::name('delete')->middleware('ajax')->delete('{board}', 'Board\DeleteBoardController@delete');
 });
 
+
+
 Route::prefix('lane')->as('lane.')->middleware('auth')->group(function() {
 
     // CREATE
@@ -70,5 +72,22 @@ Route::prefix('lane')->as('lane.')->middleware('auth')->group(function() {
 
     // DELETE
     Route::name('delete')->middleware('ajax')->delete('{lane}', 'Lane\DeleteLaneController@delete');
+
+});
+
+
+Route::prefix('card')->as('card.')->middleware('auth')->group(function() {
+
+    // CREATE
+    Route::name('store')->middleware('ajax')->post('/', 'Card\CreateCardController@store');
+
+    // READ
+    Route::name('show')->middleware('ajax')->get('{card}', 'Card\ReadCardController@show');
+
+    // UPDATE
+    Route::name('update')->middleware('ajax')->put('{card}', 'Card\UpdateCardController@update');
+
+    // DELETE
+    Route::name('delete')->middleware('ajax')->delete('{card}', 'Card\DeleteCardController@delete');
 
 });
