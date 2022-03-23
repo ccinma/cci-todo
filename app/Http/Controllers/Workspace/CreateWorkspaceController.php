@@ -9,10 +9,6 @@ use Auth;
 
 class CreateWorkspaceController extends Controller
 {
-    public function __construct()
-    {
-        
-    }
 
     public function store(StoreWorkspaceRequest $request)
     {
@@ -20,6 +16,7 @@ class CreateWorkspaceController extends Controller
         $attributes['user_id'] = Auth::user()->id;
 
         $workspace = Workspace::create($attributes);
+        $workspace->addMember(Auth::user());
 
         return response()->json([
             'data' => $workspace

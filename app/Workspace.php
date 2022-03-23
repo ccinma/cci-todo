@@ -26,10 +26,10 @@ class Workspace extends Model
      * 
      * @return Collection
      */
-    public static function findAllByLoggedUser() : Collection
+    public static function findUserWorkspaces() : Collection
     {
         $user_id = Auth::user()->id;
-        return Self::where(['user_id' => $user_id])->orWhereHas('members', function($q) use($user_id) {
+        return Self::whereHas('members', function($q) use($user_id) {
             $q->whereIn('user_id', [$user_id]);
         })->get();
     }
@@ -52,14 +52,10 @@ class Workspace extends Model
     public function hasMember(User $user) : bool
     {
         $value = false;
-        if ($this->user_id == $user->id) {
-            $value = true;
-        } else {
-            foreach($this->members as $member) {
-                if ($member->id == $user->id) {
-                    $value = true;
-                    break;
-                }
+        foreach($this->members as $member) {
+            if ($member->id == $user->id) {
+                $value = true;
+                break;
             }
         }
         return $value;

@@ -30,8 +30,9 @@ Route::prefix('workspace')->as('workspace.')->middleware('auth')->group(function
     Route::name('store')->middleware('ajax')->post('/', 'Workspace\CreateWorkspaceController@store');
 
     // READ
-    Route::name('index')->get('/', 'Workspace\ReadWorkspaceController@index');
-    Route::name('show')->get('{workspace}', 'Workspace\ReadWorkspaceController@show');
+    Route::name('index')->middleware('ajax')->get('/', 'Workspace\ReadWorkspaceController@index');
+    Route::name('show')->middleware('ajax')->get('{workspace}', 'Workspace\ReadWorkspaceController@show');
+    Route::name('boards')->middleware('ajax')->get('{workspace}/boards', 'Workspace\ReadWorkspaceController@boards');
 
     // UPDATE
     Route::name('update')->middleware('ajax')->put('{workspace}', 'Workspace\UpdateWorkspaceController@update');

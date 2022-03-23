@@ -39,12 +39,13 @@ class CreateWorkspaceTest extends TestCase
         $this->actingAs($user);
         $this->postJson('/workspace', ['test' => 'test'], $this->ajaxHeader)->assertStatus(422);
 
-        // LEGIT REQUEST
+        // VALID REQUEST
         $this->actingAs($user);
         $request = $this->postJson('/workspace', $attributes, $this->ajaxHeader);
         $request->assertCreated();
         $this->assertDatabaseHas('workspaces', $attributes);
         $workspace = Workspace::where($attributes)->firstOrFail();
+        $this->assertDatabaseHas('users_workspaces', ['user_id' => $user->id, 'workspace_id' => $workspace->id]);
         $request->assertJsonFragment([
             'data' => $workspace->toArray()
         ]);

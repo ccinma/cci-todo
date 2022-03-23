@@ -12,44 +12,6 @@ use Tests\TestCase;
 class ReadBoardTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
-    /**
-     * It should show every board of a membered workspace, and only for this workspace.
-     *
-     * @return void
-     */
-    public function testGetWorskpaceBoards()
-    {
-        $users = factory(User::class, 2)->create();
-        $this->actingAs($users[0]);
-
-        $workspaces = factory(Workspace::class, 1)->create([
-            'user_id' => $users[0]->id
-        ])->merge(
-            factory(Workspace::class, 1)->create([
-                'user_id' => $users[1]->id
-            ])
-        );
-
-        factory(Board::class, 3)->create([
-            'user_id' => $users[0]->id,
-            'workspace_id' => $workspaces[0]->id,
-        ]);
-
-        factory(Board::class, 3)->create([
-            'user_id' => $users[1]->id,
-            'workspace_id' => $workspaces[1]->id,
-        ]);
-
-        foreach($workspaces[0]->boards as $board) {
-            $this->get('/workspace'.'/'.$workspaces[0]->id)->assertSee($board->name);
-        }
-        foreach($workspaces[1]->boards as $board) {
-            $this->get('/workspace'.'/'.$workspaces[0]->id)->assertDontSee($board->name);
-        }
-        foreach($workspaces[1]->boards as $board) {
-            $this->get('/workspace'.'/'.$workspaces[1]->id)->assertDontSee($board->name);
-        }
-    }
 
     /**
      * It should display the board or not if the user is not authorized to
