@@ -49,12 +49,18 @@ class Workspace extends Model
      * 
      * @return bool
      */
-    public function hasMember(User $user) : bool
+    public function hasMember(User $user, ?string $role = null) : bool
     {
         $value = false;
         foreach($this->members as $member) {
             if ($member->id == $user->id) {
-                $value = true;
+                if ( $role ) {
+                    if ( $member->rôle == $role ) {
+                        $value = true;
+                    }
+                } else {
+                    $value = true;
+                }
                 break;
             }
         }
