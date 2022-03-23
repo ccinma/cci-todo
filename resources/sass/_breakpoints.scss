@@ -54,8 +54,8 @@ $screen-laptop-l-min: 1440px;
     }
 }
 
-// @mixin custom-breakpoint($screen) {
-//     @media (min-width: $screen+'px') {
-//         @content;
-//     }
-//  }
+@mixin custom-breakpoint($screen) {
+    @media (min-width: $screen+'px') {
+        @content;
+    }
+ }

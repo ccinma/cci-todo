@@ -6,10 +6,6 @@
   
   margin: $subnav-margin-mobile;
   padding: 1rem;
-  
-  @include tablet-s {
-    margin: $subnav-margin-tablet-s;
-  }
 
   @include tablet {
     margin: $subnav-margin-tablet-s auto;

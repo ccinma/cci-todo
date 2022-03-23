@@ -1,9 +1,6 @@
 #main {
   padding-inline: $main-padding-inline-mobile;
   padding-block: $main-padding-block-mobile;
-  @include tablet-s {
-    padding-inline: $main-padding-inline-tablet-s;
-  }
   @include tablet {
     padding-inline: $main-padding-inline-tablet;
   }
@@ -16,11 +13,17 @@
     min-height: $align-container-with-header-footer;
   
     padding-inline: 1.25rem;
-    padding-top: 4rem;
-    padding-bottom: 5rem;
+    padding-top: 2.5rem;
+    padding-bottom: 4.5rem;
+
+    @include tablet {
+      padding-top: 2.75rem;
+      padding-bottom: 4.75rem;
+    }
 
     @include laptop {
-      padding-bottom: 2.5rem;
+      padding-top: 3rem;
+      padding-bottom: 2rem;
       padding-inline: 2rem;
     }
   
@@ -43,6 +46,12 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    padding-bottom: 2.5rem;
+
+    @include tablet {
+      padding-bottom: 2.75rem;
+    }
   }
   
   #small_container {
