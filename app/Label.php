@@ -11,10 +11,13 @@ class Label extends Model
     
     protected $guarded = [];
 
-    public function onCards() {
-        return $this->belongsToMany(Label::class, "cards_labels");
+    public function cards() {
+        return $this->belongsToMany(Card::class, "cards_labels");
     }
     public function board() {
-        return $this->hasOne(Board::class);
+        return $this->hasOne(Board::class, 'id', 'board_id');
+    }
+    public function creator() {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

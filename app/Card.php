@@ -14,7 +14,7 @@ class Card extends Model
     public function lane() {
         return $this->hasOne(Lane::class, 'id', 'lane_id');
     }
-    public function hasLabels() {
+    public function labels() {
         return $this->belongsToMany(Label::class, "cards_labels");
     }
     public function creator() {
