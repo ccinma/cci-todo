@@ -31,9 +31,7 @@ class UpdateLaneTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = factory(Workspace::class)->create([
-            'user_id' => $users[0]->id,
-        ]);
+        $workspace = $this->generateWorkspaces($users[0]);
 
         $board = factory(Board::class)->create([
             'workspace_id' => $workspace->id,
