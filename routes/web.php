@@ -106,5 +106,6 @@ Route::prefix('label')->as('label.')->middleware('auth')->group(function() {
     Route::name('attach')->middleware('ajax')->put('{label}/attach', 'Label\UpdateLabelController@attach');
 
     // DELETE
+    Route::name('delete')->middleware('ajax')->delete('{label}', 'Label\DeleteLabelController@delete');
 
 });
