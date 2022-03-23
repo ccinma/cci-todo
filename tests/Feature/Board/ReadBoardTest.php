@@ -14,36 +14,54 @@ class ReadBoardTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     /**
-     * It should display the board or not if the user is not authorized to
+     * It should:
+     *  - return 401 when not logged
+     *  - return 403 when not ajax
+     *  - return 400 when not UUID
+     *  - return 404 when not found
+     *  - return 401 when not authorized
+     *  - return 200 and data when authorized
+     *
+     * @return void
      */
-    public function testBoardPage()
+    public function testReadBoard()
     {
-        $this->withoutExceptionHandling();
-
         $users = factory(User::class, 2)->create();
-        $this->actingAs($users[0]);
 
-        $workspaces = factory(Workspace::class, 1)->create([
-            'user_id' => $users[0]->id
-        ])->merge(
-            factory(Workspace::class, 1)->create([
-                'user_id' => $users[1]->id
-            ])
-        );
-
-        $boards = factory(Board::class, 2)->create([
+        $workspace = factory(Workspace::class)->create([
             'user_id' => $users[0]->id,
-            'workspace_id' => $workspaces[0]->id,
-        ])->merge(
-            factory(Board::class, 1)->create([
-                'user_id' => $users[1]->id,
-                'workspace_id' => $workspaces[1]->id,
-            ])
-        );
+        ]);
 
-        $this->get('/board'.'/'.$boards[0]->id)->assertSee($boards[0]->name);
-        $this->get('/board'.'/'.$boards[0]->id)->assertDontSee($boards[1]->name);
-        $this->get('/board'.'/'.$boards[1]->id)->assertSee($boards[1]->name);
-        $this->get('/board'.'/'.$boards[2]->id)->assertDontSee($boards[2]->name);
+        $board = factory(Board::class)->create([
+            'workspace_id' => $workspace->id,
+            'user_id' => $users[0]->id,
+        ]);
+
+
+        // NOT LOGGED
+        $this->getJson('/board'.'/'.$board->id, $this->ajaxHeader)->assertUnauthorized();
+
+        // NOT AJAX
+        $this->actingAs($users[0]);
+        $this->getJson('/board'.'/'.$board->id)->assertForbidden();
+
+        // NOT UUID
+        $this->getJson('/board/notUUID', $this->ajaxHeader)->assertStatus(400);
+
+        // NOT FOUND
+        $this->getJson('/board'.'/'.$this->faker()->uuid(), $this->ajaxHeader)->assertNotFound();
+
+        // NOT AUTHORIZED
+        $this->actingAs($users[1]);
+        $this->getJson('/board'.'/'.$board->id, $this->ajaxHeader)->assertUnauthorized();
+
+        // VALID REQUEST
+        $workspace->addMember($users[1]);
+        $response = $this->getJson('/board'.'/'.$board->id, $this->ajaxHeader);
+        $response->assertOk();
+        $response->assertJsonFragment([
+            'id' => $board->id
+        ]);
+
     }
 }

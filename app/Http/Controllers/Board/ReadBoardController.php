@@ -5,23 +5,25 @@ namespace App\Http\Controllers\Board;
 use App\Board;
 use App\Http\Controllers\Controller;
 use Auth;
+use Str;
 
 class ReadBoardController extends Controller
 {
-    public function show($board)
+    public function show($board_id)
     {
-        $board = Board::with('workspace')->find($board);
-
-        if ( ! $board) {
-            return view('errors.404');
+        if ( ! Str::isUuid($board_id) ) {
+            return response()->json([], 400);
         }
 
-        if( ! $board->workspace->hasMember(Auth::user())) {
-            return view('errors.401');
+        $board = Board::findOrFail($board_id);
+
+        if ( ! $board->workspace->hasMember(Auth::user()) ) {
+            return response()->json([], 401);
         }
 
-        return view('board.show', [
-            'board' => $board,
+        return response([
+            'data' => $board->withoutRelations(),
         ]);
+
     }
 }

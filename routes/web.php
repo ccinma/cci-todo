@@ -49,7 +49,7 @@ Route::prefix('board')->as('board.')->middleware('auth')->group(function() {
     Route::name('store')->middleware('ajax')->post('/', 'Board\CreateBoardController@store');
 
     // READ
-    Route::name('show')->get('{board}', 'Board\ReadBoardController@show');
+    Route::name('show')->middleware('ajax')->get('{board}', 'Board\ReadBoardController@show');
     
     // UPDATE
     Route::name('update')->middleware('ajax')->put('{board}', 'Board\UpdateBoardController@update');
