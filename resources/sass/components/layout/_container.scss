@@ -47,9 +47,16 @@
     flex-direction: column;
     justify-content: center;
 
-    padding-bottom: 2.5rem;
+    padding-top: calc(2.5rem * 2);
+    padding-bottom: calc(2.5rem * 2);
 
     @include tablet {
+      padding-top: calc(2.75rem * 2); 
+      padding-bottom: calc(2.75rem * 2);
+    }
+
+    @include laptop {
+      padding-top: calc(3rem + 2.75rem);
       padding-bottom: 2.75rem;
     }
   }
