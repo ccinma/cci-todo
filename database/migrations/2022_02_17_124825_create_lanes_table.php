@@ -20,8 +20,16 @@ class CreateLanesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete("cascade");
             $table->string('board_id');
             $table->foreign('board_id')->references('id')->on('boards')->onDelete("cascade");
+            $table->string('previous_id')->nullable();
+            $table->string('next_id')->nullable();
             $table->timestamps();
         });
+
+        Schema::table('lanes', function (Blueprint $table) {
+            $table->foreign('previous_id')->references('id')->on('lanes');
+            $table->foreign('next_id')->references('id')->on('lanes');
+        });
+
     }
 
     /**
