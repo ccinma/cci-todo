@@ -31,7 +31,17 @@ class CreateLaneController extends Controller
 
         $attributes['user_id'] = Auth::user()->id;
 
+        $lastLane = $board->lanes()->where('next_id', null)->first();
+
+        if ( $lastLane ) {
+            $attributes['previous_id'] = $lastLane->id;
+        }
+
         $lane = Lane::create($attributes);
+
+        if ( $lastLane ) {
+            $lastLane->update(['next_id' => $lane->id]);
+        }
 
         return response()->json([
             'data' => $lane,
