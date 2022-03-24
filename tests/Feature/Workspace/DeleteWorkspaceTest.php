@@ -27,9 +27,7 @@ class DeleteWorkspaceTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = factory(Workspace::class)->create([
-            'user_id' => $users[0]->id
-        ]);
+        $workspace = $this->generateWorkspaces($users[0]);
 
         // NOT LOGGED
         $this->deleteJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader)->assertUnauthorized();
@@ -39,19 +37,21 @@ class DeleteWorkspaceTest extends TestCase
         $this->deleteJson('/workspace'.'/'.$workspace->id, [])->assertForbidden();
 
         // NOT UUID
-        $this->actingAs($users[0]);
         $this->deleteJson('/workspace/notauuid', [], $this->ajaxHeader)->assertStatus(400);
 
         // NOT FOUND
-        $this->actingAs($users[0]);
         $this->deleteJson('/workspace'.'/'.$this->faker()->uuid(), [], $this->ajaxHeader)->assertNotFound();
 
-        // NOT CREATOR
+        // NOT WORKSPACE MEMBER 
         $this->actingAs($users[1]);
         $this->deleteJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader)->assertUnauthorized();
 
-        // VALID REQUEST BY CREATOR
-        $this->actingAs($users[0]);
+        // NOT ADMIN
+        $workspace->addMember($users[1]);
+        $this->deleteJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader)->assertUnauthorized();
+
+        // VALID REQUEST BY ADMIN
+        $workspace->setAdmin($users[1]);
         $request = $this->deleteJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader);
         $request->assertStatus(204);
         $this->assertDatabaseMissing('workspaces', ['id' => $workspace->id]);

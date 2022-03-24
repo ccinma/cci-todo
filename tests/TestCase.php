@@ -27,14 +27,14 @@ abstract class TestCase extends BaseTestCase
             ]);
 
             foreach ( $workspaces as $workspace ) {
-                $workspace->addMember($user);
+                $workspace->addMember($user, true);
             }
 
         } else {
             $workspaces = factory(Workspace::class)->create([
                 'user_id' => $user->id,
             ]);
-            $workspaces->addMember($user);
+            $workspaces->addMember($user, true);
         }
 
         return $workspaces;
