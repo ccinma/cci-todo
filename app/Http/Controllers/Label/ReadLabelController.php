@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Label;
 
 use App\Http\Controllers\Controller;
 use App\Label;
-use Auth;
+use Gate;
 use Str;
 
 class ReadLabelController extends Controller
@@ -17,7 +17,7 @@ class ReadLabelController extends Controller
 
         $label = Label::findOrFail($label_id);
 
-        if ( ! $label->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $label->board->workspace) ) {
             return response()->json([], 401);
         }
 

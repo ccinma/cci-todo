@@ -18,7 +18,7 @@ class DeleteWorkspaceController extends Controller
 
         $workspace = Workspace::findOrFail($workspace_id);
 
-        if ( ! Gate::allows('delete-workspace', $workspace) ) {
+        if ( Gate::denies('manage-workspace', $workspace) ) {
             return response()->json([], 401);
         }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Lane;
 use App\Http\Controllers\Controller;
 use App\Lane;
 use Auth;
+use Gate;
 use Str;
 
 class ReadLaneController extends Controller
@@ -25,7 +26,7 @@ class ReadLaneController extends Controller
             return response()->json([], 404);
         }
 
-        if ( ! $lane->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $lane->board->workspace) ) {
             return response()->json([], 401);
         }
 

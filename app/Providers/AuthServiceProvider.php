@@ -27,12 +27,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::define('collaborate', function (User $user, Workspace $workspace) {
+
+            return !! $workspace->members()->where('id', $user->id)->first();
+            
+        });
+
         /**
          * Only allow admins to delete workspaces
          */
-        Gate::define('delete-workspace', function (User $user, Workspace $workspace) {
+        Gate::define('manage-workspace', function (User $user, Workspace $workspace) {
             
-            return $workspace->hasMember($user, true);
+            return !! $workspace->members()->where([['user_id', $user->id], ['isAdmin', true]])->first();
 
         });
     }

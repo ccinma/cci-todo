@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Board;
 use App\Board;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateBoardRequest;
-use Auth;
+use Gate;
 use Str;
 
 class UpdateBoardController extends Controller
@@ -18,7 +18,7 @@ class UpdateBoardController extends Controller
 
         $board = Board::findOrFail($board_id);
 
-        if ( ! $board->workspace->hasMember(Auth::user()) ) {
+        if (  Gate::denies('collaborate', $board->workspace)  ) {
             return response()->json([], 401);
         }
 

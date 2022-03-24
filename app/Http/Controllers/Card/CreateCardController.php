@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCardRequest;
 use App\Lane;
 use Auth;
+use Gate;
 
 class CreateCardController extends Controller
 {
@@ -20,7 +21,7 @@ class CreateCardController extends Controller
             return response()->json([], 404);
         }
 
-        if ( ! $lane->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $lane->board->workspace) ) {
             return response()->json([], 401);
         }
 

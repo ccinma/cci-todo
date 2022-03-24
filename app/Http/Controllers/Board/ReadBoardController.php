@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Board;
 
 use App\Board;
 use App\Http\Controllers\Controller;
-use Auth;
+use Gate;
 use Str;
 
 class ReadBoardController extends Controller
@@ -17,7 +17,7 @@ class ReadBoardController extends Controller
 
         $board = Board::findOrFail($board_id);
 
-        if ( ! $board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $board->workspace) ) {
             return response()->json([], 401);
         }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateLaneRequest;
 use App\Lane;
 use Auth;
+use Gate;
 use Str;
 
 class UpdateLaneController extends Controller
@@ -32,7 +33,7 @@ class UpdateLaneController extends Controller
             ], 404);
         }
 
-        if ( ! $lane->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $lane->board->workspace) ) {
             return response()->json([], 401);
         }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Card;
 use App\Card;
 use App\Http\Controllers\Controller;
 use Auth;
+use Gate;
 use Str;
 
 class ReadCardController extends Controller
@@ -21,7 +22,7 @@ class ReadCardController extends Controller
             return response()->json([], 404);
         }
 
-        if ( ! $card->lane->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $card->lane->board->workspace) ) {
             return response()->json([], 401);
         }
 

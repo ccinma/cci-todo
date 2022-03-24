@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\Uuids;
 use Auth;
+use Gate;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -45,25 +46,6 @@ class Workspace extends Model
         return $this->user_id == $user->id;
     }
 
-    /**
-     * Determine if the User is the creator or a member of the Workspace
-     * 
-     * @return bool
-     */
-    public function hasMember(User $user, bool $isAdmin = false) : bool
-    {
-        $member = $this->members->firstWhere('id', $user->id);
-
-        if ( $member ) {
-            if ( $isAdmin ) {
-                return $member->pivot->isAdmin == "1";
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Add a User to the members of the Workspace
@@ -90,7 +72,7 @@ class Workspace extends Model
      */
     public function setAdmin(User $user) : bool
     {
-        if (Self::hasMember($user)) {
+        if ( Gate::allows('collaborate', $this) ) {
             $this->members()->updateExistingPivot($user->id, ['isAdmin' => true]);
             return true;
         }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLaneRequest;
 use App\Lane;
 use Auth;
+use Gate;
 
 class CreateLaneController extends Controller
 {
@@ -24,7 +25,7 @@ class CreateLaneController extends Controller
             ], 404);
         }
 
-        if ( ! $board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $board->workspace) ) {
             return response()->json([], 401);
         }
 

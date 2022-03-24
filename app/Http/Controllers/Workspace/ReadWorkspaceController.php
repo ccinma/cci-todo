@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Workspace;
 use App\Http\Controllers\Controller;
 use App\Workspace;
 use Auth;
+use Gate;
 use Str;
 
 class ReadWorkspaceController extends Controller
@@ -27,7 +28,7 @@ class ReadWorkspaceController extends Controller
 
         $workspace = Workspace::findOrFail($workspace_id);
 
-        if ( ! $workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $workspace) ) {
             return response()->json([], 401);
         };
 
@@ -44,7 +45,7 @@ class ReadWorkspaceController extends Controller
 
         $workspace = Workspace::findOrFail($workspace_id);
 
-        if ( ! $workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $workspace) ) {
             return response()->json([], 401);
         }
 
