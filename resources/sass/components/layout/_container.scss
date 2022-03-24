@@ -29,8 +29,8 @@
   
     background: #FFFFFF88;
     box-shadow: 0 0.5rem 2rem 0 $shadow;
-    backdrop-filter: blur( 5px );
-    -webkit-backdrop-filter: blur( 5px );
+    backdrop-filter: $blur;
+    -webkit-backdrop-filter: $blur;
     border-radius: 1rem;
   
     z-index: -1;
