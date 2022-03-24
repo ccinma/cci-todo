@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Lane;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MoveLaneRequest;
 use App\Http\Requests\UpdateLaneRequest;
 use App\Lane;
 use Auth;
@@ -47,4 +48,72 @@ class UpdateLaneController extends Controller
             'data' => $lane
         ], 200);
     }
+
+
+    public function move($lane_id, MoveLaneRequest $request)
+    {
+        $previous = null;
+        $next = null;
+
+        if ( ! Str::isUuid($lane_id) ) {
+            return response()->json([], 400);
+        }
+
+        $lane = Lane::findOrFail($lane_id);
+
+        if ( Gate::denies('collaborate', $lane->board->workspace) ) {
+            return response()->json([], 401);
+        }
+
+        $attributes = $request->validated();
+
+        if ( empty($attributes) ) {
+            return response()->json([], 304);
+        }
+
+        $data = [];
+
+
+        $previous_id = isset($attributes['previous_id']) ? $attributes['previous_id'] : null;
+        $next_id = isset($attributes['next_id']) ? $attributes['next_id'] : null;
+
+        $previous = null;
+        $next = null;
+
+        if ( $previous_id ) {
+            $previous = Lane::findOrFail($previous_id);
+            $next_id = $previous->next_id;
+            $next = Lane::find($next_id);
+        } else {
+            $next = Lane::findOrFail($next_id);
+            $previous_id = $next->previous_id;
+            $previous = Lane::find($previous_id);
+        }
+
+        $order = [];
+
+        if ( $previous ) {
+            $previous->update([
+                'next_id' => $lane->id,
+            ]);
+            $order['previous_id'] = $previous->id;
+            $data['previous'] = $previous->withoutRelations();
+        }
+
+        if ( $next ) {
+            $next->update([
+                'previous_id' => $lane->id,
+            ]);
+            $order['next_id'] = $next->id;
+            $data['next'] = $next->withoutRelations();
+        }
+
+        $lane->update($order);
+        $data['moved'] = $lane->withoutRelations();
+
+        return response()->json([
+            'data' => $data
+        ], 200);
+    }
+
 }
