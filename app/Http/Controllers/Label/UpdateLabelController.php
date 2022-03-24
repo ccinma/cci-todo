@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AttachLabelRequest;
 use App\Http\Requests\UpdateLabelRequest;
 use App\Label;
-use Auth;
+use Gate;
 use Str;
 
 class UpdateLabelController extends Controller
@@ -20,7 +20,7 @@ class UpdateLabelController extends Controller
 
         $label = Label::findOrFail($label_id);
 
-        if ( ! $label->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $label->board->workspace) ) {
             return response()->json([], 401);
         }
 
@@ -50,7 +50,7 @@ class UpdateLabelController extends Controller
 
         $label = Label::findOrFail($label_id);
 
-        if ( ! $label->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $label->board->workspace) ) {
             return response()->json([], 401);
         }
         

@@ -5,22 +5,24 @@ namespace App\Http\Controllers\Board;
 use App\Board;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateBoardRequest;
-use Auth;
+use Gate;
+use Str;
 
 class UpdateBoardController extends Controller
 {
-    public function update($board, UpdateBoardRequest $request)
+    public function update($board_id, UpdateBoardRequest $request)
     {
-        $board = Board::with(['workspace', 'workspace.members'])->find($board);
-        $attributes = $request->validated();
-        
-        if ( ! $board ) {
-            return response()->json([], 404);
+        if ( ! Str::isUuid($board_id) ) {
+            return response()->json([], 400);
         }
 
-        if ( ! $board->workspace->hasMember(Auth::user()) ) {
+        $board = Board::findOrFail($board_id);
+
+        if (  Gate::denies('collaborate', $board->workspace)  ) {
             return response()->json([], 401);
         }
+
+        $attributes = $request->validated();
 
         if ( empty($attributes) ) {
             return response()->json([], 304);
@@ -28,7 +30,9 @@ class UpdateBoardController extends Controller
 
         $board->update($attributes);
 
-        return response()->json(['data' => $board]);
+        return response()->json([
+            'data' => $board->withoutRelations(),
+        ], 200);
 
     }
 }

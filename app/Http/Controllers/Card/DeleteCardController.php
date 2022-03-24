@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Card;
 
 use App\Card;
 use App\Http\Controllers\Controller;
-use Auth;
+use Gate;
 use Str;
 
 class DeleteCardController extends Controller
@@ -17,7 +17,7 @@ class DeleteCardController extends Controller
 
         $card = Card::findOrFail($card_id);
 
-        if ( ! $card->lane->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $card->lane->board->workspace) ) {
             return response()->json([], 401);
         }
 

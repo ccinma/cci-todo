@@ -33,9 +33,7 @@ class UpdateLabelTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = factory(Workspace::class)->create([
-            'user_id' => $users[0]->id,
-        ]);
+        $workspace = $this->generateWorkspaces($users[0]);
 
         $board = factory(Board::class)->create([
             'workspace_id' => $workspace->id,
@@ -44,11 +42,6 @@ class UpdateLabelTest extends TestCase
 
         $lane = factory(Lane::class)->create([
             'board_id' => $board->id,
-            'user_id' => $users[0]->id,
-        ]);
-
-        $card = factory(Card::class)->create([
-            'lane_id' => $lane->id,
             'user_id' => $users[0]->id,
         ]);
 
@@ -123,9 +116,7 @@ class UpdateLabelTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = factory(Workspace::class)->create([
-            'user_id' => $users[0]->id,
-        ]);
+        $workspace = $this->generateWorkspaces($users[0]);
 
         $boards = factory(Board::class, 2)->create([
             'workspace_id' => $workspace->id,

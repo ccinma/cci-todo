@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Card;
 use App\Card;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateCardRequest;
-use Auth;
+use Gate;
 use Str;
 
 class UpdateCardController extends Controller
@@ -18,7 +18,7 @@ class UpdateCardController extends Controller
 
         $card = Card::findOrFail($card_id);
 
-        if ( ! $card->lane->board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $card->lane->board->workspace) ) {
             return response()->json([], 401);
         }
 

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App;
 use App\User;
+use App\Board;
 use App\Workspace;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -16,77 +17,140 @@ class ReadWorkspaceTest extends TestCase
 
 
     /**
-     * It should return only the workspaces that are created by or which are trusting the logged user.
+     * It should:
+     *  - return 401 when not logged
+     *  - return 403 when not ajax
+     *  - return 200 and data when authorized
      *
      * @return void
      */
-    public function testFindWorkspacesByLoggedUser()
+    public function testGetWorkspaces()
     {
-        // Generate 2 different users and log the first user
         $users = factory(User::class, 2)->create();
-        $this->actingAs($users[0]);
 
-        // Generate 3 workspace for the first user and 2 other for second user
-        //  Workspace 1 = created by user 1
-        //  Workspace 2 = created by user 1
-        //  Workspace 3 = created by user 1
-        //  Workspace 4 = created by user 2
-        //  Workspace 5 = created by user 2
-        $workspaces = factory(Workspace::class, 3)->create([
-            'user_id' => $users[0]->id,
-        ])->merge(
-            factory(Workspace::class, 2)->create([
-                'user_id' => $users[1]->id,
-            ])
+        $workspaces = $this->generateWorkspaces($users[0], 1)->merge(
+            $this->generateWorkspaces($users[1], 2)
         );
 
-        // Setting additional members for workspaces
-        //  Workspace 1 = members: user1
-        //  Workspace 2 = members: user1
-        //  Workspace 3 = members: user1
-        //  Workspace 4 = members: user1, user2
-        //  Workspace 5 = members: user2
-        $workspaces[3]->addMember($users[0]);
-        
-        // Get workspaces created by the logged user
-        $userWorkspaces = Workspace::findAllByLoggedUser();
+        // NOT LOGGED
+        $this->getJson('/workspace', $this->ajaxHeader)->assertUnauthorized();
 
-        // ASSERTIONS
-        // It should only return workspaces where user1 is a member
-        foreach ($userWorkspaces as $workspace) {
-            $this->assertEquals(true, $workspace->hasMember($users[0]));
-        }
-        
-        // It should see this created workspace (workspace 1)
-        $this->get('/workspace')->assertSee($workspaces[0]->name);
-        // It should see this authorized workspace (workspace 4)
-        $this->get('/workspace')->assertSee($workspaces[3]->name);
-        // It should not see this not authorized workspace (workspace 5)
-        $this->get('/workspace')->assertDontSee($workspaces[4]->name);
+        // NOT AJAX
+        $this->actingAs($users[0]);
+        $this->getJson('/workspace')->assertForbidden();
+
+        // VALID REQUEST
+        $workspaces[1]->addMember($users[0]);
+        $response = $this->getJson('/workspace', $this->ajaxHeader);
+        $response->assertOk();
+        $response->assertJsonFragment(['id' => $workspaces[0]->id]);
+        $response->assertJsonFragment(['id' => $workspaces[1]->id]);
+        $response->assertJsonMissing(['id' => $workspaces[2]->id]);
+
+
     }
 
     /**
-     * It should return a specific workspace only if the user is the creator or a member of the workspace.
-     * 
+     * It should:
+     *  - return 401 when not logged
+     *  - return 403 when not ajax
+     *  - return 400 when not UUID
+     *  - return 404 when not found
+     *  - return 401 when not authorized
+     *  - return 200 and data when authorized
+     *
      * @return void
      */
-    public function testFindOneWorkspaceByLoggedUserId()
+    public function testFindWorkspace()
     {
-        // Generate 2 different users and log the first user
         $users = factory(User::class, 2)->create();
+
+        $workspace = $this->generateWorkspaces($users[0]);
+
+        // NOT LOGGED
+        $this->getJson('/workspace'.'/'.$workspace->id, $this->ajaxHeader)->assertUnauthorized();
+
+        // NOT AJAX
         $this->actingAs($users[0]);
+        $this->getJson('/workspace'.'/'.$workspace->id)->assertForbidden();
 
-        // Generate 1 workspace for each user
-        $workspaces = [
-            factory(Workspace::class)->create([
-                'user_id' => $users[0]->id
-            ]),
-            factory(Workspace::class)->create([
-                'user_id' => $users[1]->id
-            ]),
-        ];
+        // NOT UUID
+        $this->getJson('/workspace/notUUID', $this->ajaxHeader)->assertStatus(400);
 
-        $this->get('/workspace' . '/' . $workspaces[0]->id)->assertSee($workspaces[0]->name);
-        $this->get('/workspace' . '/' . $workspaces[1]->id)->assertDontSee($workspaces[1]->name);
+        // NOT FOUND
+        $this->getJson('/workspace'.'/'.$this->faker()->uuid(), $this->ajaxHeader)->assertNotFound();
+
+        // NOT AUTHORIZED
+        $this->actingAs($users[1]);
+        $this->getJson('/workspace'.'/'.$workspace->id, $this->ajaxHeader)->assertUnauthorized();
+        
+        // VALID REQUEST
+        $workspace->addMember($users[1]);
+        $response = $this->getJson('/workspace'.'/'.$workspace->id, $this->ajaxHeader);
+        $response->assertOk();
+        $response->assertJsonFragment([
+            'id' => $workspace->id
+        ]);
+
+    }
+
+    /**
+     * It should:
+     *  - return 401 when not logged
+     *  - return 403 when not ajax
+     *  - return 400 when not UUID
+     *  - return 404 when not found
+     *  - return 401 when not authorized
+     *  - return 200 and data when authorized
+     *
+     * @return void
+     */
+    public function testGetWorkspaceBoards()
+    {
+        $users = factory(User::class, 2)->create();
+
+        $workspaces = $this->generateWorkspaces($users[0], 1)->merge(
+            $this->generateWorkspaces($users[1], 1)
+        );
+
+        factory(Board::class)->create([
+            'user_id' => $users[0]->id,
+            'workspace_id' => $workspaces[0]->id,
+        ]);
+
+        factory(Board::class)->create([
+            'user_id' => $users[1]->id,
+            'workspace_id' => $workspaces[0]->id,
+        ]);
+
+        factory(Board::class)->create([
+            'user_id' => $users[1]->id,
+            'workspace_id' => $workspaces[1]->id,
+        ]);
+
+        // NOT LOGGED
+        $this->getJson('/workspace'.'/'.$workspaces[0]->id.'/boards', $this->ajaxHeader)->assertUnauthorized();
+
+        // NOT AJAX
+        $this->actingAs($users[0]);
+        $this->getJson('/workspace'.'/'.$workspaces[0]->id.'/boards')->assertForbidden();
+
+        // NOT UUID
+        $this->getJson('/workspace/notUUID'.'/boards', $this->ajaxHeader)->assertStatus(400);
+
+        // NOT FOUND
+        $this->getJson('/workspace'.'/'.$this->faker()->uuid().'/boards', $this->ajaxHeader)->assertNotFound();
+
+        // NOT AUTHORIZED
+        $this->actingAs($users[1]);
+        $this->getJson('/workspace'.'/'.$workspaces[0]->id.'/boards', $this->ajaxHeader)->assertUnauthorized();
+        
+        // VALID REQUEST
+        $workspaces[0]->addMember($users[1]);
+        $response = $this->getJson('/workspace'.'/'.$workspaces[0]->id.'/boards', $this->ajaxHeader);
+        $response->assertOk();
+        $response->assertJsonFragment(['id' => $workspaces[0]->boards[0]->id]);
+        $response->assertJsonFragment(['id' => $workspaces[0]->boards[1]->id]);
+        $response->assertJsonMissing(['id' => $workspaces[1]->boards[0]->id]);
     }
 }

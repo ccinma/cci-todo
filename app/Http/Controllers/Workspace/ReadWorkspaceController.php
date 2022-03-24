@@ -5,33 +5,52 @@ namespace App\Http\Controllers\Workspace;
 use App\Http\Controllers\Controller;
 use App\Workspace;
 use Auth;
+use Gate;
+use Str;
 
 class ReadWorkspaceController extends Controller
 {
-    public function __construct()
-    {
-        
-    }
 
     public function index()
     {
-        // Get workspaces by user id
-        $workspaces = Workspace::findAllByLoggedUser();
+        $workspaces = Workspace::findUserWorkspaces();
 
-        // Return response
-        return view('workspace.listing', ['workspaces' => $workspaces]);
+        return response()->json([
+            'data' => $workspaces
+        ], 200);
     }
 
-    public function show($workspace)
+    public function show($workspace_id)
     {
-        $workspace = Workspace::find($workspace);
+        if ( ! Str::isUuid($workspace_id) ) {
+            return response()->json([], 400);
+        }
 
-        if (!$workspace || !$workspace->hasMember(Auth::user())) {
-            return view('errors.404');
+        $workspace = Workspace::findOrFail($workspace_id);
+
+        if ( Gate::denies('collaborate', $workspace) ) {
+            return response()->json([], 401);
         };
 
-        return view('workspace.show', [
-            'workspace' => $workspace
+        return response()->json([
+            'data' => $workspace->withoutRelations(),
+        ]);
+    }
+
+    public function boards($workspace_id)
+    {
+        if ( ! Str::isUuid($workspace_id) ) {
+            return response()->json([], 400);
+        }
+
+        $workspace = Workspace::findOrFail($workspace_id);
+
+        if ( Gate::denies('collaborate', $workspace) ) {
+            return response()->json([], 401);
+        }
+
+        return response()->json([
+            'data' => $workspace->boards
         ]);
     }
 }

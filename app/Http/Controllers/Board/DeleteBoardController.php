@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Board;
 
 use App\Board;
 use App\Http\Controllers\Controller;
-use Auth;
+use Gate;
 
 class DeleteBoardController extends Controller
 {
@@ -16,7 +16,7 @@ class DeleteBoardController extends Controller
             return response()->json([], 404);
         }
 
-        if ( ! $board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $board->workspace) ) {
             return response()->json([], 401);
         }
 

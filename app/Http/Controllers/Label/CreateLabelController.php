@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLabelRequest;
 use App\Label;
 use Auth;
+use Gate;
 
 class CreateLabelController extends Controller
 {
@@ -16,7 +17,7 @@ class CreateLabelController extends Controller
 
         $board = Board::findOrFail($attributes['board_id']);
 
-        if ( ! $board->workspace->hasMember(Auth::user()) ) {
+        if ( Gate::denies('collaborate', $board->workspace) ) {
             return response()->json([], 401);
         }
 

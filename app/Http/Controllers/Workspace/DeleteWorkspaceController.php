@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Workspace;
 use App\Http\Controllers\Controller;
 use App\Workspace;
 use Auth;
+use Gate;
 use Str;
 
 class DeleteWorkspaceController extends Controller
@@ -15,13 +16,9 @@ class DeleteWorkspaceController extends Controller
             return response()->json([], 400);
         }
 
-        $workspace = Workspace::find($workspace_id);
+        $workspace = Workspace::findOrFail($workspace_id);
 
-        if ( ! $workspace ) {
-            return response()->json([], 404);
-        }
-
-        if ( ! $workspace->isCreator(Auth::user()) ) {
+        if ( Gate::denies('manage-workspace', $workspace) ) {
             return response()->json([], 401);
         }
 
