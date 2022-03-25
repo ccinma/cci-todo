@@ -38,17 +38,15 @@ class DeleteLaneTest extends TestCase
             'user_id' => $users[0]->id,
         ]);
 
-        $lane = factory(Lane::class)->create([
-            'board_id' => $board->id,
-            'user_id' => $users[0]->id
-        ]);
+        $lanes = $this->generateFollowingLanes($users[0], $board, 3);
+
         
         // NOT LOGGED
-        $this->deleteJson('/lane'.'/'.$lane->id, [], $this->ajaxHeader)->assertUnauthorized();
+        $this->deleteJson('/lane'.'/'.$lanes[1]->id, [], $this->ajaxHeader)->assertUnauthorized();
 
         // NOT AJAX
         $this->actingAs($users[0]);
-        $this->deleteJson('/lane'.'/'.$lane->id, [])->assertForbidden();
+        $this->deleteJson('/lane'.'/'.$lanes[1]->id, [])->assertForbidden();
 
         // NOT UUID
         $this->actingAs($users[0]);
@@ -60,13 +58,19 @@ class DeleteLaneTest extends TestCase
 
         // NOT AUTHORIZED
         $this->actingAs($users[1]);
-        $this->deleteJson('/lane'.'/'.$lane->id, [], $this->ajaxHeader)->assertUnauthorized();
+        $this->deleteJson('/lane'.'/'.$lanes[1]->id, [], $this->ajaxHeader)->assertUnauthorized();
 
         // VALID REQUEST
         $this->actingAs($users[1]);
         $workspace->addMember($users[1]);
-        $request = $this->deleteJson('/lane'.'/'.$lane->id, [], $this->ajaxHeader);
+        $request = $this->deleteJson('/lane'.'/'.$lanes[1]->id, [], $this->ajaxHeader);
         $request->assertStatus(204);
-        $this->assertDatabaseMissing('lanes', $lane->toArray());
+        $this->assertDatabaseMissing('lanes', $lanes[1]->toArray());
+        
+        $previous = Lane::find($lanes[0]->id);
+        $next = Lane::find($lanes[2]->id);
+
+        $this->assertEquals($next->previous_id, $previous->id);
+        $this->assertEquals($previous->next_id, $next->id);
     }
 }
