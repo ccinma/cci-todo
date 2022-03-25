@@ -82,12 +82,14 @@ class UpdateLaneController extends Controller
 
         if ( $previous_id ) {
             $previous = Lane::findOrFail($previous_id);
-            $next_id = $previous->next_id;
-            $next = Lane::find($next_id);
+            if ( $previous->next_id ) {
+                $next = Lane::find($previous->next_id);
+            }
         } else {
             $next = Lane::findOrFail($next_id);
-            $previous_id = $next->previous_id;
-            $previous = Lane::find($previous_id);
+            if ( $next->previous_id ) {
+                $previous = Lane::find($previous_id);
+            }
         }
 
         $order = [];

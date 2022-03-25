@@ -27,14 +27,14 @@ class DeleteWorkspaceTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = $this->generateWorkspaces($users[0]);
+        $workspaces = $this->generateWorkspaces($users[0], 1);
 
         // NOT LOGGED
-        $this->deleteJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader)->assertUnauthorized();
+        $this->deleteJson('/workspace'.'/'.$workspaces[0]->id, [], $this->ajaxHeader)->assertUnauthorized();
 
         // NOT AJAX
         $this->actingAs($users[0]);
-        $this->deleteJson('/workspace'.'/'.$workspace->id, [])->assertForbidden();
+        $this->deleteJson('/workspace'.'/'.$workspaces[0]->id, [])->assertForbidden();
 
         // NOT UUID
         $this->deleteJson('/workspace/notauuid', [], $this->ajaxHeader)->assertStatus(400);
@@ -44,17 +44,17 @@ class DeleteWorkspaceTest extends TestCase
 
         // NOT WORKSPACE MEMBER 
         $this->actingAs($users[1]);
-        $this->deleteJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader)->assertUnauthorized();
+        $this->deleteJson('/workspace'.'/'.$workspaces[0]->id, [], $this->ajaxHeader)->assertUnauthorized();
 
         // NOT ADMIN
-        $workspace->addMember($users[1]);
-        $this->deleteJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader)->assertUnauthorized();
+        $workspaces[0]->addMember($users[1]);
+        $this->deleteJson('/workspace'.'/'.$workspaces[0]->id, [], $this->ajaxHeader)->assertUnauthorized();
 
         // VALID REQUEST BY ADMIN
-        $workspace->setAdmin($users[1]);
-        $request = $this->deleteJson('/workspace'.'/'.$workspace->id, [], $this->ajaxHeader);
+        $workspaces[0]->setAdmin($users[1]);
+        $request = $this->deleteJson('/workspace'.'/'.$workspaces[0]->id, [], $this->ajaxHeader);
         $request->assertStatus(204);
-        $this->assertDatabaseMissing('workspaces', ['id' => $workspace->id]);
+        $this->assertDatabaseMissing('workspaces', ['id' => $workspaces[0]->id]);
 
     }
 }

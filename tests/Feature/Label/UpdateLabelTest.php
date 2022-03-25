@@ -33,10 +33,10 @@ class UpdateLabelTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = $this->generateWorkspaces($users[0]);
+        $workspaces = $this->generateWorkspaces($users[0], 1);
 
         $board = factory(Board::class)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => $workspaces[0]->id,
             'user_id' => $users[0]->id,
         ]);
 
@@ -90,7 +90,7 @@ class UpdateLabelTest extends TestCase
 
         // VALID REQUEST
         $this->actingAs($users[1]);
-        $workspace->addMember($users[1]);
+        $workspaces[0]->addMember($users[1]);
         $response = $this->putJson('/label'.'/'.$label->id, $attributes, $this->ajaxHeader);
         $response->assertOk();
         $this->assertDatabaseHas('labels', $attributes);
@@ -116,10 +116,10 @@ class UpdateLabelTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = $this->generateWorkspaces($users[0]);
+        $workspaces = $this->generateWorkspaces($users[0], 1);
 
         $boards = factory(Board::class, 2)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => $workspaces[0]->id,
             'user_id' => $users[0]->id,
         ]);
 
@@ -185,7 +185,7 @@ class UpdateLabelTest extends TestCase
 
         // VALID REQUEST
         $this->actingAs($users[1]);
-        $workspace->addMember($users[1]);
+        $workspaces[0]->addMember($users[1]);
         $response = $this->putJson('/label'.'/'.$label->id.'/attach', $attributes, $this->ajaxHeader);
         $response->assertStatus(204);
         $this->assertDatabaseHas('cards_labels', [

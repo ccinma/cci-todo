@@ -38,7 +38,7 @@ class DeleteLaneTest extends TestCase
             'user_id' => $users[0]->id,
         ]);
 
-        $lanes = $this->generateFollowingLanes($users[0], $board, 3);
+        $lanes = $this->generateLanes($users[0], $board, 3);
 
         
         // NOT LOGGED

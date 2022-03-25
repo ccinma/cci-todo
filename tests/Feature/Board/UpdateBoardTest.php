@@ -30,11 +30,11 @@ class UpdateBoardTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = $this->generateWorkspaces($users[0]);
+        $workspaces = $this->generateWorkspaces($users[0], 1);
 
         $board = factory(Board::class)->create([
             'user_id' => $users[0]->id,
-            'workspace_id' => $workspace->id
+            'workspace_id' => $workspaces[0]->id
         ]);
 
         $newAttributes = [
@@ -61,7 +61,7 @@ class UpdateBoardTest extends TestCase
 
         // LOGGED WITH MEMBER USER
         $this->actingAs($users[1]);
-        $workspace->addMember($users[1]);
+        $workspaces[0]->addMember($users[1]);
         $this->putJson('/board'.'/'.$board->id, [], $this->ajaxHeader)->assertStatus(304);
         $request = $this->putJson('/board'.'/'.$board->id, $newAttributes, $this->ajaxHeader);
         $request->assertOk();

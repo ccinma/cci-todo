@@ -31,10 +31,10 @@ class UpdateLaneTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = $this->generateWorkspaces($users[0]);
+        $workspaces = $this->generateWorkspaces($users[0], 1);
 
         $board = factory(Board::class)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => $workspaces[0]->id,
             'user_id' => $users[0]->id,
         ]);
 
@@ -73,7 +73,7 @@ class UpdateLaneTest extends TestCase
 
         // VALID REQUEST
         $this->actingAs($users[1]);
-        $workspace->addMember($users[1]);
+        $workspaces[0]->addMember($users[1]);
         $request = $this->putJson('/lane'.'/'.$lane->id, $attributes, $this->ajaxHeader);
         $request->assertOk();
         $this->assertDatabaseHas('lanes', $attributes);
@@ -98,14 +98,14 @@ class UpdateLaneTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = $this->generateWorkspaces($users[0]);
+        $workspaces = $this->generateWorkspaces($users[0], 1);
 
         $board = factory(Board::class)->create([
-            'workspace_id' => $workspace->id,
+            'workspace_id' => $workspaces[0]->id,
             'user_id' => $users[0]->id,
         ]);
 
-        $lanes = $this->generateFollowingLanes($users[0], $board, 5);
+        $lanes = $this->generateLanes($users[0], $board, 5);
 
         // Move to position 3
         $position4 = [
@@ -139,7 +139,7 @@ class UpdateLaneTest extends TestCase
 
         // VALID REQUEST
         $this->actingAs($users[1]);
-        $workspace->addMember($users[1]);
+        $workspaces[0]->addMember($users[1]);
 
         $response = $this->putJson('/lane'.'/'.$lanes[0]->id.'/move', $position4, $this->ajaxHeader);
         $response->assertOk();
