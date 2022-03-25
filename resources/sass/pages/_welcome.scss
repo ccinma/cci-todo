@@ -35,13 +35,13 @@
   }
 
   .register-btn {
-    max-width: 350px;
+    max-width: 20rem;
     margin: 0 auto;
   }
 
   .image {
     display: block;
-    max-width: 350px;
+    max-width: 20rem;
     height: auto;
     margin: 0 auto;
     margin-bottom: 1rem;
@@ -52,7 +52,7 @@
     }
 
     @include laptop {
-      width: 50%;
+      width: 45%;
       max-width: unset;
 
       margin-bottom: 0;
