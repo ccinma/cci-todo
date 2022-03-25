@@ -10,9 +10,9 @@ const public_image_path = "public/assets/images"
 
 
 mix.webpackConfig({
-    stats: {
-        children: true
-    }
+    // stats: {
+    //     children: true
+    // }
 });
 
 
@@ -27,7 +27,7 @@ mix.webpackConfig({
  |
  */
 
-mix.js(`${js_path}/app.js`, public_js_path)
+mix.js(`${js_path}/app.js`, public_js_path).vue()
     .sass(`${sass_path}/app.scss`, public_sass_path)
     .sass(`${sass_path}/themes/_dark.scss`, public_sass_path)
     .copy(`${image_path}`, public_image_path)

@@ -15,7 +15,7 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
+        <script src="{{ asset('assets/js/app.js') }}" defer></script>
 
         <!-- Fonts -->
         <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -31,11 +31,7 @@
         @include("layouts.components.header")
 
         <!-- Content -->
-        <main id='main'>
-            @yield("container")
-
-            @include("layouts.components.mobile_nav")
-        </main>
+        @yield('main-container')
 
         @include("layouts.components.footer")
 
