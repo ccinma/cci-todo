@@ -44,17 +44,14 @@ class DeleteCardTest extends TestCase
             'user_id' => $users[0]->id,
         ]);
 
-        $card = factory(Card::class)->create([
-            'lane_id' => $lane->id,
-            'user_id' => $users[0]->id,
-        ]);
+        $cards = $this->generateCards($users[0], $lane, 3);
         
         // NOT LOGGED
-        $this->deleteJson('/card'.'/'.$card->id, [], $this->ajaxHeader)->assertUnauthorized();
+        $this->deleteJson('/card'.'/'.$cards[1]->id, [], $this->ajaxHeader)->assertUnauthorized();
 
         // NOT AJAX
         $this->actingAs($users[0]);
-        $this->deleteJson('/card'.'/'.$card->id, [])->assertForbidden();
+        $this->deleteJson('/card'.'/'.$cards[1]->id, [])->assertForbidden();
 
         // NOT UUID
         $this->deleteJson('/card/notUUID', [], $this->ajaxHeader)->assertStatus(400);
@@ -64,12 +61,18 @@ class DeleteCardTest extends TestCase
 
         // NOT AUTHORIZED
         $this->actingAs($users[1]);
-        $this->deleteJson('/card'.'/'.$card->id, [], $this->ajaxHeader)->assertUnauthorized();
+        $this->deleteJson('/card'.'/'.$cards[1]->id, [], $this->ajaxHeader)->assertUnauthorized();
 
         // VALID REQUEST
         $workspace->addMember($users[1]);
-        $request = $this->deleteJson('/card'.'/'.$card->id, [], $this->ajaxHeader);
+        $request = $this->deleteJson('/card'.'/'.$cards[1]->id, [], $this->ajaxHeader);
         $request->assertStatus(204);
-        $this->assertDatabaseMissing('cards', $card->toArray());
+        $this->assertDatabaseMissing('cards', $cards[1]->toArray());
+
+        $previous = Card::find($cards[0]->id);
+        $next = Card::find($cards[2]->id);
+
+        $this->assertEquals($next->previous_id, $previous->id);
+        $this->assertEquals($previous->next_id, $next->id);
     }
 }

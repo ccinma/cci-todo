@@ -21,6 +21,26 @@ class DeleteCardController extends Controller
             return response()->json([], 401);
         }
 
+        $previous = null;
+        $next = null;
+
+        if ( $card->previous_id ) {
+            $previous = Card::find($card->previous_id);
+        }
+
+        if ( $card->next_id ) {
+            $next = Card::find($card->next_id);
+        }
+
+        if ( $previous && $next ) {
+            $previous->update(['next_id' => $next->id]);
+            $next->update(['previous_id' => $previous->id]);
+        } elseif ($previous) {
+            $previous->update(['next_id' => null]);
+        } elseif ($next) {
+            $next->update(['previous' => null]);
+        }
+
         $card->delete();
 
         return response()->json([], 204);
