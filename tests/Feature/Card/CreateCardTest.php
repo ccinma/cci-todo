@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Board;
+use App\Card;
 use App\Lane;
 use App\User;
 use App\Workspace;
@@ -21,7 +22,8 @@ class CreateCardTest extends TestCase
      *  - return 422 when bad data
      *  - return 404 when not found lane
      *  - return 401 when user not workspace member
-     *  - create board and return it in 201 request when user is a workspace member
+     *  - create card and return it in 201 request when user is a workspace member
+     *  - auto set previous and next when adding a new card
      * 
      * @return void
      */
@@ -76,5 +78,17 @@ class CreateCardTest extends TestCase
         $request->assertCreated();
         $this->assertDatabaseHas('cards', $attributes);
         $request->assertJsonFragment($attributes);
+
+        // CREATE A SECOND CARD
+        $this->postJson('/card', [
+            'name' => 'Second card',
+            'lane_id' => $lane->id,
+        ], $this->ajaxHeader);
+
+        $cards = Card::orderBy('createdAt')->get();
+
+        $this->assertEquals($cards[1]->id, $cards[0]->next_id);
+        $this->assertEquals($cards[0]->id, $cards[1]->previous_id);
+        
     }
 }
