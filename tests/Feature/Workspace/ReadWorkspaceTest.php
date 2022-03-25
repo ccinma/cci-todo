@@ -65,14 +65,14 @@ class ReadWorkspaceTest extends TestCase
     {
         $users = factory(User::class, 2)->create();
 
-        $workspace = $this->generateWorkspaces($users[0]);
+        $workspaces = $this->generateWorkspaces($users[0], 1);
 
         // NOT LOGGED
-        $this->getJson('/workspace'.'/'.$workspace->id, $this->ajaxHeader)->assertUnauthorized();
+        $this->getJson('/workspace'.'/'.$workspaces[0]->id, $this->ajaxHeader)->assertUnauthorized();
 
         // NOT AJAX
         $this->actingAs($users[0]);
-        $this->getJson('/workspace'.'/'.$workspace->id)->assertForbidden();
+        $this->getJson('/workspace'.'/'.$workspaces[0]->id)->assertForbidden();
 
         // NOT UUID
         $this->getJson('/workspace/notUUID', $this->ajaxHeader)->assertStatus(400);
@@ -82,14 +82,14 @@ class ReadWorkspaceTest extends TestCase
 
         // NOT AUTHORIZED
         $this->actingAs($users[1]);
-        $this->getJson('/workspace'.'/'.$workspace->id, $this->ajaxHeader)->assertUnauthorized();
+        $this->getJson('/workspace'.'/'.$workspaces[0]->id, $this->ajaxHeader)->assertUnauthorized();
         
         // VALID REQUEST
-        $workspace->addMember($users[1]);
-        $response = $this->getJson('/workspace'.'/'.$workspace->id, $this->ajaxHeader);
+        $workspaces[0]->addMember($users[1]);
+        $response = $this->getJson('/workspace'.'/'.$workspaces[0]->id, $this->ajaxHeader);
         $response->assertOk();
         $response->assertJsonFragment([
-            'id' => $workspace->id
+            'id' => $workspaces[0]->id
         ]);
 
     }

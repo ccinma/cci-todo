@@ -21,4 +21,11 @@ class Lane extends Model
     public function creator() {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
+    public function previous() {
+        return $this->hasOne(Self::class, 'id', 'previous_id');
+    }
+    public function next() {
+        return $this->hasOne(Self::class, 'id', 'next_id');
+    }
 }

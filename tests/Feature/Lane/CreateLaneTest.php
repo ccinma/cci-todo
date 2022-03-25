@@ -69,12 +69,23 @@ class CreateLaneTest extends TestCase
         // VALID REQUEST
         $this->actingAs($users[1]);
         $board->workspace->addMember($users[1]);
-        $request = $this->postJson('/lane', $attributes, $this->ajaxHeader);
-        $request->assertCreated();
+        $response = $this->postJson('/lane', $attributes, $this->ajaxHeader);
+        $response->assertCreated();
         $this->assertDatabaseHas('lanes', $attributes);
-        $lane = Lane::where($attributes)->firstOrFail();
-        $request->assertJsonFragment([
-            'data' => $lane->toArray(),
+        $lane = Lane::where($attributes)->first();
+        $response->assertJsonFragment([
+            'id' => $lane->id,
         ]);
+
+        // INCREMENTING BY CREATING A SECOND LANE
+        $this->postJson('/lane', [
+            'name' => 'Second Lane',
+            'board_id' => $board->id,
+        ], $this->ajaxHeader);
+        $secondLane = Lane::where('name', 'Second Lane')->first();
+        $this->assertEquals($lane->id, $secondLane->previous_id);
+
+
+
     }
 }
