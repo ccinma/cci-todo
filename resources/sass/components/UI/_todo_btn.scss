@@ -8,11 +8,17 @@
     text-align: center;
 
     background-color: $btn-bg-primary;
+    
     border: 0.15rem solid $btn-bg-primary;
     border-radius: 0.75rem;
 
     display: flex;
     justify-content: center;
+
+    svg {
+        fill: $btn-bg-primary;
+        height: 1rem;
+    }
 }
 
 .todo-btn:hover {
@@ -23,7 +29,11 @@
     @extend .todo-btn;
     background: #00000000;
     color: $font-color-primary;
-    border-color: $font-color-primary; 
+    border-color: $font-color-primary;
+
+    svg {
+        fill: $font-color-primary;
+    }
 }
 
 .todo-btn-round {
