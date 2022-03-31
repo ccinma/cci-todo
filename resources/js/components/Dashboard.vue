@@ -49,18 +49,40 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M447.1 256C447.1 273.7 433.7 288 416 288H109.3l105.4 105.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L109.3 224H416C433.7 224 447.1 238.3 447.1 256z"/></svg>      
         </div>
       </button>
+
+      <div v-for="item in workspace.boards[this.currentBoards].lanes" class="lane">
+        <Lane :name="item.name" :card="item.card"></Lane>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import Lane from './Lane.vue'
+
   export default {
+    components: {
+      Lane,
+    },
+
     data() {
       return {
         workspace: {
           name: "Test",
           boards: [
-            {name: "Front-End"},
+            {name: "Front-End",
+              lanes: [
+                {name: "Backlog",
+                  card: [
+                    {name: "Faire le responsive"},
+                    {name: "Ajouter un mode sombre"},
+                    {name: "Finir les maquettes"},
+                  ]
+                },
+                {name: "A faire"},
+                {name: "Retour en dev"},
+              ]
+            },
             {name: "Back-End"},
           ],
           users: [
@@ -69,6 +91,8 @@
             {name: "Jack"},
           ]
         },
+
+        currentBoards: 0,
 
         leftIsOpen: true,
       }
@@ -171,6 +195,14 @@
 
     .right {
       width: 100%;
+
+      .lane {
+        width: 15rem;
+        margin-top: 2rem;
+        margin-right: 1rem;
+        
+        display: inline-block;
+      }
 
       .btn {
         position: absolute;
