@@ -44,7 +44,7 @@
     </div>
     
     <div class="all_container right">
-      <button class="todo-btn-secondary-round btn" v-bind:class="{ active: leftIsOpen, 'btn-flip': !leftIsOpen }" v-on:click="changeLeft">
+      <button class="todo-btn-secondary-round btn-abs" v-bind:class="{ active: leftIsOpen, 'btn-flip': !leftIsOpen }" v-on:click="changeLeft">
         <div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M447.1 256C447.1 273.7 433.7 288 416 288H109.3l105.4 105.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L109.3 224H416C433.7 224 447.1 238.3 447.1 256z"/></svg>      
         </div>
@@ -53,6 +53,12 @@
       <div v-for="item in workspace.boards[this.currentBoards].lanes" class="lane">
         <Lane :name="item.name" :card="item.card"></Lane>
       </div>
+
+      <button class="todo-btn-secondary-round btn" v-on:click="createLane">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>          
+        </div>
+      </button>
     </div>
   </div>
 </template>
@@ -79,8 +85,12 @@
                     {name: "Finir les maquettes"},
                   ]
                 },
-                {name: "A faire"},
-                {name: "Retour en dev"},
+                {name: "A faire",
+                  card: [],
+                },
+                {name: "Retour en dev",
+                  card: [],
+                },
               ]
             },
             {name: "Back-End"},
@@ -106,6 +116,15 @@
         else {
           this.leftIsOpen = true;
         }
+      },
+
+      createLane() {
+        var newLane = {
+          name: "Nouvelle Lane",
+          card: [],
+        }
+        
+        this.workspace.boards[this.currentBoards].lanes.push(newLane);
       }
     }
   }
@@ -205,13 +224,9 @@
       }
 
       .btn {
-        position: absolute;
-        left: 0;
-        bottom: 0;
-
+        display: inline-block;
         width: auto;
 
-        margin: 2rem;
         padding: 0.75rem;
 
         > div {
@@ -224,8 +239,18 @@
         }
       }
 
-      .btn-flip {
+      .btn-abs {
         @extend .btn;
+
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        margin: 2rem;
+      }
+
+      .btn-flip {
+        @extend .btn-abs;
         transform: rotate(0.5turn);
       }
     }
