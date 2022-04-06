@@ -1,8 +1,8 @@
 <template>
   <div id="lane">
     <p class="title">{{ name }}</p>
-    <div v-for="item in card">
-      <Card :name="item.name"></Card>
+    <div v-for="item in cards">
+      <Card :name="item.name" :labels="item.labels" :description="item.description"></Card>
     </div>
     <button class="todo-btn-round btn" v-on:click="createCard">
       <div>
@@ -22,16 +22,18 @@
 
     props: {
       name: String,
-      card: Array,
+      cards: Array,
     },
 
     methods :{
       createCard() {
         var newCard = {
           name: "Nouvelle Card",
+          labels: [],
+          description: "",
         }
 
-        this.card.push(newCard);
+        this.cards.push(newCard);
       }
     }
   }

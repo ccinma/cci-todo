@@ -6,13 +6,13 @@
         <div class="hr"></div>
         
         <div class="board">
-          <div class="title">
+          <div class="title" v-on:click="createBoardVisibility = true">
             <p>Tableaux</p>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>
           </div>
 
           <ul>
-            <li v-for="item in workspace.boards" :key="item.name">
+            <li v-for="(item, index) in workspace.boards" v-on:click="changeBoard(index)">
               {{ item.name }}
             </li>
           </ul>
@@ -50,8 +50,8 @@
         </div>
       </button>
 
-      <div v-for="item in workspace.boards[this.currentBoards].lanes" class="lane">
-        <Lane :name="item.name" :card="item.card"></Lane>
+      <div v-for="item in workspace.boards[this.currentBoard].lanes" class="lane">
+        <Lane :name="item.name" :cards="item.cards"></Lane>
       </div>
 
       <button class="todo-btn-secondary-round btn" v-on:click="createLane">
@@ -60,15 +60,19 @@
         </div>
       </button>
     </div>
+  <createBoard v-if="createBoardVisibility" class="edit" @create="createBoard"/>
+
   </div>
 </template>
 
 <script>
   import Lane from './Lane.vue'
+  import createBoard from './createBoard.vue'
 
   export default {
     components: {
       Lane,
+      createBoard,
     },
 
     data() {
@@ -79,21 +83,34 @@
             {name: "Front-End",
               lanes: [
                 {name: "Backlog",
-                  card: [
-                    {name: "Faire le responsive"},
-                    {name: "Ajouter un mode sombre"},
-                    {name: "Finir les maquettes"},
+                  cards: [
+                    {name: "Faire le responsive",
+                    labels: [
+                      {name: "Front", color: "#FF0000"},
+                    ],
+                    description: "Ceci est une description random"},
+                    {name: "Ajouter un mode sombre",
+                    labels: [
+                      {name: "Front", color: "#FF0000"},
+                    ],
+                    description: "Ceci est une description random"},
+                    {name: "Finir les maquettes",
+                    labels: [
+                      {name: "Front", color: "#FF0000"},
+                    ],
+                    description: "Ceci est une description random"},
                   ]
                 },
                 {name: "A faire",
-                  card: [],
+                  cards: [],
                 },
                 {name: "Retour en dev",
-                  card: [],
+                  cards: [],
                 },
               ]
             },
-            {name: "Back-End"},
+            {name: "Back-End",
+            lanes: []},
           ],
           users: [
             {name: "Pierre"},
@@ -102,7 +119,8 @@
           ]
         },
 
-        currentBoards: 0,
+        currentBoard: 0,
+        createBoardVisibility: false,
 
         leftIsOpen: true,
       }
@@ -118,13 +136,27 @@
         }
       },
 
+      createBoard(name) {
+        var newBoard = {
+          name: name,
+          lanes: [],
+        }
+
+        this.workspace.boards.push(newBoard);
+        this.createBoardVisibility = false;
+      },
+
       createLane() {
         var newLane = {
           name: "Nouvelle Lane",
-          card: [],
+          cards: [],
         }
         
-        this.workspace.boards[this.currentBoards].lanes.push(newLane);
+        this.workspace.boards[this.currentBoard].lanes.push(newLane);
+      },
+
+      changeBoard(index) {
+        this.currentBoard = index;
       }
     }
   }
@@ -148,6 +180,13 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
+      li {
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
 
       .top {
         h3 {
@@ -173,6 +212,13 @@
             svg {
               height: 1rem;
               fill: $font-color-primary;
+            }
+
+            &:hover {
+              cursor: pointer;
+              p {
+                text-decoration: underline;
+              }
             }
           }
         }
@@ -253,6 +299,22 @@
         @extend .btn-abs;
         transform: rotate(0.5turn);
       }
+    }
+
+    .edit {
+      position: absolute;
+
+      // top: 0;
+      // left: 0;
+      // right: 0;
+      // bottom: 0;
+
+      // margin-left: auto;
+      // margin-right: auto;
+      // margin-top: auto;
+      // margin-bottom: auto;
+
+      z-index: 20
     }
   }
 </style>
