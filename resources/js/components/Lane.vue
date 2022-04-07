@@ -1,6 +1,6 @@
 <template>
   <div id="lane">
-    <p class="title">{{ name + index}}</p>
+    <p class="title">{{ name }}</p>
     <div v-for="item in cards">
       <Card :name="item.name" :labels="item.labels" :description="item.description"></Card>
     </div>
