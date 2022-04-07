@@ -61,11 +61,12 @@
       </button>
     </div>
 
-  <AddUser v-if="addUserVisibility" class="edit" @create="addUser"/>
-  <CreateBoard v-if="createBoardVisibility" class="edit" @create="createBoard"/>
-  <CreateLane v-if="createLaneVisibility" class="edit" @create="createLane"/>
-  <CreateCard v-if="createCardVisibility" class="edit" @create="createCard"/>
-  
+    <div v-if="addUserVisibility || createBoardVisibility || createLaneVisibility || createCardVisibility" class="edit">
+      <AddUser v-if="addUserVisibility" @create="addUser"/>
+      <CreateBoard v-if="createBoardVisibility" @create="createBoard"/>
+      <CreateLane v-if="createLaneVisibility" @create="createLane"/>
+      <CreateCard v-if="createCardVisibility" @create="createCard"/>
+    </div>
   </div>
 </template>
 
@@ -353,18 +354,27 @@
 
     .edit {
       position: absolute;
+      backdrop-filter: $blur;
 
-      // top: 0;
-      // left: 0;
-      // right: 0;
-      // bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       // margin-left: auto;
       // margin-right: auto;
       // margin-top: auto;
       // margin-bottom: auto;
 
-      z-index: 20
+      z-index: 20;
+
+      & > * {
+        width: 15rem;
+      }
     }
   }
 </style>
