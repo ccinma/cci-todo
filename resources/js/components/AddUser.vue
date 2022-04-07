@@ -6,7 +6,7 @@
       </div>
     </button>
     <input class="todo-form-text" type="text" v-model="name">
-    <button class="todo-btn-round" v-on:click="send">Créer le Board</button>
+    <button class="todo-btn-round" v-on:click="send">Ajouter le User</button>
   </div>
 </template>
 
@@ -14,7 +14,7 @@
   export default {
     data() {
       return{
-        name: "Nouveau Board",
+        name: "Nouvel User",
       }
     },
     methods: {
@@ -26,6 +26,7 @@
         this.$emit('create', this.name)
       },
     }
+    
   }
 </script>
 

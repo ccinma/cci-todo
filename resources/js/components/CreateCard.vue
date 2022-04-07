@@ -6,7 +6,10 @@
       </div>
     </button>
     <input class="todo-form-text" type="text" v-model="name">
-    <button class="todo-btn-round" v-on:click="send">Créer le Board</button>
+    
+    <textarea cols="30" rows="10" v-model="description"></textarea>
+
+    <button class="todo-btn-round" v-on:click="send">Créer la Card</button>
   </div>
 </template>
 
@@ -14,7 +17,9 @@
   export default {
     data() {
       return{
-        name: "Nouveau Board",
+        name: "Nouvelle Card",
+        labels: [],
+        description: "",
       }
     },
     methods: {
@@ -23,9 +28,10 @@
         this.send();
       },
       send() {
-        this.$emit('create', this.name)
+        this.$emit('create', this.name, this.labels, this.description)
       },
     }
+    
   }
 </script>
 

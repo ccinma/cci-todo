@@ -21,7 +21,7 @@
         <div class="hr"></div>
 
         <div class="users">
-          <div class="title">
+          <div class="title" v-on:click="addUserVisibility = true">
             <p>Participants</p>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>
           </div>
@@ -50,29 +50,39 @@
         </div>
       </button>
 
-      <div v-for="item in workspace.boards[this.currentBoard].lanes" class="lane">
-        <Lane :name="item.name" :cards="item.cards"></Lane>
+      <div v-for="(item, index) in workspace.boards[this.currentBoard].lanes" class="lane">
+        <Lane :name="item.name" :cards="item.cards" :index="index" @create="catchCreateCard"></Lane>
       </div>
 
-      <button class="todo-btn-secondary-round btn" v-on:click="createLane">
+      <button class="todo-btn-secondary-round btn" v-on:click="createLaneVisibility=true">
         <div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"/></svg>          
         </div>
       </button>
     </div>
-  <createBoard v-if="createBoardVisibility" class="edit" @create="createBoard"/>
 
+  <AddUser v-if="addUserVisibility" class="edit" @create="addUser"/>
+  <CreateBoard v-if="createBoardVisibility" class="edit" @create="createBoard"/>
+  <CreateLane v-if="createLaneVisibility" class="edit" @create="createLane"/>
+  <CreateCard v-if="createCardVisibility" class="edit" @create="createCard"/>
+  
   </div>
 </template>
 
 <script>
   import Lane from './Lane.vue'
-  import createBoard from './createBoard.vue'
+  import AddUser from './AddUser.vue'
+  import CreateBoard from './CreateBoard.vue'
+  import CreateLane from './CreateLane.vue'
+  import CreateCard from './CreateCard.vue'
 
   export default {
     components: {
       Lane,
-      createBoard,
+      AddUser,
+      CreateBoard,
+      CreateLane,
+      CreateCard,
     },
 
     data() {
@@ -120,7 +130,12 @@
         },
 
         currentBoard: 0,
+        currentLane: 0,
+
+        addUserVisibility: false,
         createBoardVisibility: false,
+        createLaneVisibility: false,
+        createCardVisibility: false,
 
         leftIsOpen: true,
       }
@@ -136,23 +151,58 @@
         }
       },
 
+      addUser(name) {
+        var newUser = {
+          name: name,
+        }
+
+        if (name != "") {
+          this.workspace.users.push(newUser);
+        }
+
+        this.addUserVisibility = false;
+      },
+
       createBoard(name) {
         var newBoard = {
           name: name,
           lanes: [],
         }
 
-        this.workspace.boards.push(newBoard);
+        if (name != "") {
+          this.workspace.boards.push(newBoard);
+        }
         this.createBoardVisibility = false;
       },
 
-      createLane() {
+      createLane(name) {
         var newLane = {
-          name: "Nouvelle Lane",
+          name: name,
           cards: [],
         }
-        
-        this.workspace.boards[this.currentBoard].lanes.push(newLane);
+
+        if (name != "") {
+          this.workspace.boards[this.currentBoard].lanes.push(newLane);
+        }
+        this.createLaneVisibility = false;        
+      },
+
+      catchCreateCard(index)
+      {
+        this.currentLane = index;
+        this.createCardVisibility = true;
+      },
+
+      createCard(name, labels, description) {
+        var newCard = {
+          name: name,
+          labels: labels,
+          description: description,
+        }
+        if (name != "") {
+          this.workspace.boards[this.currentBoard].lanes[this.currentLane].cards.push(newCard);
+        }
+        this.createCardVisibility = false;
       },
 
       changeBoard(index) {
