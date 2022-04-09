@@ -1,4 +1,4 @@
-#main {
+#main, #app {
   padding-inline: $main-padding-inline-mobile;
   padding-block: $main-padding-block-mobile;
   @include tablet {
@@ -12,7 +12,7 @@
 
     min-height: $align-container-with-header-footer;
   
-    padding-inline: 1.25rem;
+    padding-inline: 2rem;
     padding-top: 2.5rem;
     padding-bottom: 4.5rem;
 
@@ -24,7 +24,6 @@
     @include laptop {
       padding-top: 3rem;
       padding-bottom: 2rem;
-      padding-inline: 2rem;
     }
   
     background: #FFFFFF88;

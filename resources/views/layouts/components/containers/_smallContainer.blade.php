@@ -1,4 +1,4 @@
-@extends("layouts.app")
+@extends('layouts.components.containers._mainContainer')
 
 @section("container")
     <div id="small_container">
