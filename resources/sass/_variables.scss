@@ -8,11 +8,20 @@ $header-margin-mobile: 0.5rem;
 $header-margin-tablet: 0.75rem;
 $header-margin-laptop: 1rem;
 
+$header-height: 80px;
+$header-height-mid: calc($header-height / 2);
+
+$mid-header-mobile: calc($header-margin-mobile + $header-height-mid);
+$mid-header-tablet: calc($header-margin-tablet + $header-height-mid);
+$mid-header-laptop: calc($header-margin-laptop + $header-height-mid);
+
 $subnav-margin-mobile: $header-margin-mobile;
 $subnav-margin-tablet-s: $header-margin-tablet;
 
 $align-container-with-header-footer: calc(100vh - 6rem);
 
 $blur: blur(1rem);
+
+$side-bar-width: 18rem;
 
 // Header / Footer

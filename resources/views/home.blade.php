@@ -2,8 +2,6 @@
 
 @section('main-container')
 <div id='app'>
-  <dashboard></dashboard>
-
-    @include("layouts.components.mobile_nav")
+  @include("layouts.components.mobile_nav")
 </div>
 @endsection
