@@ -1,7 +1,7 @@
 <template>
   <div id="side-bar">
 
-    <SideBarWithInfos v-if=" !! workspace " v-bind:workspace="workspace" />
+    <SideBarWithInfos v-if=" !! workspace " />
     <SideBarEmpty v-if=" ! workspace" />
     <SideBarChangeWorkspace v-if=" !! workspace" />
 
@@ -68,10 +68,6 @@ export default {
         width: 30px;
         height: 30px;
         margin-right: 5px;
-      }
-
-      p {
-        
       }
     }
 

@@ -9,11 +9,16 @@
     <div>
       <h3>Tableaux</h3>
       <ul>
-        <li v-for="(item, index) in workspace.boards" v-on:click="changeBoard(index)" v-bind:key="index">
-          {{ item.name }}
+        <li v-for="(board, index) in workspace.boards" v-on:click="changeBoard(index)" v-bind:key="index">
+          {{ board.name }}
         </li>
         <li v-if=" ! workspace.boards || workspace.boards.length == 0 ">
           Aucun tableau...
+        </li>
+        <li>
+          <a v-on:click.prevent="openNewBoardPopup()">
+            + Ajouter un tableau
+          </a>
         </li>
       </ul>
     </div>
@@ -24,6 +29,15 @@
 <script>
 export default {
   name: 'SideBarWithInfos',
-  props: ['workspace'],
+  computed: {
+    workspace() {
+      return this.$store.state.currentWorkspace
+    }
+  },
+  methods: {
+    openNewBoardPopup() {
+      this.$store.commit('openNewBoardPopup')
+    }
+  }
 }
 </script>

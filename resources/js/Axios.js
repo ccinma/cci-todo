@@ -7,6 +7,16 @@ export default class TodoAxios {
     headers: this.setHeaders()
   })
 
+  routes = {
+    workspace: {
+      index: '/workspace',
+    },
+    board: {
+      index: '/board',
+      store: '/board',
+    }
+  }
+
   setHeaders() {
     const headers = {"X-Requested-With": "XMLHttpRequest"}
     const cookies = document.cookie.split(';')
@@ -19,12 +29,22 @@ export default class TodoAxios {
     return headers
   }
 
-  get(path) {
-    return this.instance.get(path)
+  async get(path) {
+    return await this.instance.get(path)
   }
 
-  post(path, data) {
-    return this.instance.post(path, data)
+  async post(path, data) {
+    return await this.instance.post(path, data)
+  }
+
+  async getUserWorkspaces() {
+    const response = await this.get(this.routes.workspace.index)
+    return response
+  }
+
+  async storeBoard(data) {
+    const response = await this.post(this.routes.board.store, data)
+    return response
   }
 
 }

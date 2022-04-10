@@ -1,5 +1,5 @@
 <template>
-  <full-layout v-if=" ! $store.state.loading "></full-layout>
+  <full-layout v-if=" ! $store.state.initialLoading "></full-layout>
 </template>
 
 <script>
@@ -10,13 +10,8 @@ export default {
   components: {
     FullLayout
   },
-  methods: {
-    async findWorkspaces() {
-      await this.$store.commit('findWorkspaces')
-    }
-  },
   async mounted() {
-    await this.findWorkspaces()
+    await this.$store.commit('init')
   }
 }
 </script>
