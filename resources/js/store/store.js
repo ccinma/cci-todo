@@ -33,7 +33,7 @@ const todoStore = new Vuex.Store({
     }
   },
   mutations: {
-    async init (state) {
+    async init (state, {routeParams}) {
       const response = await axios.getUserWorkspaces()
       if (response.status == 200) {
         const workspaces = response.data.data
@@ -41,6 +41,15 @@ const todoStore = new Vuex.Store({
           state.workspaces = workspaces
         }
       }
+      console.log(routeParams)
+      // Setting up default workspace and board to be the ones in the url
+      if (routeParams.workspace) {
+        state.currentWorkspace = state.workspaces.find(workspace => workspace.id == routeParams.workspace) ?? null
+      }
+      if (routeParams.board) {
+        state.currentBoard = state.workspaces.find(workspace => workspace.id == routeParams.board) ?? null
+      }
+      
       state.initialLoading = false
     },
     async resetCurrentWorkspace (state) {

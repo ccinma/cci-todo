@@ -37,6 +37,11 @@ export default {
     NewBoardPopup,
     FlashMessagePopup,
   },
+  mounted() {
+    if (this.$route.params.workspace && ! this.$store.state.currentWorkspace) {
+      this.$router.push('/')
+    }
+  }
 }
 </script>
 

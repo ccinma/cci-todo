@@ -11,7 +11,7 @@ export default {
     FullLayout
   },
   async mounted() {
-    await this.$store.commit('init')
+    await this.$store.commit('init', {routeParams: this.$route.params})
   }
 }
 </script>
