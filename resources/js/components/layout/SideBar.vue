@@ -1,9 +1,13 @@
 <template>
-  <div id="side-bar">
+  <div id="side-bar" :class=" isOpen ? '' : 'close' ">
 
     <SideBarWithInfos v-if=" !! workspace " />
     <SideBarEmpty v-if=" ! workspace" />
     <SideBarChangeWorkspace v-if=" !! workspace" />
+
+    <button id="toggle-side-bar" v-on:click.prevent="toggleSidebar">
+      Toggle
+    </button>
 
   </div>
 </template>
@@ -14,10 +18,20 @@ export default {
   components: { ContentDivider },
   data() {
     return {
-      isOpen: true,
       workspace: this.$store.getters.getCurrentWorkspace()
     }
   },
+  computed: {
+    isOpen() {
+      return this.$store.state.sidebarIsOpen
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      const mutation = this.$store.state.sidebarIsOpen ? 'closeSidebar' : 'openSidebar'
+      this.$store.commit(mutation)
+    }
+  }
 }
 </script>
 
@@ -27,6 +41,8 @@ export default {
   @import "../../../sass/_colors.scss";
 
   #side-bar {
+
+    transition: transform 0.5s;
 
     display: flex;
     flex-direction: column;
@@ -50,6 +66,10 @@ export default {
 
     width: $side-bar-width;
 
+    &.close {
+      transform: translateX(-300px);
+    }
+
     .workspace {
       &-name {
         text-align: center;
@@ -69,6 +89,12 @@ export default {
         height: 30px;
         margin-right: 5px;
       }
+    }
+
+    #toggle-side-bar {
+      position: absolute;
+      bottom: 1rem;
+      left: calc(100% + 0.5rem);
     }
 
   }

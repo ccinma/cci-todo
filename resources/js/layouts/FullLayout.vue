@@ -7,6 +7,8 @@
 
     <router-view />
 
+
+
   </div>
 </template>
 
@@ -24,9 +26,7 @@ export default {
       return this.$store.getters.getCurrentWorkspace()
     },
     sidebarIsOpen() {
-      const isOpenState = this.$store.state.sidebarIsOpen
-      const isPresent = !! document.querySelector('#side-bar')
-      return isOpenState && isPresent
+      return this.$store.state.sidebarIsOpen
     },
     storeBoardPopupIsOpen() {
       return this.$store.state.newBoardPopupIsOpen
@@ -41,7 +41,7 @@ export default {
     if (this.$route.params.workspace && ! this.$store.state.currentWorkspace) {
       this.$router.push('/')
     }
-  }
+  },
 }
 </script>
 
@@ -53,6 +53,8 @@ export default {
     height: 100vh;
 
     position: relative;
+
+    transition: padding 0.5s;
 
     padding-block: $mid-header-mobile;
     @include tablet {

@@ -30,6 +30,7 @@ const todoStore = new Vuex.Store({
     },
     reset( {commit} ) {
       commit('resetCurrentWorkspace')
+      commit('closeSidebar')
     }
   },
   mutations: {
@@ -41,7 +42,6 @@ const todoStore = new Vuex.Store({
           state.workspaces = workspaces
         }
       }
-      console.log(routeParams)
       // Setting up default workspace and board to be the ones in the url
       if (routeParams.workspace) {
         state.currentWorkspace = state.workspaces.find(workspace => workspace.id == routeParams.workspace) ?? null
@@ -57,7 +57,6 @@ const todoStore = new Vuex.Store({
     },
     async storeBoard (state, {name, workspace_id}) {
       const response = await axios.storeBoard({name, workspace_id})
-      console.log(response)
       if (response.status == 201) {
         state.currentWorkspace.boards.push(response.data.data)
       }

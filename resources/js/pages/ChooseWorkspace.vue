@@ -22,11 +22,16 @@ export default {
   methods: {
     setWorkspace(id) {
       this.$store.dispatch('setCurrentWorkspace', {workspace_id: id})
-      console.log(this.$store.state.currentWorkspace)
     }
   },
   mounted() {
     this.$store.dispatch('reset')
+  },
+  unmounted() {
+    this.$store.commit('openSidebar')
+  },
+  destroyed() {
+    this.$store.commit('openSidebar')
   }
 }
 </script>
