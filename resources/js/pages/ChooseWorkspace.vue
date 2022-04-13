@@ -22,7 +22,7 @@ export default {
   methods: {
     setWorkspace(id) {
       this.$store.dispatch('setCurrentWorkspace', {workspace_id: id})
-    }
+    },
   },
   mounted() {
     this.$store.dispatch('reset')

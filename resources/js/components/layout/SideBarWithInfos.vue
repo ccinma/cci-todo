@@ -9,19 +9,22 @@
     <div>
       <h3>Tableaux</h3>
       <ul>
-        <li v-for="(board, index) in workspace.boards" v-on:click="changeBoard(index)" v-bind:key="index">
-          {{ board.name }}
+        <li v-for="(board, index) in workspace.boards" v-bind:key="index" v-on:click.prevent="setCurrentBoard(board.id)">
+          <router-link :to="'/workspace/'+workspace.id+'/board/'+board.id">
+            {{ board.name }}
+          </router-link>
         </li>
         <li v-if=" ! workspace.boards || workspace.boards.length == 0 ">
           Aucun tableau...
         </li>
         <li>
-          <a v-on:click.prevent="openNewBoardPopup()">
+          <a v-on:click.prevent="openNewBoardPopup()" class="clickable">
             + Ajouter un tableau
           </a>
         </li>
       </ul>
     </div>
+    
 
   </section>
 </template>
@@ -37,7 +40,18 @@ export default {
   methods: {
     openNewBoardPopup() {
       this.$store.commit('openNewBoardPopup')
+    },
+    setCurrentBoard(id) {
+      this.$store.commit('setCurrentBoard', {board_id: id})
     }
   }
 }
 </script>
+
+<style lang="scss">
+  .workspace {
+    .clickable {
+      cursor: pointer;
+    }
+  }
+</style>

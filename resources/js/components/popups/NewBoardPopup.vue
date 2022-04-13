@@ -1,11 +1,18 @@
 <template>
   <div id="new-board-popup">
+
+    <div class="backdrop" v-on:click="closePopup"></div>
     
-    <form v-on:submit.prevent="post">
-      <input type="text" name="name">
-      <input type="text" name="workspace_id" id="workspace_id" hidden>
-      <input type="submit" value="Envoyer">
-    </form>
+    <div class="popup">
+      <h2 class="popup-title">
+        Nouveau tableau
+      </h2>
+      <form v-on:submit.prevent="post" class="popup-form">
+        <input type="text" name="name">
+        <input type="text" name="workspace_id" id="workspace_id" hidden>
+        <input type="submit" value="Envoyer">
+      </form>
+    </div>
 
   </div>
 </template>
@@ -18,6 +25,9 @@ export default {
       const name = e.target.elements.name.value
       const workspace_id = e.target.elements.workspace_id.value
       this.$store.dispatch('storeBoard', { name, workspace_id })      
+    },
+    closePopup() {
+      this.$store.commit('closeNewBoardPopup')
     }
   },
   mounted() {
@@ -30,6 +40,7 @@ export default {
 <style lang="scss" scoped>
   
 #new-board-popup {
+  @import "../../../sass/_variables";
 
   z-index: 10;
 
@@ -38,12 +49,47 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  max-width: 750px;
+  .backdrop {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: $blur;
+  }
 
-  background-color: white;
+  .popup {
+    z-index: 2;
+    max-width: 360px;
+    width: 100%;
+    height: 150px;
 
-  margin: 0 auto;
+    padding: 1rem;
+
+    background-color: rgba(255, 255, 255, 0.511);
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: relative;
+
+    &-title {
+      margin-bottom: 1rem;
+    }
+
+    &-form {
+
+    }
+
+  }
 
 }
   

@@ -38,8 +38,12 @@ export default {
     FlashMessagePopup,
   },
   mounted() {
+
     if (this.$route.params.workspace && ! this.$store.state.currentWorkspace) {
       this.$router.push('/')
+    }
+    if (this.$route.params.board && ! this.$store.state.currentBoard) {
+      this.$router.push('/workspace/'+this.$route.params.workspace)
     }
   },
 }
@@ -56,17 +60,17 @@ export default {
 
     transition: padding 0.5s;
 
-    padding-block: $mid-header-mobile;
+    padding-top: calc($mid-header-mobile + 4rem);
     @include tablet {
-      padding-block: $mid-header-tablet;
+      padding-top: calc($mid-header-tablet + 4rem);
       padding-inline: $main-padding-inline-tablet;
     }
     @include laptop {
-      padding-block: $mid-header-laptop;
+      padding-top: calc($mid-header-laptop + 4rem);
     }
 
     &.side-bar-open {
-      padding-left: 300px;
+      padding-left: 316px;
     }
   }
 </style>

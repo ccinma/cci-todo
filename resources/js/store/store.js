@@ -10,6 +10,7 @@ const todoStore = new Vuex.Store({
   state: {
     workspaces: [],
     currentWorkspace: null,
+    currentBoard: null,
     initialLoading: true,
     loading: false,
     newBoardPopupIsOpen: false,
@@ -29,7 +30,7 @@ const todoStore = new Vuex.Store({
       commit('closeNewBoardPopup')
     },
     reset( {commit} ) {
-      commit('resetCurrentWorkspace')
+      commit('resetCurrents')
       commit('closeSidebar')
     }
   },
@@ -46,14 +47,15 @@ const todoStore = new Vuex.Store({
       if (routeParams.workspace) {
         state.currentWorkspace = state.workspaces.find(workspace => workspace.id == routeParams.workspace) ?? null
       }
-      if (routeParams.board) {
-        state.currentBoard = state.workspaces.find(workspace => workspace.id == routeParams.board) ?? null
+      if (routeParams.board && state.currentWorkspace) {
+        state.currentBoard = state.currentWorkspace.boards.find(board => board.id == routeParams.board) ?? null
       }
       
       state.initialLoading = false
     },
-    async resetCurrentWorkspace (state) {
+    async resetCurrents (state) {
       state.currentWorkspace = null
+      state.currentBoard = null
     },
     async storeBoard (state, {name, workspace_id}) {
       const response = await axios.storeBoard({name, workspace_id})
@@ -63,6 +65,9 @@ const todoStore = new Vuex.Store({
     },
     async setCurrentWorkspace (state, { workspace_id }) {
       state.currentWorkspace = state.workspaces.find(workspace => workspace.id == workspace_id)
+    },
+    async setCurrentBoard (state, {board_id}) {
+      state.currentBoard = state.currentWorkspace.boards.find(board => board.id == board_id)
     },
     async openNewBoardPopup (state) {
       state.newBoardPopupIsOpen = true

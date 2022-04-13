@@ -48,8 +48,9 @@ export default {
     flex-direction: column;
     justify-content: space-between;
 
-    padding-top: calc($header-height + 2.5rem);
+    padding-top: calc($header-height + 2rem);
     padding-bottom: 0.5rem;
+    padding-inline: 1rem;
 
     background: rgba( 255, 255, 255, 0.5 );
     box-shadow: 0 0.5rem 2rem 0 $translucent_black;
