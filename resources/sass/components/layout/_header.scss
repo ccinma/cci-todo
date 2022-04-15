@@ -4,6 +4,8 @@
   left: 0;
   right: 0;
 
+  height: $header-height;
+
   margin: $header-margin-mobile;
   padding: 1rem;
 
@@ -29,7 +31,6 @@
   }
 
   @include laptop {
-    margin-top: 1rem;
     display: flex;
     justify-content: space-between;
     margin: $header-margin-laptop;

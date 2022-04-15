@@ -6,29 +6,39 @@
 
 require('./bootstrap');
 
+import Dashboard from '../js/components/Dashboard.vue'
+import ChooseWorkspace from '../js/pages/ChooseWorkspace.vue'
+import WorkspaceDashboard from '../js/pages/WorkspaceDashboard.vue'
+import BoardPage from '../js/pages/BoardPage.vue'
+import App from '../js/App.vue'
 import Vue from 'vue';
+import VueRouter from 'vue-router'
+import todoStore from './store/store';
 
-// window.Vue = require('vue');
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+if ( !! document.querySelector('#app') ) {
 
-const files = require.context('./', true, /\.vue$/i)
-files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+  Vue.use(VueRouter);
+  
+  const routes = [
+    {path: '/', component: ChooseWorkspace},
+    {path: '/workspace/:workspace', component: WorkspaceDashboard},
+    {path: '/workspace/:workspace/board/:board', component: BoardPage},
+    {path: '/legacy', component: Dashboard},
+  ]
+  const router = new VueRouter({routes})
 
-// Vue.component('dashboard', require('./components/Dashboard.vue').default);
+  const store = todoStore
+  
+  
+  const files = require.context('./', true, /\.vue$/i)
+  files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+  
+  const app = new Vue({
+    el: "#app",
+    router: router,
+    store: store,
+    render: h => h(App),
+  })
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-const app = new Vue({
-    el: '#app',
-});
+}

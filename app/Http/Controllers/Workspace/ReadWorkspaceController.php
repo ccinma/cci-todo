@@ -13,7 +13,10 @@ class ReadWorkspaceController extends Controller
 
     public function index()
     {
-        $workspaces = Workspace::findUserWorkspaces();
+        $user_id = Auth::user()->id;
+        $workspaces = Workspace::with(['boards', 'members'])->whereHas('members', function($q) use($user_id) {
+            $q->whereIn('user_id', [$user_id]);
+        })->get();
 
         return response()->json([
             'data' => $workspaces
@@ -43,14 +46,14 @@ class ReadWorkspaceController extends Controller
             return response()->json([], 400);
         }
 
-        $workspace = Workspace::findOrFail($workspace_id);
+        $workspace = Workspace::with('boards')->findOrFail($workspace_id);
 
         if ( Gate::denies('collaborate', $workspace) ) {
             return response()->json([], 401);
         }
 
         return response()->json([
-            'data' => $workspace->boards
+            'data' => $workspace
         ]);
     }
 }
