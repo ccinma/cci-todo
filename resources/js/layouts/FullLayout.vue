@@ -6,9 +6,7 @@
     <new-workspace-popup v-if="storeWorkspacePopupIsOpen" />
     <side-bar v-if=" !! workspace "/>
 
-    <router-view />
-
-
+    <router-view class="router-view" />
 
   </div>
 </template>
@@ -66,6 +64,7 @@ export default {
 
     transition: padding 0.5s;
 
+    padding-inline: $main-padding-inline-mobile;
     padding-top: calc($mid-header-mobile + 4rem);
     @include tablet {
       padding-top: calc($mid-header-tablet + 4rem);
@@ -77,6 +76,11 @@ export default {
 
     &.side-bar-open {
       padding-left: 316px;
+    }
+
+    .router-view {
+      overflow: auto;
+      height: 100%;
     }
   }
 </style>
