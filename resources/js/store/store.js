@@ -14,6 +14,7 @@ const todoStore = new Vuex.Store({
     initialLoading: true,
     loading: false,
     newBoardPopupIsOpen: false,
+    newWorkspacePopupIsOpen: false,
     sidebarIsOpen: true,
   },
   getters: {
@@ -28,6 +29,10 @@ const todoStore = new Vuex.Store({
     storeBoard ({commit}, {name, workspace_id}) {
       commit('storeBoard', {name, workspace_id})
       commit('closeNewBoardPopup')
+    },
+    storeWorkspace({commit}, {name}) {
+      commit('storeWorkspace', {name})
+      commit('closeNewWorkspacePopup')
     },
     reset( {commit} ) {
       commit('resetCurrents')
@@ -63,6 +68,12 @@ const todoStore = new Vuex.Store({
         state.currentWorkspace.boards.push(response.data.data)
       }
     },
+    async storeWorkspace (state, {name}) {
+      const response = await axios.storeWorkspace({name})
+      if (response.status == 201) {
+        state.workspaces.push(response.data.data)
+      }
+    },
     async setCurrentWorkspace (state, { workspace_id }) {
       state.currentWorkspace = state.workspaces.find(workspace => workspace.id == workspace_id)
     },
@@ -74,6 +85,12 @@ const todoStore = new Vuex.Store({
     },
     async closeNewBoardPopup (state) {
       state.newBoardPopupIsOpen = false
+    },
+    async openNewWorkspacePopup (state) {
+      state.newWorkspacePopupIsOpen = true
+    },
+    async closeNewWorkspacePopup (state) {
+      state.newWorkspacePopupIsOpen = false
     },
     async openSidebar (state) {
       state.sidebarIsOpen = true
