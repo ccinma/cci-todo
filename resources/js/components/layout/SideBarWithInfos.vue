@@ -2,7 +2,9 @@
   <section class="workspace">
 
     <h2 class="workspace-name">
-      {{ workspace.name }}
+      <router-link :to="'/workspace/' + workspace.id">
+        {{ workspace.name }}
+      </router-link>
     </h2>
     <content-divider :width="'2px'" :maxLength="'90%'" :align="'center'" />
 
