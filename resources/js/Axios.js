@@ -10,6 +10,7 @@ export default class TodoAxios {
   routes = {
     workspace: {
       index: '/workspace',
+      store: '/workspace',
     },
     board: {
       index: '/board',
@@ -47,4 +48,8 @@ export default class TodoAxios {
     return response
   }
 
+  async storeWorkspace(data) {
+    const response = await this.post(this.routes.workspace.store, data)
+    return response
+  }
 }

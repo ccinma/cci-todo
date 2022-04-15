@@ -36,9 +36,9 @@ export default {
 </script>
 
 <style lang="scss">
-  @import "../../../sass/_breakpoints.scss";
-  @import "../../../sass/_variables.scss";
-  @import "../../../sass/_colors.scss";
+  @import "resources/sass/_breakpoints.scss";
+  @import "resources/sass/_variables.scss";
+  @import "resources/sass/_colors.scss";
 
   #side-bar {
 

@@ -3,6 +3,7 @@
     
     <flash-message-popup />
     <new-board-popup v-if="storeBoardPopupIsOpen" />
+    <new-workspace-popup v-if="storeWorkspacePopupIsOpen" />
     <side-bar v-if=" !! workspace "/>
 
     <router-view />
@@ -17,6 +18,7 @@
 import SideBar from '../components/layout/SideBar.vue'
 import FlashMessagePopup from '../components/popups/FlashMessagePopup.vue'
 import NewBoardPopup from '../components/popups/NewBoardPopup.vue'
+import NewWorkspacePopup from '../components/popups/NewWorkspacePopup.vue'
 
 
 export default {
@@ -31,10 +33,14 @@ export default {
     storeBoardPopupIsOpen() {
       return this.$store.state.newBoardPopupIsOpen
     },
+    storeWorkspacePopupIsOpen() {
+      return this.$store.state.newWorkspacePopupIsOpen
+    }
   },
   components: {
     SideBar,
     NewBoardPopup,
+    NewWorkspacePopup,
     FlashMessagePopup,
   },
   mounted() {
