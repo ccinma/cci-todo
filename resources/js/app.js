@@ -18,6 +18,8 @@ import todoStore from './store/store';
 
 if ( !! document.querySelector('#app') ) {
 
+  const store = todoStore
+  
   Vue.use(VueRouter);
   
   const routes = [
@@ -27,9 +29,6 @@ if ( !! document.querySelector('#app') ) {
     {path: '/legacy', component: Dashboard},
   ]
   const router = new VueRouter({routes})
-
-  const store = todoStore
-  
   
   const files = require.context('./', true, /\.vue$/i)
   files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
