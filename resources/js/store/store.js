@@ -18,8 +18,10 @@ const todoStore = new Vuex.Store({
     
     newBoardPopupIsOpen: false,
     newWorkspacePopupIsOpen: false,
+    newLaneFormIsOpen: false,
     sidebarIsOpen: true,
   },
+
   getters: {
     workspaces: (state) => () => {
       return state.workspaces
@@ -33,16 +35,20 @@ const todoStore = new Vuex.Store({
     sidebarIsOpen: (state) => () => {
       return state.sidebarIsOpen
     },
+    newWorkspacePopupIsOpen: (state) => () => {
+      return state.newWorkspacePopupIsOpen
+    },
     newBoardPopupIsOpen: (state) => () => {
       return state.newBoardPopupIsOpen
     },
-    newWorkspacePopupIsOpen: (state) => () => {
-      return state.newWorkspacePopupIsOpen
+    newLaneFormIsOpen: (state) => () => {
+      return state.newLaneFormIsOpen
     },
     initialLoading: (state) => () => {
       return state.initialLoading
     }
   },
+
   actions: {
     async setCurrentWorkspace ({commit, state}, {workspaceId}) {
       commit('incrementApiCallsQueue')
@@ -58,21 +64,32 @@ const todoStore = new Vuex.Store({
       if (currentBoard) commit('setCurrentBoard', {board: currentBoard})
       commit('decrementApiCallsQueue')
     },
-    async storeBoard ({commit}, {name, workspace_id}) {
-      commit('incrementApiCallsQueue')
-      const response = await axios.storeBoard({name, workspace_id})
-      if (response.status == 201) {
-        commit('storeBoard', {board: response.data.data})
-        commit('closeNewBoardPopup')
-      }
-      commit('decrementApiCallsQueue')
-    },
     async storeWorkspace({commit}, {name}) {
+      commit('incrementApiCallsQueue')
       const response = await axios.storeWorkspace({name})
       if (response.status == 201) {
         commit('storeWorkspace', {workspace: response.data.data})
         commit('closeNewWorkspacePopup')
       }
+      commit('decrementApiCallsQueue')
+    },
+    async storeBoard ({commit}, {name, workspace_id}) {
+      commit('incrementApiCallsQueue')
+      const response = await axios.storeBoard({name, workspace_id})
+      if (response.status == 201) {
+        commit('storeBoard', {board: response.data.data})
+        commit('closeNewLaneForm')
+      }
+      commit('decrementApiCallsQueue')
+    },
+    async storeLane ({commit}, {name, board_id}) {
+      commit('incrementApiCallsQueue')
+      const response = await axios.storeLane({name, board_id})
+      if (response.status == 201) {
+        commit('storeLane', {lane: response.data.data})
+        commit('closeNewBoardPopup')
+      }
+      commit('decrementApiCallsQueue')
     },
     reset( {commit} ) {
       commit('resetCurrents')
@@ -102,10 +119,12 @@ const todoStore = new Vuex.Store({
         }, 200)
       }
       removeInitialLoading()
-    }
+    },
+
   },
+
   mutations: {
-    async removeInitialLoading (state) {
+    removeInitialLoading (state) {
       state.initialLoading = false
     },
     incrementApiCallsQueue (state) {
@@ -116,42 +135,51 @@ const todoStore = new Vuex.Store({
       let queue = state.apiCallsQueue
       state.apiCallsQueue = queue - 1
     },
-    async getWorkspaces (state, {workspaces}) {
+    getWorkspaces (state, {workspaces}) {
       state.workspaces = workspaces
     },
-    async resetCurrents (state) {
+    resetCurrents (state) {
       state.currentWorkspace = null
       state.currentBoard = null
     },
-    async storeBoard (state, {board}) {
-      state.currentWorkspace.boards.push(board)
-    },
-    async storeWorkspace (state, {workspace}) {
+    storeWorkspace (state, {workspace}) {
       state.workspaces.push(workspace)
     },
-    async setCurrentWorkspace (state, { workspace }) {
+    storeBoard (state, {board}) {
+      state.currentWorkspace.boards.push(board)
+    },
+    storeLane (state, {lane}) {
+      state.currentBoard.lanes.push(lane)
+    },
+    setCurrentWorkspace (state, { workspace }) {
       state.currentWorkspace = workspace
     },
-    async setCurrentBoard (state, {board}) {
+    setCurrentBoard (state, {board}) {
       state.currentBoard = board
     },
-    async openNewBoardPopup (state) {
+    openNewBoardPopup (state) {
       state.newBoardPopupIsOpen = true
     },
-    async closeNewBoardPopup (state) {
+    closeNewBoardPopup (state) {
       state.newBoardPopupIsOpen = false
     },
-    async openNewWorkspacePopup (state) {
+    openNewWorkspacePopup (state) {
       state.newWorkspacePopupIsOpen = true
     },
-    async closeNewWorkspacePopup (state) {
+    closeNewWorkspacePopup (state) {
       state.newWorkspacePopupIsOpen = false
     },
-    async openSidebar (state) {
+    openSidebar (state) {
       state.sidebarIsOpen = true
     },
-    async closeSidebar (state) {
+    closeSidebar (state) {
       state.sidebarIsOpen = false
+    },
+    openNewLaneForm (state) {
+      state.newLaneFormIsOpen = true
+    },
+    closeNewLaneForm (state) {
+      state.newLaneFormIsOpen = false
     },
   }
 })

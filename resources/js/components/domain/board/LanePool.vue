@@ -1,21 +1,20 @@
 <template>
 
-  <ul class="lane-pool">
+  <ul class="lane-pool" v-on:click.prevent="closeForm">
 
     <li class="lane-pool-element" v-for="lane in lanes" v-bind:key="'lane-' + lane.id">
       <lane :lane="lane" />
     </li>
 
-    <li class="lane-pool-element new-lane">
-      <div v-if="dispForm" class="new-lane-form">
+    <li class="lane-pool-element new-lane" v-on:click.stop>
+      <div class="new-lane-form" :class="dispForm ? 'show' : ''">
         <form v-on:submit.prevent="post">
-          <input type="text" name="name">
-          <input type="text" name="board_id" id="board_id" hidden>
+          <input type="text" name="name" id="lane-name-input" placeholder="Nouvelle liste">
           <input type="submit" value="Envoyer">
         </form>
       </div>
 
-      <div v-if=" ! dispForm " v-on:click.prevent="toggleForm" class="new-lane-backdrop">
+      <div v-if=" ! dispForm " v-on:click.stop="toggleForm" class="new-lane-backdrop">
         <p>
           +
         </p>
@@ -34,25 +33,34 @@ export default {
   },
   name: 'LanePool',
   props: ['lanes'],
-  data() {
-    return {
-      dispForm: false,
+  computed: {
+    dispForm() {
+      return this.$store.getters.newLaneFormIsOpen()
     }
   },
   methods: {
     toggleForm() {
-      this.dispForm = !this.dispForm
+      if (this.dispForm) {
+        const nameInput = document.querySelector('#lane-name-input')
+        nameInput.value = null
+        this.closeForm()
+      } else {
+        this.openForm()
+      }
     },
-    post(e) {
+    closeForm() {
+      this.$store.commit('closeNewLaneForm')
+    },
+    openForm() {
+      this.$store.commit('openNewLaneForm')
+    },
+    async post(e) {
       const name = e.target.elements.name.value
-      const board_id = e.target.elements.board_id.value
-      this.$store.dispatch('storeLane', { name, board_id })  
+      const board_id = this.$store.getters.currentBoard().id
+      await this.$store.dispatch('storeLane', { name, board_id })
+      this.toggleForm()
     },
-    mounted() {
-      const workspaceInput = document.querySelector('#board_id')
-      workspaceInput.value = this.$store.getters.currentBoard().id
-    }
-  }
+  },
 }
 </script>
 
@@ -75,6 +83,14 @@ export default {
 
     &-form, &-backdrop {
       background-color: rgba(0, 0, 0, 0.15);
+    }
+
+    &-form {
+      display: none;
+    }
+
+    &-form.show {
+      display: block;
     }
 
     &-backdrop {

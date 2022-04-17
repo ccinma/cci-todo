@@ -17,6 +17,9 @@ export default class TodoAxios {
       index: '/board',
       store: '/board',
       show: (id) => { return '/board/' + id },
+    },
+    lane: {
+      store: '/lane',
     }
   }
 
@@ -54,14 +57,19 @@ export default class TodoAxios {
     const response = await this.get(this.routes.board.show(id))
     return response
   }
+  
+  async storeWorkspace(data) {
+    const response = await this.post(this.routes.workspace.store, data)
+    return response
+  }
 
   async storeBoard(data) {
     const response = await this.post(this.routes.board.store, data)
     return response
   }
 
-  async storeWorkspace(data) {
-    const response = await this.post(this.routes.workspace.store, data)
+  async storeLane(data) {
+    const response = await this.post(this.routes.lane.store, data)
     return response
   }
 }

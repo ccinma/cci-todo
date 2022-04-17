@@ -2,7 +2,14 @@
 
   <div class="lane">
 
-    <p class="title">{{ lane.name }}</p>
+    <div class="lane-header">
+      <h3 class="lane-header-title">{{ lane.name }}</h3>
+      <div class="lane-header-menu">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
 
     <button class="todo-btn-round btn">
       <div>
@@ -41,10 +48,32 @@
     display: flex;
     flex-direction: column;
 
-    .title {
+    &-header {
+
+      display: flex;
+      justify-content: space-between;
       margin-bottom: 1rem;
-      font-size: 1.2rem;
+
+      &-title {
+        font-size: 1.2rem;
+      }
+
+      &-menu {
+
+        display: flex;
+        justify-content: center;
+        gap: 2px;
+
+        .dot {
+          height: 0.5rem;
+          width: 0.5rem;
+          border-radius: 9999px;
+          background-color: white;
+          margin-top: 0.5rem;
+        }
+      }
     }
+
 
     .btn {
       width: auto;
