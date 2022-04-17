@@ -23,12 +23,12 @@ export default {
   },
   computed: {
     isOpen() {
-      return this.$store.state.sidebarIsOpen
+      return this.$store.getters.sidebarIsOpen
     }
   },
   methods: {
     toggleSidebar() {
-      const mutation = this.$store.state.sidebarIsOpen ? 'closeSidebar' : 'openSidebar'
+      const mutation = this.$store.getters.sidebarIsOpen() ? 'closeSidebar' : 'openSidebar'
       this.$store.commit(mutation)
     }
   }

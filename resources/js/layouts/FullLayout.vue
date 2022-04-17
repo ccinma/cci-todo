@@ -26,13 +26,13 @@ export default {
       return this.$store.getters.currentWorkspace()
     },
     sidebarIsOpen() {
-      return this.$store.state.sidebarIsOpen
+      return this.$store.getters.sidebarIsOpen()
     },
     storeBoardPopupIsOpen() {
-      return this.$store.state.newBoardPopupIsOpen
+      return this.$store.getters.newBoardPopupIsOpen()
     },
     storeWorkspacePopupIsOpen() {
-      return this.$store.state.newWorkspacePopupIsOpen
+      return this.$store.getters.newWorkspacePopupIsOpen()
     }
   },
   components: {
@@ -41,14 +41,6 @@ export default {
     NewWorkspacePopup,
     FlashMessagePopup,
   },
-  mounted() {
-    if (this.$route.params.workspace && ! this.$store.state.currentWorkspace) {
-      this.$router.push('/')
-    }
-    if (this.$route.params.board && ! this.$store.state.currentBoard) {
-      this.$router.push('/workspace/' + this.$route.params.workspace)
-    }
-  }
 }
 </script>
 

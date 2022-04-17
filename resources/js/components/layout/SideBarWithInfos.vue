@@ -36,7 +36,7 @@ export default {
   name: 'SideBarWithInfos',
   computed: {
     workspace() {
-      return this.$store.state.currentWorkspace
+      return this.$store.getters.currentWorkspace()
     }
   },
   methods: {

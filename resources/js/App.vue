@@ -10,11 +10,6 @@ export default {
   components: {
     FullLayout
   },
-  // data() {
-  //   return {
-  //     initDone: this.$store.state.initialLoading
-  //   }
-  // },
   computed: {
     initDone() {
       return ! this.$store.getters.initialLoading()
@@ -23,7 +18,12 @@ export default {
   watch: {
     initDone(newState) {
       if (newState === true) {
-        console.log(this.$store.getters.currentWorkspace())
+        if (this.$route.params.workspace && ! this.$store.getters.currentWorkspace()) {
+          this.$router.push('/')
+        }
+        if (this.$route.params.board && ! this.$store.getters.currentBoard()) {
+          this.$router.push('/workspace/' + this.$route.params.workspace)
+        }
       }
     }
   },

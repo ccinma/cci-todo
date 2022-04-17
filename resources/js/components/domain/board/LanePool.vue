@@ -10,7 +10,7 @@
       <div v-if="dispForm" class="new-lane-form">
         <form v-on:submit.prevent="post">
           <input type="text" name="name">
-          <input type="text" name="workspace_id" id="workspace_id" hidden>
+          <input type="text" name="board_id" id="board_id" hidden>
           <input type="submit" value="Envoyer">
         </form>
       </div>
@@ -41,8 +41,16 @@ export default {
   },
   methods: {
     toggleForm() {
-      console.log('hello')
       this.dispForm = !this.dispForm
+    },
+    post(e) {
+      const name = e.target.elements.name.value
+      const board_id = e.target.elements.board_id.value
+      this.$store.dispatch('storeLane', { name, board_id })  
+    },
+    mounted() {
+      const workspaceInput = document.querySelector('#board_id')
+      workspaceInput.value = this.$store.getters.currentBoard().id
     }
   }
 }
@@ -67,10 +75,6 @@ export default {
 
     &-form, &-backdrop {
       background-color: rgba(0, 0, 0, 0.15);
-    }
-
-    &-form {
-      
     }
 
     &-backdrop {

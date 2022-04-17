@@ -21,8 +21,23 @@ const todoStore = new Vuex.Store({
     sidebarIsOpen: true,
   },
   getters: {
+    workspaces: (state) => () => {
+      return state.workspaces
+    },
     currentWorkspace: (state) => () => {
       return state.currentWorkspace
+    },
+    currentBoard: (state) => () => {
+      return state.currentBoard
+    },
+    sidebarIsOpen: (state) => () => {
+      return state.sidebarIsOpen
+    },
+    newBoardPopupIsOpen: (state) => () => {
+      return state.newBoardPopupIsOpen
+    },
+    newWorkspacePopupIsOpen: (state) => () => {
+      return state.newWorkspacePopupIsOpen
     },
     initialLoading: (state) => () => {
       return state.initialLoading

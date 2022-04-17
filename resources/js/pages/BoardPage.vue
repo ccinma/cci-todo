@@ -16,7 +16,7 @@ export default {
   name: 'BoardPage',
   computed: {
     board() {
-      return this.$store.state.currentBoard
+      return this.$store.getters.currentBoard()
     }
   },
 }

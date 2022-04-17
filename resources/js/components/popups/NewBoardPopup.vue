@@ -32,7 +32,7 @@ export default {
   },
   mounted() {
     const workspaceInput = document.querySelector('#workspace_id')
-    workspaceInput.value = this.$store.state.currentWorkspace.id
+    workspaceInput.value = this.$store.getters.currentWorkspace().id
   }
 }
 </script>
