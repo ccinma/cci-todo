@@ -23,7 +23,7 @@ export default {
   name: 'FullLayout',
   computed: {
     workspace() {
-      return this.$store.getters.getCurrentWorkspace()
+      return this.$store.getters.currentWorkspace()
     },
     sidebarIsOpen() {
       return this.$store.state.sidebarIsOpen
@@ -42,14 +42,13 @@ export default {
     FlashMessagePopup,
   },
   mounted() {
-
     if (this.$route.params.workspace && ! this.$store.state.currentWorkspace) {
       this.$router.push('/')
     }
     if (this.$route.params.board && ! this.$store.state.currentBoard) {
-      this.$router.push('/workspace/'+this.$route.params.workspace)
+      this.$router.push('/workspace/' + this.$route.params.workspace)
     }
-  },
+  }
 }
 </script>
 

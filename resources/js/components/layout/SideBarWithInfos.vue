@@ -44,7 +44,7 @@ export default {
       this.$store.commit('openNewBoardPopup')
     },
     setCurrentBoard(id) {
-      this.$store.commit('setCurrentBoard', {board_id: id})
+      this.$store.dispatch('setCurrentBoard', {boardId: id})
     }
   }
 }

@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     setWorkspace(id) {
-      this.$store.dispatch('setCurrentWorkspace', {workspace_id: id})
+      this.$store.dispatch('setCurrentWorkspace', {workspaceId: id})
     },
     openNewWorkspacePopup() {
       this.$store.commit('openNewWorkspacePopup')

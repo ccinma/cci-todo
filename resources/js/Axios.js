@@ -11,11 +11,12 @@ export default class TodoAxios {
     workspace: {
       index: '/workspace',
       store: '/workspace',
-      show: (id) => { return '/workspace/' + id }
+      show: (id) => { return '/workspace/' + id },
     },
     board: {
       index: '/board',
       store: '/board',
+      show: (id) => { return '/board/' + id },
     }
   }
 
@@ -46,6 +47,11 @@ export default class TodoAxios {
 
   async getWorkspace(id) {
     const response = await this.get(this.routes.workspace.show(id))
+    return response
+  }
+
+  async getBoard(id) {
+    const response = await this.get(this.routes.board.show(id))
     return response
   }
 

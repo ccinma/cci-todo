@@ -11,76 +11,114 @@ const todoStore = new Vuex.Store({
     workspaces: [],
     currentWorkspace: null,
     currentBoard: null,
+
     initialLoading: true,
+    apiCallsQueue: 0,
     loading: false,
+    
     newBoardPopupIsOpen: false,
     newWorkspacePopupIsOpen: false,
     sidebarIsOpen: true,
   },
   getters: {
-    getCurrentWorkspace: (state) => () => {
+    currentWorkspace: (state) => () => {
       return state.currentWorkspace
     },
+    initialLoading: (state) => () => {
+      return state.initialLoading
+    }
   },
   actions: {
-    setCurrentWorkspace ({commit}, {workspace_id}) {
-      commit('setCurrentWorkspace', {workspace_id})
+    async setCurrentWorkspace ({commit, state}, {workspaceId}) {
+      commit('incrementApiCallsQueue')
+      const found = state.workspaces.find(workspace => workspace.id == workspaceId) ?? null
+      const currentWorkspace = (found) ? await (await axios.getWorkspace(workspaceId)).data.data : null
+      if (currentWorkspace) commit('setCurrentWorkspace', {workspace: currentWorkspace})
+      commit('decrementApiCallsQueue')
     },
-    storeBoard ({commit}, {name, workspace_id}) {
-      commit('storeBoard', {name, workspace_id})
-      commit('closeNewBoardPopup')
+    async setCurrentBoard ({commit, state}, {boardId}) {
+      commit('incrementApiCallsQueue')
+      const found = state.currentWorkspace.boards.find(board => board.id == boardId) ?? null
+      const currentBoard = (found) ? await (await axios.getBoard(boardId)).data.data : null
+      if (currentBoard) commit('setCurrentBoard', {board: currentBoard})
+      commit('decrementApiCallsQueue')
     },
-    storeWorkspace({commit}, {name}) {
-      commit('storeWorkspace', {name})
-      commit('closeNewWorkspacePopup')
+    async storeBoard ({commit}, {name, workspace_id}) {
+      commit('incrementApiCallsQueue')
+      const response = await axios.storeBoard({name, workspace_id})
+      if (response.status == 201) {
+        commit('storeBoard', {board: response.data.data})
+        commit('closeNewBoardPopup')
+      }
+      commit('decrementApiCallsQueue')
+    },
+    async storeWorkspace({commit}, {name}) {
+      const response = await axios.storeWorkspace({name})
+      if (response.status == 201) {
+        commit('storeWorkspace', {workspace: response.data.data})
+        commit('closeNewWorkspacePopup')
+      }
     },
     reset( {commit} ) {
       commit('resetCurrents')
       commit('closeSidebar')
-    }
-  },
-  mutations: {
-    async init (state, {routeParams}) {
+    },
+    async init( {commit, dispatch, state}, {workspaceId, boardId} ) {
       const response = await axios.getUserWorkspaces()
       if (response.status == 200) {
         const workspaces = response.data.data
         if (workspaces && workspaces.length > 0) {
-          state.workspaces = workspaces
+          commit('getWorkspaces', {workspaces})
         }
       }
-      // Setting up default workspace and board to be the ones in the url
-      if (routeParams.workspace) {
-        const found = state.workspaces.find(workspace => workspace.id == routeParams.workspace) ?? null
-        const currentWorkspace = (found) ? await (await axios.getWorkspace(routeParams.workspace)).data.data : null
-        state.currentWorkspace = currentWorkspace
+      if (workspaceId) {
+        await dispatch('setCurrentWorkspace', {workspaceId})
       }
-      if (routeParams.board && state.currentWorkspace) {
-        state.currentBoard = state.currentWorkspace.boards.find(board => board.id == routeParams.board) ?? null
+      if (boardId) {
+        await dispatch('setCurrentBoard', {boardId})
       }
-      
+      const removeInitialLoading = () => {
+        setTimeout(() => {
+          if (state.apiCallsQueue > 0) {
+            removeInitialLoading()
+          } else {
+            commit('removeInitialLoading')
+          }
+        }, 200)
+      }
+      removeInitialLoading()
+    }
+  },
+  mutations: {
+    async removeInitialLoading (state) {
       state.initialLoading = false
+    },
+    incrementApiCallsQueue (state) {
+      let queue = state.apiCallsQueue
+      state.apiCallsQueue = queue + 1
+    },
+    decrementApiCallsQueue (state) {
+      let queue = state.apiCallsQueue
+      state.apiCallsQueue = queue - 1
+    },
+    async getWorkspaces (state, {workspaces}) {
+      state.workspaces = workspaces
     },
     async resetCurrents (state) {
       state.currentWorkspace = null
       state.currentBoard = null
     },
-    async storeBoard (state, {name, workspace_id}) {
-      const response = await axios.storeBoard({name, workspace_id})
-      if (response.status == 201) {
-        state.currentWorkspace.boards.push(response.data.data)
-      }
+    async storeBoard (state, {board}) {
+      state.currentWorkspace.boards.push(board)
     },
-    async storeWorkspace (state, {name}) {
-      const response = await axios.storeWorkspace({name})
-      if (response.status == 201) {
-        state.workspaces.push(response.data.data)
-      }
+    async storeWorkspace (state, {workspace}) {
+      state.workspaces.push(workspace)
     },
-    async setCurrentWorkspace (state, { workspace_id }) {
-      state.currentWorkspace = state.workspaces.find(workspace => workspace.id == workspace_id)
+    async setCurrentWorkspace (state, { workspace }) {
+      state.currentWorkspace = workspace
     },
-    async setCurrentBoard (state, {board_id}) {
-      state.currentBoard = state.currentWorkspace.boards.find(board => board.id == board_id)
+    async setCurrentBoard (state, {board}) {
+      state.currentBoard = board
     },
     async openNewBoardPopup (state) {
       state.newBoardPopupIsOpen = true

@@ -15,14 +15,14 @@ class ReadBoardController extends Controller
             return response()->json([], 400);
         }
 
-        $board = Board::findOrFail($board_id);
+        $board = Board::with(['lanes', 'labels', 'lanes.cards'])->findOrFail($board_id);
 
         if ( Gate::denies('collaborate', $board->workspace) ) {
             return response()->json([], 401);
         }
 
         return response([
-            'data' => $board->withoutRelations(),
+            'data' => $board,
         ]);
 
     }

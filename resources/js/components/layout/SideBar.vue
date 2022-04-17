@@ -18,7 +18,7 @@ export default {
   components: { ContentDivider },
   data() {
     return {
-      workspace: this.$store.getters.getCurrentWorkspace()
+      workspace: this.$store.getters.currentWorkspace()
     }
   },
   computed: {

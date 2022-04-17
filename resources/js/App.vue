@@ -10,8 +10,31 @@ export default {
   components: {
     FullLayout
   },
+  // data() {
+  //   return {
+  //     initDone: this.$store.state.initialLoading
+  //   }
+  // },
+  computed: {
+    initDone() {
+      return ! this.$store.getters.initialLoading()
+    }
+  },
+  watch: {
+    initDone(newState) {
+      if (newState === true) {
+        console.log(this.$store.getters.currentWorkspace())
+      }
+    }
+  },
   async mounted() {
-    await this.$store.commit('init', {routeParams: this.$route.params})
+    const routeParams = this.$route.params
+    const params = {
+      workspaceId: routeParams.workspace,
+      boardId: routeParams.board
+    }
+    await this.$store.dispatch('init', params)
+
   }
 }
 </script>

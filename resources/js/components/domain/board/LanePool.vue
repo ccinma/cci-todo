@@ -7,7 +7,15 @@
     </li>
 
     <li class="lane-pool-element new-lane">
-      <div class="new-lane-backdrop">
+      <div v-if="dispForm" class="new-lane-form">
+        <form v-on:submit.prevent="post">
+          <input type="text" name="name">
+          <input type="text" name="workspace_id" id="workspace_id" hidden>
+          <input type="submit" value="Envoyer">
+        </form>
+      </div>
+
+      <div v-if=" ! dispForm " v-on:click.prevent="toggleForm" class="new-lane-backdrop">
         <p>
           +
         </p>
@@ -26,6 +34,17 @@ export default {
   },
   name: 'LanePool',
   props: ['lanes'],
+  data() {
+    return {
+      dispForm: false,
+    }
+  },
+  methods: {
+    toggleForm() {
+      console.log('hello')
+      this.dispForm = !this.dispForm
+    }
+  }
 }
 </script>
 
@@ -46,10 +65,17 @@ export default {
   .new-lane {
     height: 100%;
 
+    &-form, &-backdrop {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+
+    &-form {
+      
+    }
+
     &-backdrop {
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.15);
       display: flex;
       justify-content: center;
       align-items: center;
