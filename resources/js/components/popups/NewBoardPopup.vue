@@ -8,9 +8,9 @@
         Nouveau tableau
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
-        <input type="text" name="name">
+        <input class="text" type="text" name="name">
         <input type="text" name="workspace_id" id="workspace_id" hidden>
-        <input type="submit" value="Envoyer">
+        <input class="submit" type="submit" value="Envoyer">
       </form>
     </div>
 
@@ -40,7 +40,9 @@ export default {
 <style lang="scss" scoped>
   
 #new-board-popup {
-  @import "../../../sass/_variables";
+  @import "resources/sass/_breakpoints.scss";
+  @import "resources/sass/_variables.scss";
+  @import "resources/sass/_colors.scss";
 
   z-index: 10;
 
@@ -65,7 +67,6 @@ export default {
     z-index: 2;
     max-width: 360px;
     width: 100%;
-    height: 150px;
 
     padding: 1rem;
 
@@ -86,7 +87,51 @@ export default {
     }
 
     &-form {
+      .text {
+        all: unset;
 
+        padding-inline: 1rem;
+        padding-block: 0.5rem;
+        
+        border-radius: 5rem;
+
+        background: $white;
+      }
+
+      .submit {
+        border: none;
+        cursor: pointer;
+        background: $cyanprocess;
+        color: $white;
+
+        padding-inline: 1rem;
+        padding-block: 0.5rem;
+        
+        border-radius: 5rem;
+      }
+    }&-form {
+      .text {
+        all: unset;
+
+        padding-inline: 1rem;
+        padding-block: 0.5rem;
+        
+        border-radius: 5rem;
+
+        background: $white;
+      }
+
+      .submit {
+        border: none;
+        cursor: pointer;
+        background: $cyanprocess;
+        color: $white;
+
+        padding-inline: 1rem;
+        padding-block: 0.5rem;
+        
+        border-radius: 5rem;
+      }
     }
 
   }
