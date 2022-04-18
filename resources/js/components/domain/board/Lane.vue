@@ -56,6 +56,7 @@
 
       &-title {
         font-size: 1.2rem;
+        user-select: none;
       }
 
       &-menu {

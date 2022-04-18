@@ -1,12 +1,14 @@
 <template>
 
-  <ul class="lane-pool" v-on:click.prevent="closeForm">
+  <div class="lane-pool-container" v-on:click.prevent="closeForm">
 
-    <li class="lane-pool-element" v-for="lane in lanes" v-bind:key="'lane-' + lane.id">
-      <lane :lane="lane" />
-    </li>
+    <ul id="lane-pool" class="lane-pool">
+      <li class="lane-pool-element draggable-lane" v-for="lane in lanes" v-bind:key="'lane-' + lane.id">
+        <lane :lane="lane" />
+      </li>
+    </ul>
 
-    <li class="lane-pool-element new-lane" v-on:click.stop>
+    <div class="new-lane" v-on:click.stop>
       <div class="new-lane-form" :class="dispForm ? 'show' : ''">
         <form v-on:submit.prevent="post">
           <input type="text" name="name" id="lane-name-input" placeholder="Nouvelle liste">
@@ -19,13 +21,14 @@
           +
         </p>
       </div>
-    </li>
+    </div>
 
-  </ul>
+  </div>
 </template>
 
 <script>
 import Lane from './Lane.vue'
+import Sortable from 'sortablejs';
 
 export default {
   components: {
@@ -38,7 +41,19 @@ export default {
       return this.$store.getters.newLaneFormIsOpen()
     }
   },
+  mounted() {
+    this.dragNdrop()
+  },
   methods: {
+    dragNdrop() {
+      let pool = document.querySelector('#lane-pool')
+      new Sortable(pool, {
+        handle: '.draggable-lane',
+        chosenClass: 'chosen-lane',
+        animation: 200,
+        delay: 100,
+      })
+    },
     toggleForm() {
       if (this.dispForm) {
         const nameInput = document.querySelector('#lane-name-input')
@@ -66,51 +81,66 @@ export default {
 
 <style lang="scss">
 
-.lane-pool {
+.lane-pool-container {
+  overflow: auto;
+  height: calc(100% - 65px);
+  display: flex;
+  width: max-content;
+}
 
+.lane-pool {
   width: 100%;
   display: flex;
-  height: calc(100% - 65px);
-
   &-element {
     width: 300px;
     flex-shrink: 0;
     padding-inline: 0.5rem;
+    &.draggable-lane {
+      &.lane-dragging {
+        opacity: 0.5;
+      }
+      &.lane-placeholder {
+        opacity: 0.5;
+      }
+      &.chosen-lane {
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+.new-lane {
+  @extend .lane-pool-element;
+  height: 100%;
+  &-form, &-backdrop {
+    background-color: rgba(0, 0, 0, 0.15);
   }
 
-  .new-lane {
+  &-form {
+    display: none;
+  }
+
+  &-form.show {
+    display: block;
+  }
+
+  &-backdrop {
+    width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    cursor: pointer;
 
-    &-form, &-backdrop {
-      background-color: rgba(0, 0, 0, 0.15);
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.2);
     }
 
-    &-form {
-      display: none;
-    }
-
-    &-form.show {
-      display: block;
-    }
-
-    &-backdrop {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 1rem;
+    p {
+      font-size: 10rem;
+      color: rgba(0, 0, 0, 0.15);
       cursor: pointer;
-
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.2);
-      }
-
-      p {
-        font-size: 10rem;
-        color: rgba(0, 0, 0, 0.15);
-        cursor: pointer;
-      }
     }
   }
 }
