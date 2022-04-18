@@ -108,7 +108,7 @@ const todoStore = new Vuex.Store({
     },
     async moveLane ({commit}, {lane_id, previous_id}) {
       commit('incrementApiCallsQueue')
-      const response = await axios.moveLane(lane_id, {previous_id})
+      await axios.moveLane(lane_id, {previous_id})
       commit('decrementApiCallsQueue')
     },
     reset( {commit} ) {

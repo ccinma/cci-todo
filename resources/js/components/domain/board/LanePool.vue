@@ -65,7 +65,7 @@ export default {
           if (previousEl) {
             previous_id = previousEl.dataset.id
           }
-          store.dispatch('moveLane', {lane_id, previous_id})
+          store.dispatch('moveLane', {lane_id, previous_id: previous_id})
         }
       })
     },
