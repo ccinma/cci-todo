@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     isOpen() {
-      return this.$store.getters.sidebarIsOpen
+      return this.$store.getters.sidebarIsOpen()
     }
   },
   methods: {

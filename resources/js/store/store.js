@@ -11,6 +11,7 @@ const todoStore = new Vuex.Store({
     workspaces: [],
     currentWorkspace: null,
     currentBoard: null,
+    currentLanes: null,
 
     initialLoading: true,
     apiCallsQueue: 0,
@@ -31,6 +32,9 @@ const todoStore = new Vuex.Store({
     },
     currentBoard: (state) => () => {
       return state.currentBoard
+    },
+    currentLanes: (state) => () => {
+      return state.currentLanes
     },
     sidebarIsOpen: (state) => () => {
       return state.sidebarIsOpen
@@ -61,7 +65,19 @@ const todoStore = new Vuex.Store({
       commit('incrementApiCallsQueue')
       const found = state.currentWorkspace.boards.find(board => board.id == boardId) ?? null
       const currentBoard = (found) ? await (await axios.getBoard(boardId)).data.data : null
-      if (currentBoard) commit('setCurrentBoard', {board: currentBoard})
+      if (currentBoard) {
+        commit('setCurrentBoard', {board: currentBoard})
+        const rawLanesArray = currentBoard.lanes ?? []
+        const sortedLanesArray = []
+        let last_id = null
+        for (let i = 0; i < rawLanesArray.length; i++) {
+          let lane = rawLanesArray.find(lane => lane.previous_id === last_id)
+          last_id = lane.id
+          sortedLanesArray.push(lane)
+          if (!lane.next_id) break
+        }
+        commit('setCurrentLanes', {lanes: sortedLanesArray})
+      }
       commit('decrementApiCallsQueue')
     },
     async storeWorkspace({commit}, {name}) {
@@ -78,7 +94,7 @@ const todoStore = new Vuex.Store({
       const response = await axios.storeBoard({name, workspace_id})
       if (response.status == 201) {
         commit('storeBoard', {board: response.data.data})
-        commit('closeNewLaneForm')
+        commit('closeNewBoardPopup')
       }
       commit('decrementApiCallsQueue')
     },
@@ -87,7 +103,6 @@ const todoStore = new Vuex.Store({
       const response = await axios.storeLane({name, board_id})
       if (response.status == 201) {
         commit('storeLane', {lane: response.data.data})
-        commit('closeNewBoardPopup')
       }
       commit('decrementApiCallsQueue')
     },
@@ -147,15 +162,20 @@ const todoStore = new Vuex.Store({
     },
     storeBoard (state, {board}) {
       state.currentWorkspace.boards.push(board)
+      state.currentBoard = board
     },
     storeLane (state, {lane}) {
       state.currentBoard.lanes.push(lane)
+      state.currentLanes.push(lane)
     },
     setCurrentWorkspace (state, { workspace }) {
       state.currentWorkspace = workspace
     },
     setCurrentBoard (state, {board}) {
       state.currentBoard = board
+    },
+    setCurrentLanes (state, {lanes}) {
+      state.currentLanes = lanes
     },
     openNewBoardPopup (state) {
       state.newBoardPopupIsOpen = true

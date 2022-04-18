@@ -1,10 +1,10 @@
 <template>
-  <div v-if="board" >
+  <div v-if="board">
     <h1 class="no-text-overflow">
       Bienvenue dans le tableau {{ board.name }}!
     </h1>
 
-    <lane-pool :lanes="board.lanes ? board.lanes : []" />
+    <lane-pool :lanes="lanes" />
 
   </div>
 </template>
@@ -17,6 +17,9 @@ export default {
   computed: {
     board() {
       return this.$store.getters.currentBoard()
+    },
+    lanes() {
+      return this.$store.getters.currentLanes()
     }
   },
 }

@@ -9,7 +9,6 @@
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
         <input type="text" name="name">
-        <input type="text" name="workspace_id" id="workspace_id" hidden>
         <input type="submit" value="Envoyer">
       </form>
     </div>
@@ -22,18 +21,15 @@ export default {
   name: 'NewBoardPopup',
   methods: {
     post(e) {
+      console.log('hello')
       const name = e.target.elements.name.value
-      const workspace_id = e.target.elements.workspace_id.value
-      this.$store.dispatch('storeBoard', { name, workspace_id })      
+      const workspace = this.$store.getters.currentWorkspace()
+      this.$store.dispatch('storeBoard', { name, workspace_id: workspace.id })      
     },
     closePopup() {
       this.$store.commit('closeNewBoardPopup')
     }
   },
-  mounted() {
-    const workspaceInput = document.querySelector('#workspace_id')
-    workspaceInput.value = this.$store.getters.currentWorkspace().id
-  }
 }
 </script>
 

@@ -34,12 +34,12 @@ export default {
   components: {
     Lane
   },
-  name: 'LanePool',
   props: ['lanes'],
+  name: 'LanePool',
   computed: {
     dispForm() {
       return this.$store.getters.newLaneFormIsOpen()
-    }
+    },
   },
   mounted() {
     this.dragNdrop()
