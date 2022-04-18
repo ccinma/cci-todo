@@ -5,9 +5,28 @@
     <div class="lane-header">
       <h3 class="lane-header-title">{{ lane.name }}</h3>
       <div class="lane-header-menu">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+        <div class="lane-header-menu-backdrop" v-if="isOpen" v-on:click.prevent.stop="toggleDropdown"></div>
+        <div class="lane-header-menu-btn" v-on:click.stop="toggleDropdown">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <div class="lane-header-menu-dropdown" v-if="isOpen">
+          <div class="dropdown-close">
+            <div v-on:click.stop="toggleDropdown">
+              &times;
+            </div>
+          </div>
+          <content-divider />
+          <ul class="dropdown-list">
+            <li v-if="!confirmDeleteLane" v-on:click.prevent.stop="openConfirmation" class="dropdown-element">
+              Supprimer la liste
+            </li>
+            <li v-if="confirmDeleteLane" v-on:click.prevent.stop="deleteLane" class="dropdown-element danger">
+              Confirmer suppression ?
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -27,7 +46,24 @@
 
     props: ['lane'],
 
+    data() {
+      return {
+        isOpen: false,
+        confirmDeleteLane: false,
+      }
+    },
+
     methods :{
+      toggleDropdown() {
+        this.confirmDeleteLane = false
+        this.isOpen = ! this.isOpen
+      },
+      openConfirmation() {
+        this.confirmDeleteLane = true
+      },
+      async deleteLane() {
+        await this.$store.dispatch('deleteLane', {lane_id: this.lane.id})
+      },
     }
   }
 </script>
@@ -61,9 +97,46 @@
 
       &-menu {
 
-        display: flex;
-        justify-content: center;
-        gap: 2px;
+        position: relative;
+
+        &-backdrop {
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          top: 0;
+          z-index: 1;
+        }
+        
+        &-btn {
+          display: flex;
+          justify-content: center;
+          gap: 2px;
+          height: 100%;
+          cursor: pointer;
+        }
+
+        &-dropdown {
+
+          z-index: 2;
+
+          padding-top: 0.25rem;
+          padding-inline: 0.75rem;
+          padding-bottom: 1rem;
+
+          position: absolute;
+          top: 29px;
+          left: 0;
+          
+          overflow: hidden;
+
+          white-space: nowrap;
+          color: $royalbluedark;
+          background-color: rgba(255, 255, 255, 0.918);
+          backdrop-filter: blur(5px);
+          border-radius: 5px;
+          border: 1px solid #00000040;
+        }
 
         .dot {
           height: 0.5rem;
@@ -71,6 +144,25 @@
           border-radius: 9999px;
           background-color: white;
           margin-top: 0.5rem;
+        }
+      }
+    }
+
+
+    .dropdown {
+      &-close {
+        display: flex;
+        justify-content: flex-end;
+        font-size: 1.5rem;
+        &>* {
+          cursor: pointer;
+        }
+      }
+      &-element {
+        cursor: pointer;
+        &.danger {
+          color: rgb(178, 7, 7);
+          font-size: bold;
         }
       }
     }

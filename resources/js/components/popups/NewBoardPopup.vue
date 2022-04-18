@@ -21,7 +21,6 @@ export default {
   name: 'NewBoardPopup',
   methods: {
     post(e) {
-      console.log('hello')
       const name = e.target.elements.name.value
       const workspace = this.$store.getters.currentWorkspace()
       this.$store.dispatch('storeBoard', { name, workspace_id: workspace.id })      
@@ -79,10 +78,6 @@ export default {
 
     &-title {
       margin-bottom: 1rem;
-    }
-
-    &-form {
-
     }
 
   }

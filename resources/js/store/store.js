@@ -106,6 +106,17 @@ const todoStore = new Vuex.Store({
       }
       commit('decrementApiCallsQueue')
     },
+    async deleteLane ({commit, state}, {lane_id}) {
+      commit('incrementApiCallsQueue')
+      const response = await axios.deleteLane(lane_id)
+      if (response.status = 200) {
+        const index = state.currentLanes.findIndex((element) => element.id == lane_id)
+        const currentLanes = state.currentLanes
+        currentLanes.splice(index, 1)
+        commit('setCurrentLanes', {lanes: currentLanes})
+      }
+      commit('decrementApiCallsQueue')
+    },
     async moveLane ({commit}, {lane_id, previous_id}) {
       commit('incrementApiCallsQueue')
       await axios.moveLane(lane_id, {previous_id})
