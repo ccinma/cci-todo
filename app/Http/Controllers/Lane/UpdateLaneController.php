@@ -73,23 +73,34 @@ class UpdateLaneController extends Controller
 
         $data = [];
 
+        // Fills the gap left by the moved lane by connecting the lanes
+        $previousIdBeforeMove = $lane->previous_id;
+        $nextIdBeforeMove = $lane->next_id;
+        $previousBeforeMove = null;
+        $nextBeforeMove = null;
+        if ($previousIdBeforeMove) {
+            $previousBeforeMove = Lane::findOrFail($previousIdBeforeMove);
+            $previousBeforeMove->update(['next_id' => $nextIdBeforeMove]);
+        }
+        if ($nextIdBeforeMove) {
+            $nextBeforeMove = Lane::findOrFail($nextIdBeforeMove);
+            $nextBeforeMove->update(['previous_id' => $previousIdBeforeMove]);
+        }
 
+        // Update the new next and previous lanes
         $previous_id = isset($attributes['previous_id']) ? $attributes['previous_id'] : null;
-        $next_id = isset($attributes['next_id']) ? $attributes['next_id'] : null;
 
         $previous = null;
         $next = null;
 
+        // Find the previous and next lanes
         if ( $previous_id ) {
             $previous = Lane::findOrFail($previous_id);
             if ( $previous->next_id ) {
                 $next = Lane::find($previous->next_id);
             }
         } else {
-            $next = Lane::findOrFail($next_id);
-            if ( $next->previous_id ) {
-                $previous = Lane::find($previous_id);
-            }
+            $next = Lane::where('previous_id', '=', null)->firstOrFail();
         }
 
         $order = [];
@@ -100,6 +111,8 @@ class UpdateLaneController extends Controller
             ]);
             $order['previous_id'] = $previous->id;
             $data['previous'] = $previous->withoutRelations();
+        } else {
+            $order['previous_id'] = null;
         }
 
         if ( $next ) {
@@ -108,6 +121,8 @@ class UpdateLaneController extends Controller
             ]);
             $order['next_id'] = $next->id;
             $data['next'] = $next->withoutRelations();
+        } else {
+            $order['next_id'] = null;
         }
 
         $lane->update($order);

@@ -3,7 +3,7 @@
   <div class="lane-pool-container" v-on:click.prevent="closeForm">
 
     <ul id="lane-pool" class="lane-pool">
-      <li class="lane-pool-element draggable-lane" v-for="lane in lanes" v-bind:key="'lane-' + lane.id">
+      <li class="lane-pool-element draggable-lane" v-for="lane in lanes" :data-id="lane.id" v-bind:key="'lane-' + lane.id">
         <lane :lane="lane" />
       </li>
     </ul>
@@ -42,16 +42,31 @@ export default {
     },
   },
   mounted() {
-    this.dragNdrop()
+    this.dragNdrop(this.$store)
   },
   methods: {
-    dragNdrop() {
+    dragNdrop(store) {
       let pool = document.querySelector('#lane-pool')
       new Sortable(pool, {
         handle: '.draggable-lane',
         chosenClass: 'chosen-lane',
         animation: 200,
         delay: 100,
+        onEnd: function(e) {
+          const sortedPool = e.to
+          const newIndex = e.newIndex
+          const clone = e.clone
+          const lane_id = clone.dataset.id
+          let previousEl = null
+          let previous_id = null
+          if (newIndex != 0) {
+            previousEl = sortedPool.children[newIndex - 1]
+          }
+          if (previousEl) {
+            previous_id = previousEl.dataset.id
+          }
+          store.dispatch('moveLane', {lane_id, previous_id})
+        }
       })
     },
     toggleForm() {

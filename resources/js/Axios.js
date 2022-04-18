@@ -20,6 +20,7 @@ export default class TodoAxios {
     },
     lane: {
       store: '/lane',
+      move: (id) => {return '/lane/' + id + '/move'}
     }
   }
 
@@ -41,6 +42,10 @@ export default class TodoAxios {
 
   async post(path, data) {
     return await this.instance.post(path, data)
+  }
+
+  async put(path, data) {
+    return await this.instance.put(path, data)
   }
 
   async getUserWorkspaces() {
@@ -70,6 +75,11 @@ export default class TodoAxios {
 
   async storeLane(data) {
     const response = await this.post(this.routes.lane.store, data)
+    return response
+  }
+
+  async moveLane(id, data) {
+    const response = await this.put(this.routes.lane.move(id), data)
     return response
   }
 }
