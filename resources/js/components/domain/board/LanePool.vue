@@ -8,13 +8,11 @@
       </li>
     </ul>
 
-    <div class="new-lane" v-on:click.stop>
-      <div class="new-lane-form" :class="dispForm ? 'show' : ''">
-        <form v-on:submit.prevent="post">
-          <input type="text" name="name" id="lane-name-input" placeholder="Nouvelle liste">
-          <input type="submit" value="Envoyer">
-        </form>
-      </div>
+    <div class="new-lane">
+      <form class="new-lane-form" :class="dispForm ? 'show' : ''" v-on:submit.prevent="post" v-on:click.stop>
+        <td-input-text id="lane-name-input" name="name" placeholder="Nouvelle liste" />
+        <td-input-submit value="Créer" />
+      </form>
 
       <div v-if=" ! dispForm " v-on:click.stop="toggleForm" class="new-lane-backdrop">
         <p>
@@ -29,10 +27,14 @@
 <script>
 import Lane from './Lane.vue'
 import Sortable from 'sortablejs';
+import TdInputText from '../../UI/TdInputText.vue';
+import TdInputSubmit from '../../UI/TdInputSubmit.vue';
 
 export default {
   components: {
-    Lane
+    Lane,
+    TdInputText,
+    TdInputSubmit
   },
   props: ['lanes'],
   name: 'LanePool',
@@ -76,6 +78,10 @@ export default {
         this.closeForm()
       } else {
         this.openForm()
+        setTimeout(() => {
+          const input = document.querySelector('#lane-name-input')
+          input.focus()
+        }, 50)
       }
     },
     closeForm() {
@@ -129,14 +135,20 @@ export default {
   height: 100%;
   &-form, &-backdrop {
     background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 1rem;
   }
 
   &-form {
     display: none;
+    padding: 0.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
   }
 
   &-form.show {
-    display: block;
+    display: flex;
   }
 
   &-backdrop {
@@ -145,7 +157,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 1rem;
     cursor: pointer;
 
     &:hover {

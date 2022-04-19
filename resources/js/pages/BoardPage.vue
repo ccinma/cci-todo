@@ -1,5 +1,5 @@
 <template>
-  <div v-if="board">
+  <div v-if="board" v-on:click.prevent="closeNewLaneForm">
     <h1 class="no-text-overflow">
       Bienvenue dans le tableau {{ board.name }}!
     </h1>
@@ -20,6 +20,11 @@ export default {
     },
     lanes() {
       return this.$store.getters.currentLanes()
+    }
+  },
+  methods: {
+    closeNewLaneForm() {
+      this.$store.commit('closeNewLaneForm')
     }
   },
 }

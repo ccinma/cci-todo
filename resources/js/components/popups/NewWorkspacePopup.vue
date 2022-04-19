@@ -8,8 +8,8 @@
         Nouvel espace de travail
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
-        <input class="text" type="text" name="name">
-        <input class="submit" type="submit" value="Envoyer">
+        <td-input-text name="name" placeholder="Nom du workspace" />
+        <td-input-submit value="Envoyer" />
       </form>
     </div>
 
@@ -17,7 +17,10 @@
 </template>
 
 <script>
+import TdInputSubmit from '../UI/TdInputSubmit.vue'
+import TdInputText from '../UI/TdInputText.vue'
 export default {
+  components: { TdInputSubmit, TdInputText },
   name: 'NewWorkspacedPopup',
   methods: {
     post(e) {
@@ -81,28 +84,11 @@ export default {
     }
 
     &-form {
-      .text {
-        all: unset;
-
-        padding-inline: 1rem;
-        padding-block: 0.5rem;
-        
-        border-radius: 5rem;
-
-        background: $white;
-      }
-
-      .submit {
-        border: none;
-        cursor: pointer;
-        background: $cyanprocess;
-        color: $white;
-
-        padding-inline: 1rem;
-        padding-block: 0.5rem;
-        
-        border-radius: 5rem;
-      }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
     }
   }
 }

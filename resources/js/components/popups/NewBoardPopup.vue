@@ -8,8 +8,8 @@
         Nouveau tableau
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
-        <input type="text" name="name">
-        <input type="submit" value="Envoyer">
+        <td-input-text name="name" placeholder="Nom du tableau" />
+        <td-input-submit value="Envoyer" />
       </form>
     </div>
 
@@ -17,7 +17,10 @@
 </template>
 
 <script>
+import TdInputSubmit from '../UI/TdInputSubmit.vue'
+import TdInputText from '../UI/TdInputText.vue'
 export default {
+  components: { TdInputText, TdInputSubmit },
   name: 'NewBoardPopup',
   methods: {
     post(e) {
@@ -60,7 +63,6 @@ export default {
     z-index: 2;
     max-width: 360px;
     width: 100%;
-    height: 150px;
 
     padding: 1rem;
 
@@ -78,6 +80,14 @@ export default {
 
     &-title {
       margin-bottom: 1rem;
+    }
+
+    &-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
     }
 
   }
