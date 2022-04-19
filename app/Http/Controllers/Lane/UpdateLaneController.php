@@ -24,7 +24,7 @@ class UpdateLaneController extends Controller
 
         $attributes = $request->validated();
 
-        $lane = Lane::find($lane_id);
+        $lane = Lane::with(['cards'])->find($lane_id);
 
         if ( ! $lane ) {
             return response()->json([

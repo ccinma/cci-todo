@@ -34,7 +34,7 @@ export default {
   components: {
     Lane,
     TdInputText,
-    TdInputSubmit
+    TdInputSubmit,
   },
   props: ['lanes'],
   name: 'LanePool',

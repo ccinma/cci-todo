@@ -3,7 +3,10 @@
   <div class="lane">
 
     <div class="lane-header">
-      <h3 class="lane-header-title">{{ lane.name }}</h3>
+      <h3 class="lane-header-title" v-if="!modifyName">{{ lane.name }}</h3>
+      <form @submit.prevent="send">
+        <td-input-text :id="'name-input-'+ lane.id" class="name-input" name="name" :value="lane.name" v-if="modifyName" :blur="send" />
+      </form>
       <div class="lane-header-menu">
         <div class="lane-header-menu-backdrop" v-if="isOpen" v-on:click.prevent.stop="toggleDropdown"></div>
         <div class="lane-header-menu-btn" v-on:click.stop="toggleDropdown">
@@ -19,10 +22,16 @@
           </div>
           <content-divider />
           <ul class="dropdown-list">
-            <li v-if="!confirmDeleteLane" v-on:click.prevent.stop="openConfirmation" class="dropdown-element">
+            <li v-on:click.prevent="openModifyName">
+              Modifier le nom
+            </li>
+            
+            <content-divider />
+
+            <li v-if="!confirmDeleteLane" v-on:click.prevent="openConfirmation" class="dropdown-element">
               Supprimer la liste
             </li>
-            <li v-if="confirmDeleteLane" v-on:click.prevent.stop="deleteLane" class="dropdown-element danger">
+            <li v-if="confirmDeleteLane" v-on:click.prevent="deleteLane" class="dropdown-element danger">
               Confirmer suppression ?
             </li>
           </ul>
@@ -41,15 +50,19 @@
 </template>
 
 <script>
+  import TdInputText from '../../UI/TdInputText.vue'
 
   export default {
 
     props: ['lane'],
 
+    components: {TdInputText},
+
     data() {
       return {
         isOpen: false,
         confirmDeleteLane: false,
+        modifyName: false,
       }
     },
 
@@ -64,6 +77,28 @@
       async deleteLane() {
         await this.$store.dispatch('deleteLane', {lane_id: this.lane.id})
       },
+      openModifyName(){
+        this.modifyName = true  
+        this.toggleDropdown()
+        setTimeout(() => {
+          const input = document.querySelector('#name-input-'+ this.lane.id)
+          const end = input.value.length;
+          input.setSelectionRange(end, end);
+          input.focus()
+        }, 50)
+      },
+      send() {
+        const input = document.querySelector('#name-input-'+ this.lane.id)
+        const newName = input.value
+        const oldName = this.lane.name
+        if (newName !== oldName) {
+          this.$store.dispatch('editLane', {
+            lane_id: this.lane.id,
+            name: newName
+          })
+        }
+        this.modifyName = false
+      }
     }
   }
 </script>
@@ -83,6 +118,10 @@
 
     display: flex;
     flex-direction: column;
+
+    .name-input {
+      margin-right: 0.75rem;
+    }
 
     &-header {
 

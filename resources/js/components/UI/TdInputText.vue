@@ -1,10 +1,11 @@
 <template>
-  <input class="td-input">
+  <input class="td-input" @blur="blur()">
 </template>
 
 <script>
 export default {
-  name: 'TdInputText'
+  name: 'TdInputText',
+  props: ['blur']
 }
 </script>
 

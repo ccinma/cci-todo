@@ -20,6 +20,7 @@ export default class TodoAxios {
     },
     lane: {
       store: '/lane',
+      edit: (id) => {return '/lane/' + id},
       move: (id) => {return '/lane/' + id + '/move'},
       delete: (id) => {return '/lane/' + id},
     }
@@ -49,7 +50,7 @@ export default class TodoAxios {
     return await this.instance.put(path, data)
   }
 
-  async delete(path, data) {
+  async delete(path) {
     return await this.instance.delete(path)
   }
 
@@ -80,6 +81,11 @@ export default class TodoAxios {
 
   async storeLane(data) {
     const response = await this.post(this.routes.lane.store, data)
+    return response
+  }
+
+  async editLane(id, data) {
+    const response = await this.put(this.routes.lane.edit(id), data)
     return response
   }
 
