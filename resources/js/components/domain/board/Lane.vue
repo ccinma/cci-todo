@@ -75,6 +75,7 @@
         this.confirmDeleteLane = true
       },
       async deleteLane() {
+        this.toggleDropdown()
         await this.$store.dispatch('deleteLane', {lane_id: this.lane.id})
       },
       openModifyName(){
