@@ -15,7 +15,7 @@ export default class TodoAxios {
     board: {
       index: '/board',
       store: '/board',
-    }
+    },
   }
 
   setHeaders() {

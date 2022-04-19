@@ -3,6 +3,7 @@
     
     <flash-message-popup />
     <new-board-popup v-if="storeBoardPopupIsOpen" />
+    <new-member-popup v-if="storeMemberPopupIsOpen" />
     <new-workspace-popup v-if="storeWorkspacePopupIsOpen" />
     <side-bar v-if=" !! workspace "/>
 
@@ -18,6 +19,7 @@
 import SideBar from '../components/layout/SideBar.vue'
 import FlashMessagePopup from '../components/popups/FlashMessagePopup.vue'
 import NewBoardPopup from '../components/popups/NewBoardPopup.vue'
+import NewMemberPopup from '../components/popups/NewMemberPopup.vue'
 import NewWorkspacePopup from '../components/popups/NewWorkspacePopup.vue'
 
 
@@ -33,6 +35,9 @@ export default {
     storeBoardPopupIsOpen() {
       return this.$store.state.newBoardPopupIsOpen
     },
+    storeMemberPopupIsOpen() {
+      return this.$store.state.newMemberPopupIsOpen
+    },
     storeWorkspacePopupIsOpen() {
       return this.$store.state.newWorkspacePopupIsOpen
     }
@@ -40,6 +45,7 @@ export default {
   components: {
     SideBar,
     NewBoardPopup,
+    NewMemberPopup,
     NewWorkspacePopup,
     FlashMessagePopup,
   },

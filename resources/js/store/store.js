@@ -14,6 +14,7 @@ const todoStore = new Vuex.Store({
     initialLoading: true,
     loading: false,
     newBoardPopupIsOpen: false,
+    newMemberPopupIsOpen: false,
     newWorkspacePopupIsOpen: false,
     sidebarIsOpen: true,
   },
@@ -68,6 +69,12 @@ const todoStore = new Vuex.Store({
         state.currentWorkspace.boards.push(response.data.data)
       }
     },
+    async storeBoard (state, {name}) {
+      const response = await axios.storeMember({name})
+      if (response.status == 201) {
+        state.currentWorkspace.members.push(response.data.data)
+      }
+    },
     async storeWorkspace (state, {name}) {
       const response = await axios.storeWorkspace({name})
       if (response.status == 201) {
@@ -85,6 +92,12 @@ const todoStore = new Vuex.Store({
     },
     async closeNewBoardPopup (state) {
       state.newBoardPopupIsOpen = false
+    },
+    async openNewMemberPopup (state) {
+      state.newMemberPopupIsOpen = true
+    },
+    async closeNewMemberPopup (state) {
+      state.newMemberPopupIsOpen = false
     },
     async openNewWorkspacePopup (state) {
       state.newWorkspacePopupIsOpen = true

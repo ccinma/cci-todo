@@ -1,11 +1,11 @@
 <template>
-  <div id="new-board-popup">
+  <div id="new-member-popup">
 
     <div class="backdrop" v-on:click="closePopup"></div>
     
     <div class="popup">
       <h2 class="popup-title">
-        Ajouter un utilisateur
+        Ajouter un participant
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
         <input class="text" type="text" name="name">
@@ -18,15 +18,15 @@
 
 <script>
 export default {
-  name: 'NewUserPopup',
+  name: 'NewMemberPopup',
   methods: {
     post(e) {
       const name = e.target.elements.name.value
       const workspace_id = e.target.elements.workspace_id.value
-      this.$store.dispatch('storeUser', { name })      
+      this.$store.dispatch('storeMember', { name })      
     },
     closePopup() {
-      this.$store.commit('closeNewBoardPopup')
+      this.$store.commit('closeNewMemberPopup')
     }
   },
   mounted() {
@@ -38,7 +38,7 @@ export default {
 
 <style lang="scss" scoped>
   
-#new-board-popup {
+#new-member-popup {
   @import "resources/sass/_breakpoints.scss";
   @import "resources/sass/_variables.scss";
   @import "resources/sass/_colors.scss";

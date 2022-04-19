@@ -36,7 +36,7 @@
           <p>{{member.name}}</p>
         </li>
         <li>
-          <a v-on:click.prevent="openNewBoardPopup()" class="clickable">
+          <a v-on:click.prevent="openNewMemberPopup()" class="clickable">
             + Ajouter un participant
           </a>
         </li>
@@ -59,13 +59,13 @@ export default {
     openNewBoardPopup() {
       this.$store.commit('openNewBoardPopup')
     },
+    openNewMemberPopup() {
+      this.$store.commit('openNewMemberPopup')
+    },
     setCurrentBoard(id) {
       this.$store.commit('setCurrentBoard', {board_id: id})
     }
   },
-  mounted() {
-    console.log(this.workspace)
-  }
 }
 </script>
 
