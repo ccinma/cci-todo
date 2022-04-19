@@ -1,5 +1,5 @@
 <template>
-  <input class="td-input" @blur="blur()">
+  <input class="td-input" @blur="blur ? blur() : ''">
 </template>
 
 <script>
