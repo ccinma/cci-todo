@@ -29,14 +29,14 @@ class ReadWorkspaceController extends Controller
             return response()->json([], 400);
         }
 
-        $workspace = Workspace::findOrFail($workspace_id);
+        $workspace = Workspace::with(['members', 'boards', 'boards.labels', 'boards.lanes', 'boards.lanes.cards'])->findOrFail($workspace_id);
 
         if ( Gate::denies('collaborate', $workspace) ) {
             return response()->json([], 401);
         };
 
         return response()->json([
-            'data' => $workspace->withoutRelations(),
+            'data' => $workspace,
         ]);
     }
 

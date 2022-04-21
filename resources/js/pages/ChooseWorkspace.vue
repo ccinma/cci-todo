@@ -21,13 +21,13 @@ export default {
   name: 'ChooseWorkspace',
   data() {
     return {
-      workspaces: this.$store.state.workspaces,
-      currentWorkspace: this.$store.state.currentWorkspace,
+      workspaces: this.$store.getters.workspaces(),
+      currentWorkspace: this.$store.getters.currentWorkspace(),
     }
   },
   methods: {
     setWorkspace(id) {
-      this.$store.dispatch('setCurrentWorkspace', {workspace_id: id})
+      this.$store.dispatch('setCurrentWorkspace', {workspaceId: id})
     },
     openNewWorkspacePopup() {
       this.$store.commit('openNewWorkspacePopup')

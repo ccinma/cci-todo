@@ -6,9 +6,7 @@
     <new-workspace-popup v-if="storeWorkspacePopupIsOpen" />
     <side-bar v-if=" !! workspace "/>
 
-    <router-view />
-
-
+    <router-view class="router-view" />
 
   </div>
 </template>
@@ -25,16 +23,16 @@ export default {
   name: 'FullLayout',
   computed: {
     workspace() {
-      return this.$store.getters.getCurrentWorkspace()
+      return this.$store.getters.currentWorkspace()
     },
     sidebarIsOpen() {
-      return this.$store.state.sidebarIsOpen
+      return this.$store.getters.sidebarIsOpen()
     },
     storeBoardPopupIsOpen() {
-      return this.$store.state.newBoardPopupIsOpen
+      return this.$store.getters.newBoardPopupIsOpen()
     },
     storeWorkspacePopupIsOpen() {
-      return this.$store.state.newWorkspacePopupIsOpen
+      return this.$store.getters.newWorkspacePopupIsOpen()
     }
   },
   components: {
@@ -42,15 +40,6 @@ export default {
     NewBoardPopup,
     NewWorkspacePopup,
     FlashMessagePopup,
-  },
-  mounted() {
-
-    if (this.$route.params.workspace && ! this.$store.state.currentWorkspace) {
-      this.$router.push('/')
-    }
-    if (this.$route.params.board && ! this.$store.state.currentBoard) {
-      this.$router.push('/workspace/'+this.$route.params.workspace)
-    }
   },
 }
 </script>
@@ -66,6 +55,7 @@ export default {
 
     transition: padding 0.5s;
 
+    padding-inline: $main-padding-inline-mobile;
     padding-top: calc($mid-header-mobile + 4rem);
     @include tablet {
       padding-top: calc($mid-header-tablet + 4rem);
@@ -77,6 +67,11 @@ export default {
 
     &.side-bar-open {
       padding-left: 316px;
+    }
+
+    .router-view {
+      overflow: auto;
+      height: 100%;
     }
   }
 </style>

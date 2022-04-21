@@ -8,9 +8,8 @@
         Nouveau tableau
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
-        <input type="text" name="name">
-        <input type="text" name="workspace_id" id="workspace_id" hidden>
-        <input type="submit" value="Envoyer">
+        <td-input-text name="name" placeholder="Nom du tableau" />
+        <td-input-submit value="Envoyer" />
       </form>
     </div>
 
@@ -18,22 +17,21 @@
 </template>
 
 <script>
+import TdInputSubmit from '../UI/TdInputSubmit.vue'
+import TdInputText from '../UI/TdInputText.vue'
 export default {
+  components: { TdInputText, TdInputSubmit },
   name: 'NewBoardPopup',
   methods: {
     post(e) {
       const name = e.target.elements.name.value
-      const workspace_id = e.target.elements.workspace_id.value
-      this.$store.dispatch('storeBoard', { name, workspace_id })      
+      const workspace = this.$store.getters.currentWorkspace()
+      this.$store.dispatch('storeBoard', { name, workspace_id: workspace.id })      
     },
     closePopup() {
       this.$store.commit('closeNewBoardPopup')
     }
   },
-  mounted() {
-    const workspaceInput = document.querySelector('#workspace_id')
-    workspaceInput.value = this.$store.state.currentWorkspace.id
-  }
 }
 </script>
 
@@ -65,7 +63,6 @@ export default {
     z-index: 2;
     max-width: 360px;
     width: 100%;
-    height: 150px;
 
     padding: 1rem;
 
@@ -86,7 +83,11 @@ export default {
     }
 
     &-form {
-
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
     }
 
   }
