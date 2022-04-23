@@ -52,7 +52,7 @@ export default {
   name: 'SideBarWithInfos',
   computed: {
     workspace() {
-      return this.$store.state.currentWorkspace
+      return this.$store.getters.currentWorkspace()
     }
   },
   methods: {
@@ -63,7 +63,7 @@ export default {
       this.$store.commit('openNewMemberPopup')
     },
     setCurrentBoard(id) {
-      this.$store.commit('setCurrentBoard', {board_id: id})
+      this.$store.dispatch('setCurrentBoard', {boardId: id})
     }
   },
 }

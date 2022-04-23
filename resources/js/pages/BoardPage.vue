@@ -1,21 +1,37 @@
 <template>
-  <div>
-    <h1>
-      Bienvenue dans un tableau {{ board.name }}!
+  <div v-if="board" v-on:click.prevent="closeNewLaneForm">
+    <h1 class="no-text-overflow">
+      Bienvenue dans le tableau {{ board.name }}!
     </h1>
-    <p>
-      C'est ici le coeur du projet avec du drag and drop et tout !
-    </p>
+
+    <lane-pool :lanes="lanes" />
+
   </div>
 </template>
 
 <script>
+import LanePool from '../components/domain/board/LanePool.vue'
 export default {
+  components: { LanePool },
   name: 'BoardPage',
   computed: {
     board() {
-      return this.$store.state.currentBoard
+      return this.$store.getters.currentBoard()
+    },
+    lanes() {
+      return this.$store.getters.currentLanes()
     }
-  }
+  },
+  methods: {
+    closeNewLaneForm() {
+      this.$store.commit('closeNewLaneForm')
+    }
+  },
 }
 </script>
+
+<style>
+.no-text-overflow {
+  white-space: nowrap;
+}
+</style>

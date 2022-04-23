@@ -25,10 +25,8 @@ class MoveLaneRequest extends FormRequest
     {
         return [
             'previous_id' => [
-                'uuid'
-            ],
-            'next_id' => [
-                'uuid'
+                'uuid',
+                'nullable'
             ],
         ];
     }
