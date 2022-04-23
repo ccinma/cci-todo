@@ -26,6 +26,22 @@
         </li>
       </ul>
     </div>
+
+    <content-divider :width="'2px'" :maxLength="'90%'" :align="'center'" />
+
+    <div>
+      <h3>Participants</h3>
+      <ul>
+        <li v-for="(member, index) in workspace.members" v-bind:key="index">
+          <p>{{member.name}}</p>
+        </li>
+        <li>
+          <a v-on:click.prevent="openNewMemberPopup()" class="clickable">
+            + Ajouter un participant
+          </a>
+        </li>
+      </ul>
+    </div>
     
 
   </section>
@@ -43,10 +59,13 @@ export default {
     openNewBoardPopup() {
       this.$store.commit('openNewBoardPopup')
     },
+    openNewMemberPopup() {
+      this.$store.commit('openNewMemberPopup')
+    },
     setCurrentBoard(id) {
       this.$store.dispatch('setCurrentBoard', {boardId: id})
     }
-  }
+  },
 }
 </script>
 

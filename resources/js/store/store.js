@@ -18,6 +18,7 @@ const todoStore = new Vuex.Store({
     loading: false,
     
     newBoardPopupIsOpen: false,
+    newMemberPopupIsOpen: false,
     newWorkspacePopupIsOpen: false,
     newLaneFormIsOpen: false,
     sidebarIsOpen: true,

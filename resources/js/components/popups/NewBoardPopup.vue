@@ -38,7 +38,9 @@ export default {
 <style lang="scss" scoped>
   
 #new-board-popup {
-  @import "../../../sass/_variables";
+  @import "resources/sass/_breakpoints.scss";
+  @import "resources/sass/_variables.scss";
+  @import "resources/sass/_colors.scss";
 
   z-index: 10;
 
