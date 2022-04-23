@@ -43,9 +43,13 @@
 
     <div class="lane-content">
       <ul class="lane-content-cards" :data-lane-id="lane.id">
-        <card v-for="card in lane.cards" :name="card.name" :description="card.description" v-bind:key="card.id" />
+        <li v-for="card in lane.cards" class="lane-content-cards-element" v-bind:key="card.id">
+          <card :name="card.name" :description="card.description" />
+        </li>
       </ul>
-      <card v-if="newCard" :newCard="true" :lane="lane" />
+      <div class="lane-content-new-card">
+        <card v-if="newCard" :newCard="true" :lane="lane" />
+      </div>
     </div>
 
     <button class="todo-btn-round btn" v-on:click.prevent.stop="createCard">
@@ -142,10 +146,19 @@
 
     &-content {
       margin-bottom: 1rem;
+      &-new-card {
+        padding-top: 0.75rem;
+      }
       &-cards {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+        &-element {
+          cursor: pointer;
+          &:hover {
+            filter: brightness(95%)
+          }
+        }
       }
     }
 

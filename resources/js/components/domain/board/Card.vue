@@ -16,7 +16,7 @@
     </div>
 
     <div v-if="newCard">
-      <form class="new-card-form" @submit.prevent="postNewCard">
+      <form class="new-card-form" @submit.prevent="postNewCard" autocomplete="off">
         <td-input-text class="new-card-input-title" type="text" name="name" placeholder="Nom de la carte..." />
         <td-input-text type="text" placeholder="Description..." name="description" />
         <td-input-submit type="submit" value="Créer" />
@@ -68,8 +68,6 @@ export default {
 
   .lane-card {
 
-    cursor: pointer;
-
     padding: 1rem;
     
     color: $royalbluedark;
@@ -78,10 +76,6 @@ export default {
     border-radius: 0.5rem;
 
     border: 1px solid rgba(0, 0, 0, 0.3);
-
-    &:hover {
-      filter: brightness(0.9);
-    }
 
     &-title {
       font-weight: bold;
