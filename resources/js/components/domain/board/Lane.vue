@@ -47,8 +47,8 @@
           <card :name="card.name" :description="card.description" />
         </li>
       </ul>
-      <div class="lane-content-new-card">
-        <card v-if="newCard" :newCard="true" :lane="lane" />
+      <div class="lane-content-new-card" v-if="newCard">
+        <card :newCard="true" :lane="lane" :closeForm="closeForm" />
       </div>
     </div>
 
@@ -86,6 +86,9 @@
         setTimeout(() => {
           this.$el.querySelector('.new-card-input-title').focus()
         }, 100)
+      },
+      closeForm() {
+        this.newCard = false
       },
       toggleDropdown() {
         this.confirmDeleteLane = false

@@ -15,7 +15,7 @@
       </p>
     </div>
 
-    <div v-if="newCard">
+    <div v-if="newCard" @click.stop>
       <form class="new-card-form" @submit.prevent="postNewCard" autocomplete="off">
         <td-input-text class="new-card-input-title" type="text" name="name" placeholder="Nom de la carte..." />
         <td-input-text type="text" placeholder="Description..." name="description" />
@@ -40,6 +40,7 @@ export default {
       default: false,
     },
     lane: Object,
+    closeForm: Function
   },
   methods: {
     postNewCard() {
@@ -49,6 +50,8 @@ export default {
       const description = formData.get('description')
 
       this.$store.dispatch('storeCard', {lane: this.lane, name, description})
+
+      this.closeForm()
     }
   },
   mounted() {
