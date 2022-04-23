@@ -87,9 +87,11 @@ export default {
       padding-bottom: 0.5rem;
 
       svg {
-        width: 30px;
-        height: 30px;
-        margin-right: 5px;
+        width: auto;
+        height: 1rem;
+        margin-right: 1rem;
+
+        fill: $royalbluedark;
       }
     }
 
