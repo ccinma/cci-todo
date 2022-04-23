@@ -36,7 +36,8 @@ class StoreCardRequest extends FormRequest
             ],
             'description' => [
                 'string',
-                'max:5000'
+                'max:5000',
+                'nullable',
             ],
         ];
     }

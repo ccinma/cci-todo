@@ -133,6 +133,15 @@ const todoStore = new Vuex.Store({
       await axios.moveLane(lane_id, {previous_id})
       commit('decrementApiCallsQueue')
     },
+    async storeCard ({commit}, {lane, name, description}) {
+      commit('incrementApiCallsQueue')
+      const response = await axios.storeCard({name, description, lane_id: lane.id})
+      if (response.status == 201) {
+        const createdCard = response.data.data
+        lane.cards.push(createdCard)
+      }
+      commit('decrementApiCallsQueue')
+    },
     reset( {commit} ) {
       commit('resetCurrents')
       commit('closeSidebar')

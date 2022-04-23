@@ -53,7 +53,7 @@ export default {
         handle: '.draggable-lane',
         chosenClass: 'chosen-lane',
         animation: 200,
-        delay: 0,
+        delay: 50,
         onEnd: function(e) {
           const sortedPool = e.to
           const newIndex = e.newIndex
