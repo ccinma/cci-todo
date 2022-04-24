@@ -63,122 +63,122 @@
 </template>
 
 <script>
-  import TdInputText from '../../UI/TdInputText.vue'
-  import Sortable from 'sortablejs'
+import TdInputText from '../../UI/TdInputText.vue'
+import Sortable from 'sortablejs'
 
-  export default {
+export default {
 
-    props: ['lane'],
+  props: ['lane'],
 
-    components: {TdInputText},
+  components: {TdInputText},
 
-    data() {
-      return {
-        isOpen: false,
-        confirmDeleteLane: false,
-        modifyName: false,
-        newCard: false,
-      }
-    },
+  data() {
+    return {
+      isOpen: false,
+      confirmDeleteLane: false,
+      modifyName: false,
+      newCard: false,
+    }
+  },
 
-    computed: {
-      sortedCards() {
-        return this.sortCards(this.lane.cards)
-      }
-    },
+  computed: {
+    sortedCards() {
+      return this.sortCards(this.lane.cards)
+    }
+  },
 
-    mounted() {
-      this.dragNdrop(this.$store)
-    },
+  mounted() {
+    this.dragNdrop(this.$store)
+  },
 
-    methods :{
-      dragNdrop(store) {
-        let cardsContainer = this.$el.querySelector('.lane-content-cards')
-        new Sortable(cardsContainer, {
-          group: 'cards',
-          handle: '.draggable-card',
-          chosenClass: 'chosen-card',
-          animation: 200,
-          delay: 0,
-          onEnd: function(e) {
-            const sortedContainer = e.to
-            const newIndex = e.newIndex
-            const clone = e.clone
-            const card_id = clone.dataset.id
-            let previousEl = null
-            let previous_id = null
-            if (newIndex != 0) {
-              previousEl = sortedContainer.children[newIndex - 1]
-            }
-            if (previousEl) {
-              previous_id = previousEl.dataset.id
-              console.log(previous_id)
-            }
-            store.dispatch('moveCard', {card_id, previous_id})
+  methods :{
+    dragNdrop(store) {
+      let cardsContainer = this.$el.querySelector('.lane-content-cards')
+      new Sortable(cardsContainer, {
+        group: 'cards',
+        handle: '.draggable-card',
+        chosenClass: 'chosen-card',
+        animation: 200,
+        delay: 0,
+        onEnd: function(e) {
+          const sortedContainer = e.to
+          const newIndex = e.newIndex
+          const clone = e.clone
+          const card_id = clone.dataset.id
+          let previousEl = null
+          let previous_id = null
+          if (newIndex != 0) {
+            previousEl = sortedContainer.children[newIndex - 1]
           }
-        })
-      },
-      sortCards(cards) {
-        const sortedArray = []
-        
-        for (let i = 0; i < cards.length; i++) {
-          let lastId = null
-          if (sortedArray.length != 0) {
-            lastId = sortedArray[sortedArray.length - 1].id
+          if (previousEl) {
+            previous_id = previousEl.dataset.id
+            console.log(previous_id)
           }
-          const nextCard = cards.find(card => card.previous_id === lastId)
-          if (nextCard) {
-            sortedArray.push(nextCard)
-          } else {
-            break
-          }
+          store.dispatch('moveCard', {card_id, previous_id})
         }
-        return sortedArray
-      },
-      createCard() {
-        this.newCard = true
-        setTimeout(() => {
-          this.$el.querySelector('.new-card-input-title').focus()
-        }, 100)
-      },
-      closeForm() {
-        this.newCard = false
-      },
-      toggleDropdown() {
-        this.confirmDeleteLane = false
-        this.isOpen = ! this.isOpen
-      },
-      openConfirmation() {
-        this.confirmDeleteLane = true
-      },
-      async deleteLane() {
-        this.toggleDropdown()
-        await this.$store.dispatch('deleteLane', {lane_id: this.lane.id})
-      },
-      openModifyName(){
-        this.modifyName = true  
-        this.toggleDropdown()
-        setTimeout(() => {
-          const input = document.querySelector('#name-input-'+ this.lane.id)
-          const end = input.value.length;
-          input.setSelectionRange(end, end);
-          input.focus()
-        }, 50)
-      },
-      send() {
+      })
+    },
+    sortCards(cards) {
+      const sortedArray = []
+      
+      for (let i = 0; i < cards.length; i++) {
+        let lastId = null
+        if (sortedArray.length != 0) {
+          lastId = sortedArray[sortedArray.length - 1].id
+        }
+        const nextCard = cards.find(card => card.previous_id === lastId)
+        if (nextCard) {
+          sortedArray.push(nextCard)
+        } else {
+          break
+        }
+      }
+      return sortedArray
+    },
+    createCard() {
+      this.newCard = true
+      setTimeout(() => {
+        this.$el.querySelector('.new-card-input-title').focus()
+      }, 100)
+    },
+    closeForm() {
+      this.newCard = false
+    },
+    toggleDropdown() {
+      this.confirmDeleteLane = false
+      this.isOpen = ! this.isOpen
+    },
+    openConfirmation() {
+      this.confirmDeleteLane = true
+    },
+    async deleteLane() {
+      this.toggleDropdown()
+      await this.$store.dispatch('deleteLane', {lane_id: this.lane.id})
+    },
+    openModifyName(){
+      this.modifyName = true  
+      this.toggleDropdown()
+      setTimeout(() => {
         const input = document.querySelector('#name-input-'+ this.lane.id)
-        const newName = input.value
-        const oldName = this.lane.name
-        if (newName !== oldName) {
-          this.$store.dispatch('editLane', {
-            lane_id: this.lane.id,
-            name: newName
-          })
-        }
-        this.modifyName = false
+        const end = input.value.length;
+        input.setSelectionRange(end, end);
+        input.focus()
+      }, 50)
+    },
+    send() {
+      const input = document.querySelector('#name-input-'+ this.lane.id)
+      const newName = input.value
+      const oldName = this.lane.name
+      if (newName !== oldName) {
+        this.$store.dispatch('editLane', {
+          lane_id: this.lane.id,
+          name: newName
+        })
       }
+      this.modifyName = false
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
