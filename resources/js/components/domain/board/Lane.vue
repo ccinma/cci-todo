@@ -42,7 +42,7 @@
     </div>
 
     <div class="lane-content">
-      <ul class="lane-content-cards" :data-lane-id="lane.id">
+      <ul class="lane-content-cards" :data-lane_id="lane.id">
         <li v-for="card in sortedCards" class="lane-content-cards-element draggable-card" :data-id="card.id" v-bind:key="card.id">
           <card :name="card.name" :description="card.description" />
         </li>
@@ -102,6 +102,7 @@ export default {
         delay: 0,
         onEnd: function(e) {
           const sortedContainer = e.to
+          const lane_id = sortedContainer.dataset.lane_id
           const newIndex = e.newIndex
           const clone = e.clone
           const card_id = clone.dataset.id
@@ -112,9 +113,8 @@ export default {
           }
           if (previousEl) {
             previous_id = previousEl.dataset.id
-            console.log(previous_id)
           }
-          store.dispatch('moveCard', {card_id, previous_id})
+          store.dispatch('moveCard', {card_id, previous_id, lane_id})
         }
       })
     },

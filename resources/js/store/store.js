@@ -68,14 +68,16 @@ const todoStore = new Vuex.Store({
       const currentBoard = (found) ? await (await axios.getBoard(boardId)).data.data : null
       if (currentBoard) {
         commit('setCurrentBoard', {board: currentBoard})
-        const rawLanesArray = currentBoard.lanes ?? []
+        const rawLanesArray = currentBoard.lanes
         const sortedLanesArray = []
         let last_id = null
         for (let i = 0; i < rawLanesArray.length; i++) {
           let lane = rawLanesArray.find(lane => lane.previous_id === last_id)
-          last_id = lane.id
-          sortedLanesArray.push(lane)
-          if (!lane.next_id) break
+          if (lane) {
+            last_id = lane.id
+            sortedLanesArray.push(lane)
+            if (!lane.next_id) break
+          }
         }
         commit('setCurrentLanes', {lanes: sortedLanesArray})
       }
@@ -142,9 +144,9 @@ const todoStore = new Vuex.Store({
       }
       commit('decrementApiCallsQueue')
     },
-    async moveCard ({commit}, {card_id, previous_id}) {
+    async moveCard ({commit}, {card_id, previous_id, lane_id}) {
       commit('incrementApiCallsQueue')
-      await axios.moveCard(card_id, {previous_id})
+      await axios.moveCard(card_id, {previous_id, lane_id})
       commit('decrementApiCallsQueue')
     },
     reset( {commit} ) {
