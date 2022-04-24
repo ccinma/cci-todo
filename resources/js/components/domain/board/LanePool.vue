@@ -54,6 +54,7 @@ export default {
         chosenClass: 'chosen-lane',
         animation: 200,
         delay: 100,
+        delayOnTouchOnly: true,
         onEnd: function(e) {
           const sortedPool = e.to
           const newIndex = e.newIndex
