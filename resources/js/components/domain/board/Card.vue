@@ -19,7 +19,7 @@
       <form class="new-card-form" @submit.prevent="postNewCard" autocomplete="off">
         <td-input-text class="new-card-input-title" type="text" name="name" placeholder="Nom de la carte..." />
         <td-input-text type="text" placeholder="Description..." name="description" />
-        <td-input-submit type="submit" value="Créer" />
+        <td-input-submit class="new-card-submit" type="submit" value="Créer" />
       </form>
     </div>
 
@@ -71,6 +71,8 @@ export default {
 
   .lane-card {
 
+    border: none!important;
+
     padding: 1rem;
     
     color: $royalbluedark;
@@ -87,6 +89,20 @@ export default {
 
     &-description {
       font-style: italic;
+    }
+
+    .new-card-form {
+      display: flex;
+      flex-direction: column;
+      .new-card-input-title {
+        margin-bottom: 1rem;
+      }
+
+      .new-card-submit {
+        margin-top: 1rem;
+        align-self: flex-end;
+      }
+
     }
 
     // .labels {
