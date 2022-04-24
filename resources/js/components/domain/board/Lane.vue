@@ -115,9 +115,6 @@ export default {
             previous_id = previousEl.dataset.id
           }
           store.dispatch('moveCard', {card_id, previous_id, lane_id})
-          console.log("lane_id", lane_id)
-          console.log("previous_id", previous_id)
-          console.log("card_id", card_id)
         }
       })
     },
@@ -129,7 +126,14 @@ export default {
         if (sortedArray.length != 0) {
           lastId = sortedArray[sortedArray.length - 1].id
         }
-        const nextCard = cards.find(card => card.previous_id === lastId)
+        let nextCard = null
+
+        if (i == 0) {
+          nextCard = cards[0]
+        } else {
+          nextCard = cards.find(card => card.previous_id === lastId)
+        }
+        
         if (nextCard) {
           sortedArray.push(nextCard)
         } else {
