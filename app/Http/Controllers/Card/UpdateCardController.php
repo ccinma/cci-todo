@@ -80,11 +80,13 @@ class UpdateCardController extends Controller
                 'message' => "Impossible d'envoyer la carte sur un autre tableau."
             ], 403);
         }
+
         
         // Find previous
         if (isset($attributes['previous_id'])) {
             $previous = Card::findOrFail($attributes['previous_id']);
         }
+        
 
         // Find next if exists
         if ($previous) {
@@ -94,9 +96,11 @@ class UpdateCardController extends Controller
             $lane_id = $previous->lane->id;
         } else {
             $next = Card::where('lane_id', '=', $lane_id)->where('previous_id', '=', null)->first();
-            $lane_id = $next->lane->id;
+            if ($next) {
+                $lane_id = $next->lane->id;
+            }
         }
-        
+
         // Place the moved card between the previous and the next ones
         if ( $previous && $next ) {
             $previous->update(['next_id' => $card->id]);

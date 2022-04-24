@@ -115,6 +115,9 @@ export default {
             previous_id = previousEl.dataset.id
           }
           store.dispatch('moveCard', {card_id, previous_id, lane_id})
+          console.log("lane_id", lane_id)
+          console.log("previous_id", previous_id)
+          console.log("card_id", card_id)
         }
       })
     },

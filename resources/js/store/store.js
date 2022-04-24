@@ -68,7 +68,7 @@ const todoStore = new Vuex.Store({
       const currentBoard = (found) ? await (await axios.getBoard(boardId)).data.data : null
       if (currentBoard) {
         commit('setCurrentBoard', {board: currentBoard})
-        const rawLanesArray = currentBoard.lanes
+        const rawLanesArray = currentBoard.lanes ?? []
         const sortedLanesArray = []
         let last_id = null
         for (let i = 0; i < rawLanesArray.length; i++) {
