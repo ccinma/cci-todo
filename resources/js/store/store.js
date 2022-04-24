@@ -138,7 +138,7 @@ const todoStore = new Vuex.Store({
       const response = await axios.storeCard({name, description, lane_id: lane.id})
       if (response.status == 201) {
         const createdCard = response.data.data
-        lane.cards.push(createdCard)
+        this.state.currentLanes.find(currentLane => currentLane.id === lane.id).cards.push(createdCard)
       }
       commit('decrementApiCallsQueue')
     },
