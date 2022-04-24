@@ -43,7 +43,7 @@
 
     <div class="lane-content">
       <ul class="lane-content-cards" :data-lane-id="lane.id">
-        <li v-for="card in sortedCards" class="lane-content-cards-element" v-bind:key="card.id">
+        <li v-for="card in sortedCards" class="lane-content-cards-element draggable-card" :data-id="card.id" v-bind:key="card.id">
           <card :name="card.name" :description="card.description" />
         </li>
       </ul>
@@ -64,6 +64,7 @@
 
 <script>
   import TdInputText from '../../UI/TdInputText.vue'
+  import Sortable from 'sortablejs'
 
   export default {
 
@@ -77,11 +78,46 @@
         confirmDeleteLane: false,
         modifyName: false,
         newCard: false,
-        sortedCards: this.sortCards(this.lane.cards),
       }
     },
 
+    computed: {
+      sortedCards() {
+        return this.sortCards(this.lane.cards)
+      }
+    },
+
+    mounted() {
+      this.dragNdrop(this.$store)
+    },
+
     methods :{
+      dragNdrop(store) {
+        let cardsContainer = this.$el.querySelector('.lane-content-cards')
+        new Sortable(cardsContainer, {
+          group: 'cards',
+          handle: '.draggable-card',
+          chosenClass: 'chosen-card',
+          animation: 200,
+          delay: 0,
+          onEnd: function(e) {
+            const sortedContainer = e.to
+            const newIndex = e.newIndex
+            const clone = e.clone
+            const card_id = clone.dataset.id
+            let previousEl = null
+            let previous_id = null
+            if (newIndex != 0) {
+              previousEl = sortedContainer.children[newIndex - 1]
+            }
+            if (previousEl) {
+              previous_id = previousEl.dataset.id
+              console.log(previous_id)
+            }
+            store.dispatch('moveCard', {card_id, previous_id})
+          }
+        })
+      },
       sortCards(cards) {
         const sortedArray = []
         

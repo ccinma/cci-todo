@@ -142,6 +142,11 @@ const todoStore = new Vuex.Store({
       }
       commit('decrementApiCallsQueue')
     },
+    async moveCard ({commit}, {card_id, previous_id}) {
+      commit('incrementApiCallsQueue')
+      await axios.moveCard(card_id, {previous_id})
+      commit('decrementApiCallsQueue')
+    },
     reset( {commit} ) {
       commit('resetCurrents')
       commit('closeSidebar')

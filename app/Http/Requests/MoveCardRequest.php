@@ -24,8 +24,10 @@ class MoveCardRequest extends FormRequest
     public function rules()
     {
         return [
-            'previous_id' => 'uuid',
-            'next_id' => 'uuid',
+            'previous_id' => [
+                'uuid',
+                'nullable'
+            ],
         ];
     }
 }

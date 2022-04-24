@@ -56,31 +56,48 @@ class UpdateCardController extends Controller
             return response()->json([], 304);
         }
 
-        $previous = null;
-        $next = null;
+        // Fills the gap left by the moved card
+        if ($card->previous_id || $card->next_id) {
+            $previous = ($card->previous_id) ? Card::find($card->previous_id) : null;
+            $next = ($card->next_id) ? Card::find($card->next_id) : null;
+            
+            $previous_id = $previous ? $previous->id : null;
+            $next_id = $next ? $next->id : null;
 
-        if ( isset($attributes['previous_id']) ) {
-            $previous = Card::findOrFail($attributes['previous_id']);
-            if ( $previous->next_id ) {
-                $next = Card::find($previous->next_id);
-            }
-        } elseif ( isset($attributes['next_id']) ) {
-            $next = Card::findOrFail($attributes['next_id']);
-            if ( $next->previous_id ) {
-                $previous = Card::find($next->previous_id);
-            }
+            if ($previous) $previous->update(['next_id' => $next_id]);
+            if ($next) $next->update(['previous_id' => $previous_id]);
         }
 
+        // Create new link after moved
+        $previous = null;
+        $next = null;
+        
+        // Find previous
+        if (isset($attributes['previous_id'])) {
+            $previous = Card::findOrFail($attributes['previous_id']);
+        }
+
+        // Find next if exists
+        if ($previous) {
+            if ($previous->next_id) {
+                $next = Card::find($previous->next_id);
+            }
+        } else {
+            $next = Card::where('lane_id', '=', $card->lane->id)->where('previous_id', '=', null)->first();
+        }
+        
         if ( $previous && $next ) {
             $previous->update(['next_id' => $card->id]);
             $next->update(['previous_id' => $card->id]);
             $card->update(['previous_id' => $previous->id, 'next_id' => $next->id]);
         } elseif ( $previous ) {
             $previous->update(['next_id' => $card->id]);
-            $card->update(['previous_id' => $previous->id]);
+            $card->update(['previous_id' => $previous->id, 'next_id' => null]);
         } elseif ( $next ) {
             $next->update(['previous_id' => $card->id]);
-            $card->update(['next_id' => $next->id]);
+            $card->update(['previous_id' => null, 'next_id' => $next->id]);
+        } else {
+            $card->update(['previous_id' => null, 'next_id' => null]);
         }
 
         return response()->json([
