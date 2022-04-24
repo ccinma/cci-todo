@@ -43,7 +43,7 @@
 
     <div class="lane-content">
       <ul class="lane-content-cards" :data-lane-id="lane.id">
-        <li v-for="card in lane.cards" class="lane-content-cards-element" v-bind:key="card.id">
+        <li v-for="card in sortedCards" class="lane-content-cards-element" v-bind:key="card.id">
           <card :name="card.name" :description="card.description" />
         </li>
       </ul>
@@ -77,10 +77,28 @@
         confirmDeleteLane: false,
         modifyName: false,
         newCard: false,
+        sortedCards: this.sortCards(this.lane.cards),
       }
     },
 
     methods :{
+      sortCards(cards) {
+        const sortedArray = []
+        
+        for (let i = 0; i < cards.length; i++) {
+          let lastId = null
+          if (sortedArray.length != 0) {
+            lastId = sortedArray[sortedArray.length - 1].id
+          }
+          const nextCard = cards.find(card => card.previous_id === lastId)
+          if (nextCard) {
+            sortedArray.push(nextCard)
+          } else {
+            break
+          }
+        }
+        return sortedArray
+      },
       createCard() {
         this.newCard = true
         setTimeout(() => {
