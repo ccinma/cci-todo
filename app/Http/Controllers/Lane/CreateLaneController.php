@@ -38,6 +38,7 @@ class CreateLaneController extends Controller
         }
 
         $lane = Lane::create($attributes);
+        $lane->load('cards');
 
         if ( $lastLane ) {
             $lastLane->update(['next_id' => $lane->id]);

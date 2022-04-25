@@ -23,6 +23,10 @@ export default class TodoAxios {
       edit: (id) => {return '/lane/' + id},
       move: (id) => {return '/lane/' + id + '/move'},
       delete: (id) => {return '/lane/' + id},
+    },
+    card: {
+      store: '/card',
+      move: (id) => {return '/card/' + id + '/move'},
     }
   }
 
@@ -96,6 +100,16 @@ export default class TodoAxios {
 
   async moveLane(id, data) {
     const response = await this.put(this.routes.lane.move(id), data)
+    return response
+  }
+
+  async storeCard(data) {
+    const response = await this.post(this.routes.card.store, data)
+    return response
+  }
+
+  async moveCard(id, data) {
+    const response = await this.put(this.routes.card.move(id), data)
     return response
   }
 }

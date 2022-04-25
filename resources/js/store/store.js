@@ -73,9 +73,11 @@ const todoStore = new Vuex.Store({
         let last_id = null
         for (let i = 0; i < rawLanesArray.length; i++) {
           let lane = rawLanesArray.find(lane => lane.previous_id === last_id)
-          last_id = lane.id
-          sortedLanesArray.push(lane)
-          if (!lane.next_id) break
+          if (lane) {
+            last_id = lane.id
+            sortedLanesArray.push(lane)
+            if (!lane.next_id) break
+          }
         }
         commit('setCurrentLanes', {lanes: sortedLanesArray})
       }
@@ -131,6 +133,21 @@ const todoStore = new Vuex.Store({
     async moveLane ({commit}, {lane_id, previous_id}) {
       commit('incrementApiCallsQueue')
       await axios.moveLane(lane_id, {previous_id})
+      commit('decrementApiCallsQueue')
+    },
+    async storeCard ({commit}, {lane, name, description}) {
+      commit('incrementApiCallsQueue')
+      const response = await axios.storeCard({name, description, lane_id: lane.id})
+      if (response.status == 201) {
+        const createdCard = response.data.data
+        const currentLane = this.state.currentLanes.find(currentLane => currentLane.id === lane.id)
+        currentLane.cards.push(createdCard)
+      }
+      commit('decrementApiCallsQueue')
+    },
+    async moveCard ({commit}, {card_id, previous_id, lane_id}) {
+      commit('incrementApiCallsQueue')
+      await axios.moveCard(card_id, {previous_id, lane_id})
       commit('decrementApiCallsQueue')
     },
     reset( {commit} ) {

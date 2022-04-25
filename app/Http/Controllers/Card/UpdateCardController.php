@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Card;
 
+use Str;
+use Gate;
 use App\Card;
+use App\Lane;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MoveCardRequest;
 use App\Http\Requests\UpdateCardRequest;
-use Gate;
-use Str;
 
 class UpdateCardController extends Controller
 {
@@ -56,31 +57,63 @@ class UpdateCardController extends Controller
             return response()->json([], 304);
         }
 
+        // Fills the gap left by the moved card
+        if ($card->previous_id || $card->next_id) {
+            $previous = ($card->previous_id) ? Card::find($card->previous_id) : null;
+            $next = ($card->next_id) ? Card::find($card->next_id) : null;
+            
+            $previous_id = $previous ? $previous->id : null;
+            $next_id = $next ? $next->id : null;
+
+            if ($previous) $previous->update(['next_id' => $next_id]);
+            if ($next) $next->update(['previous_id' => $previous_id]);
+        }
+
+        // Create new link after moved
         $previous = null;
         $next = null;
+        $lane_id = $attributes['lane_id'];
+        $currentLane = Lane::with('board')->findOrFail($lane_id);
 
-        if ( isset($attributes['previous_id']) ) {
+        if ($card->lane->board->id != $currentLane->board->id) {
+            return response()->json([
+                'message' => "Impossible d'envoyer la carte sur un autre tableau."
+            ], 403);
+        }
+
+        
+        // Find previous
+        if (isset($attributes['previous_id'])) {
             $previous = Card::findOrFail($attributes['previous_id']);
-            if ( $previous->next_id ) {
+        }
+        
+
+        // Find next if exists
+        if ($previous) {
+            if ($previous->next_id) {
                 $next = Card::find($previous->next_id);
             }
-        } elseif ( isset($attributes['next_id']) ) {
-            $next = Card::findOrFail($attributes['next_id']);
-            if ( $next->previous_id ) {
-                $previous = Card::find($next->previous_id);
+            $lane_id = $previous->lane->id;
+        } else {
+            $next = Card::where('lane_id', '=', $lane_id)->where('previous_id', '=', null)->first();
+            if ($next) {
+                $lane_id = $next->lane->id;
             }
         }
 
+        // Place the moved card between the previous and the next ones
         if ( $previous && $next ) {
             $previous->update(['next_id' => $card->id]);
             $next->update(['previous_id' => $card->id]);
-            $card->update(['previous_id' => $previous->id, 'next_id' => $next->id]);
+            $card->update(['previous_id' => $previous->id, 'next_id' => $next->id, 'lane_id' => $lane_id]);
         } elseif ( $previous ) {
             $previous->update(['next_id' => $card->id]);
-            $card->update(['previous_id' => $previous->id]);
+            $card->update(['previous_id' => $previous->id, 'next_id' => null, 'lane_id' => $lane_id]);
         } elseif ( $next ) {
             $next->update(['previous_id' => $card->id]);
-            $card->update(['next_id' => $next->id]);
+            $card->update(['previous_id' => null, 'next_id' => $next->id, 'lane_id' => $lane_id]);
+        } else {
+            $card->update(['previous_id' => null, 'next_id' => null, 'lane_id' => $lane_id]);
         }
 
         return response()->json([
