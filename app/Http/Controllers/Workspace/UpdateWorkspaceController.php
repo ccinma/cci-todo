@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Workspace;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateWorkspaceRequest;
-use App\Workspace;
-use Auth;
 use Str;
+use Auth;
+use App\User;
+use App\Workspace;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\AddMemberRequest;
+use App\Http\Requests\UpdateWorkspaceRequest;
 
 class UpdateWorkspaceController extends Controller
 {
@@ -43,5 +46,39 @@ class UpdateWorkspaceController extends Controller
         return response()->json([
             'data' => $workspace
         ]);
+    }
+
+    public function addMember($workspace_id, AddMemberRequest $request) {
+
+        // NOT UUID
+        if ( ! Str::isUuid($workspace_id) ) {
+            return response()->json(['message' => 'Invalid UUID'], 400);
+        }
+
+        $validated = $request->validated();
+        $workspace = Workspace::find($workspace_id);
+
+        // NOT FOUND
+        if ( ! $workspace ) {
+            return response()->json([], 404);
+        }
+
+        // NOT AUTHORIZED
+        if ( Gate::denies('collaborate', $workspace) ) {
+            return response()->json([], 401);
+        }
+
+        // EMPTY BODY
+        if ( empty($validated) ) {
+            return response()->json([], 304);
+        }
+
+        // FIND USER TO ADD TO WORKSPACE
+        $invited = User::findOrFail($validated['user_id']);
+        $workspace->addMember($invited);
+
+        return response()->json([
+            'message' => 'Member added successfully !',
+        ], 200);
     }
 }
