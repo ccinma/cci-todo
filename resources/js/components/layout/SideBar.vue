@@ -5,10 +5,11 @@
     <SideBarEmpty v-if=" ! workspace" />
     <SideBarChangeWorkspace v-if=" !! workspace" />
 
-    <button id="toggle-side-bar" v-on:click.prevent="toggleSidebar">
-      Toggle
+    <button id="toggle-side-bar" :class=" isOpen ? '' : 'flip' " v-on:click.prevent="toggleSidebar">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M447.1 256C447.1 273.7 433.7 288 416 288H109.3l105.4 105.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L109.3 224H416C433.7 224 447.1 238.3 447.1 256z"/></svg>
+      </div>
     </button>
-
   </div>
 </template>
 
@@ -86,9 +87,11 @@ export default {
       padding-bottom: 0.5rem;
 
       svg {
-        width: 30px;
-        height: 30px;
-        margin-right: 5px;
+        width: auto;
+        height: 1rem;
+        margin-right: 1rem;
+
+        fill: $royalbluedark;
       }
     }
 
@@ -96,7 +99,35 @@ export default {
       position: absolute;
       bottom: 1rem;
       left: calc(100% + 0.5rem);
+      cursor: pointer;
+      border-radius: 10rem;
+
+      width: auto;
+
+      padding: 0.75rem;
+
+      background: $white;
+      border: $white;
+
+      transform: rotate(0deg);
+      transition: transform 0.5s;
+
+      > div {
+        width: 1rem;
+        height: 1rem;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      svg {
+        fill: $royalbluedark;
+      }
     }
 
+    .flip {
+      transform: rotate(180deg)!important;
+    }
   }
 </style>
