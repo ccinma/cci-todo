@@ -74,7 +74,7 @@ class UpdateWorkspaceController extends Controller
         }
 
         // FIND USER TO ADD TO WORKSPACE
-        $invited = User::findOrFail($validated['user_id']);
+        $invited = User::where('email', '=', $validated['user_email'])->firstOrFail();
         $workspace->addMember($invited);
 
         return response()->json([

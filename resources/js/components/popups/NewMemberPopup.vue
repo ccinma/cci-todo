@@ -8,7 +8,7 @@
         Ajouter un participant
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
-        <input class="text" type="text" name="name">
+        <input class="text" type="text" name="user_email">
         <input class="submit" type="submit" value="Envoyer">
       </form>
     </div>
