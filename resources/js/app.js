@@ -14,6 +14,7 @@ import App from '../js/App.vue'
 import Vue from 'vue';
 import VueRouter from 'vue-router'
 import todoStore from './store/store';
+import Settings from '../js/pages/EditWorkspace.vue'
 
 
 if ( !! document.querySelector('#app') ) {
@@ -26,6 +27,7 @@ if ( !! document.querySelector('#app') ) {
     {path: '/', component: ChooseWorkspace},
     {path: '/workspace/:workspace', component: WorkspaceDashboard},
     {path: '/workspace/:workspace/board/:board', component: BoardPage},
+    {path: '/workspace/:workspace/settings', component: Settings},
     {path: '/legacy', component: Dashboard},
   ]
   const router = new VueRouter({routes})

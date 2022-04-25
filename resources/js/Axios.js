@@ -8,11 +8,15 @@ export default class TodoAxios {
   })
 
   routes = {
+    user: {
+      show: '/user',
+    },
     workspace: {
       index: '/workspace',
       store: '/workspace',
       show: (id) => { return '/workspace/' + id },
       addMember: (id) => {return '/workspace/' + id + '/addMember'},
+      delete: (id) => {return '/workspace/' + id},
     },
     board: {
       index: '/board',
@@ -59,6 +63,11 @@ export default class TodoAxios {
     return await this.instance.delete(path)
   }
 
+  async getUser() {
+    const response = await this.get(this.routes.user.show)
+    return response
+  }
+
   async getUserWorkspaces() {
     const response = await this.get(this.routes.workspace.index)
     return response
@@ -71,6 +80,11 @@ export default class TodoAxios {
 
   async addMember(id, data) {
     const response = await this.put(this.routes.workspace.addMember(id), data)
+    return response
+  }
+
+  async deleteWorkspace(id) {
+    const response = await this.delete(this.routes.workspace.delete(id))
     return response
   }
 
