@@ -48,19 +48,23 @@ import { set } from 'vue/types/umd';
       },
 
       leaveWorkspace() {
-        
+        try {
+          const index = this.workspaceMembers.findIndex(
+            members => members.id === this.userId
+          )
+          this.workspaceMembers.splice(index, 1)
+          console.log(this.workspaceMembers)
 
-        
-        
+          this.$store.dispatch("reset")
+          this.$router.push('/')
+        }
+        catch(e) {
+
+        }
       },
 
       async deleteWorkspace() {
         try {
-          const axios = this.$store.getters.axios()
-          const currentWorkspace = this.$store.getters.currentWorkspace()
-
-          await axios.deleteWorkspace(currentWorkspace.id)
-
           const index = this.$store.state.workspaces.findIndex(
             workspace => workspace.id === currentWorkspace.id
           )
