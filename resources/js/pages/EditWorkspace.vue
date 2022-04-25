@@ -20,6 +20,10 @@
 </template>
 
 <script>
+import { set } from 'vue/types/umd';
+
+  import TodoAxios from '../Axios'
+
   export default {
     data() {
       return {
@@ -50,13 +54,15 @@
         
       },
 
-      deleteWorkspace() {
+      async deleteWorkspace() {
         try {
-          
+          const axios = this.$store.getters.axios()
+          const currentWorkspace = this.$store.getters.currentWorkspace()
 
+          await axios.deleteWorkspace(currentWorkspace.id)
 
           const index = this.$store.state.workspaces.findIndex(
-            workspace => workspace.id === this.$store.getters.currentWorkspace().id
+            workspace => workspace.id === currentWorkspace.id
           )
           const workspaces = this.$store.getters.workspaces()
           workspaces.splice(index, 1)
@@ -64,7 +70,6 @@
           this.$router.push('/')
         }
         catch(e) {
-
         }
       },
     },
