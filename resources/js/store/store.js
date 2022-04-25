@@ -8,6 +8,8 @@ const axios = new TodoAxios()
 
 const todoStore = new Vuex.Store({
   state: {
+    axios,
+
     workspaces: [],
     currentWorkspace: null,
     currentBoard: null,
@@ -26,6 +28,9 @@ const todoStore = new Vuex.Store({
   },
 
   getters: {
+    axios: (state) => () => {
+      return state.axios
+    },
     user: (state) => () => {
       return state.user
     },
