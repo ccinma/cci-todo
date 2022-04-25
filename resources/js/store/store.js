@@ -245,6 +245,12 @@ const todoStore = new Vuex.Store({
     closeNewLaneForm (state) {
       state.newLaneFormIsOpen = false
     },
+    openNewMemberPopup (state) {
+      state.newMemberPopupIsOpen = true
+    },
+    closeNewMemberPopup (state) {
+      state.newMemberPopupIsOpen = false
+    },
   }
 })
 
