@@ -8,30 +8,53 @@
         Ajouter un participant
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
-        <input class="text" type="text" name="user_email">
+        <input class="text add-member-input" type="email" name="email">
         <input class="submit" type="submit" value="Envoyer">
       </form>
+      <p v-if="isTouched && !isValid">
+        Cet utilisateur n'a pas été trouvé...
+      </p>
     </div>
 
   </div>
 </template>
 
 <script>
+import TodoAxios from '../../Axios'
+
 export default {
   name: 'NewMemberPopup',
+  data() {
+    return {
+      axios: new TodoAxios(),
+      isValid: false,
+      isTouched: false,
+    }
+  },
   methods: {
-    post(e) {
-      const name = e.target.elements.name.value
-      const workspace_id = e.target.elements.workspace_id.value
-      this.$store.dispatch('storeMember', { name })      
+    async post(e) {
+      const email = e.target.elements.email.value
+      const workspace = this.$store.getters.currentWorkspace()
+      try {
+        const response = await this.axios.addMember(workspace.id, {user_email: email})
+        if (response.status == 200) {
+          const invited = response.data.data
+          workspace.members.push(invited)
+          this.closePopup()
+        }
+      } catch (err) {
+        this.isTouched = true
+        this.isValid = false
+      }
     },
     closePopup() {
       this.$store.commit('closeNewMemberPopup')
     }
   },
   mounted() {
-    const workspaceInput = document.querySelector('#workspace_id')
-    workspaceInput.value = this.$store.state.currentWorkspace.id
+    setTimeout(() => {
+      this.$el.querySelector('.add-member-input').focus()
+    }, 100)
   }
 }
 </script>

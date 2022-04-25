@@ -24,8 +24,9 @@ class AddMemberRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => [
-                'uuid',
+            'user_email' => [
+                'string',
+                'email',
                 'required',
             ]
         ];

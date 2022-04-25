@@ -56,12 +56,7 @@ class UpdateWorkspaceController extends Controller
         }
 
         $validated = $request->validated();
-        $workspace = Workspace::find($workspace_id);
-
-        // NOT FOUND
-        if ( ! $workspace ) {
-            return response()->json([], 404);
-        }
+        $workspace = Workspace::findOrFail($workspace_id);
 
         // NOT AUTHORIZED
         if ( Gate::denies('collaborate', $workspace) ) {
@@ -79,6 +74,7 @@ class UpdateWorkspaceController extends Controller
 
         return response()->json([
             'message' => 'Member added successfully !',
+            'data' => $invited,
         ], 200);
     }
 }
