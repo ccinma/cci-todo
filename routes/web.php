@@ -19,6 +19,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::prefix('user')->as('user.')->middleware('auth')->group(function() {
+    Route::name('show')->middleware('ajax')->get('/', 'User\ReadUserController@show');
+});
+
 /**
  * Route: "/workspace"
  * 
