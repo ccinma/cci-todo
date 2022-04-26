@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UpdateUserImageRequest;
 use Auth;
 
 class UpdateUserController extends Controller
 {
-    public function update(UpdateUserRequest $request) {
+    public function updateImage(UpdateUserImageRequest $request) {
         $imageName = time().'.'.$request->image->extension();
 
         $publicPath = public_path('images');
