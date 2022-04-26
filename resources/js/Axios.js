@@ -16,6 +16,7 @@ export default class TodoAxios {
       store: '/workspace',
       show: (id) => { return '/workspace/' + id },
       addMember: (id) => {return '/workspace/' + id + '/addMember'},
+      removeMember: (id) => {return '/workspace/' + id + '/removeMember'},
       delete: (id) => {return '/workspace/' + id},
     },
     board: {
@@ -80,6 +81,11 @@ export default class TodoAxios {
 
   async addMember(id, data) {
     const response = await this.put(this.routes.workspace.addMember(id), data)
+    return response
+  }
+
+  async removeMember(id, data) {
+    const response = await this.put(this.routes.workspace.removeMember(id), data)
     return response
   }
 

@@ -40,6 +40,7 @@ Route::prefix('workspace')->as('workspace.')->middleware(['auth'])->group(functi
     // UPDATE
     Route::name('update')->middleware('ajax')->put('{workspace}', 'Workspace\UpdateWorkspaceController@update');
     Route::name('addMember')->middleware('ajax')->put('{workspace}/addMember', 'Workspace\UpdateWorkspaceController@addMember');
+    Route::name('removeMember')->middleware('ajax')->put('{workspace}/removeMember', 'Workspace\UpdateWorkspaceController@removeMember');
 
     // DELETE
     Route::name('delete')->middleware('ajax')->delete('{workspace}', 'Workspace\DeleteWorkspaceController@delete');

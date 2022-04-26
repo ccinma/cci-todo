@@ -20,7 +20,6 @@
 </template>
 
 <script>
-  import TodoAxios from '../Axios'
 
   export default {
     data() {
@@ -45,16 +44,28 @@
         this.isAdmin = loggedUser.pivot.isAdmin
       },
 
-      leaveWorkspace() {
-        try {
-          const index = this.workspaceMembers.findIndex(
-            members => members.id === this.userId
-          )
-          this.workspaceMembers.splice(index, 1)
-          console.log(this.workspaceMembers)
+      reset() {
+        const workspaces = this.$store.getters.workspaces()
+        const currentWorkspace = this.$store.getters.currentWorkspace()
 
-          this.$store.dispatch("reset")
-          this.$router.push('/')
+        const index = workspaces.findIndex(
+          workspace => workspace.id === currentWorkspace.id
+        )
+        workspaces.splice(index, 1)
+
+        this.$store.dispatch("reset")
+        this.$router.push('/')
+      },
+
+      async leaveWorkspace() {
+        try {
+          const axios = this.$store.getters.axios()
+          const currentWorkspace = this.$store.getters.currentWorkspace()
+          const response = await axios.removeMember(currentWorkspace.id, {user_id: this.$store.getters.user().id})
+
+          if (response.status === 200) {
+            this.reset()
+          }
         }
         catch(e) {}
       },
@@ -63,16 +74,11 @@
         try {
           const axios = this.$store.getters.axios()
           const currentWorkspace = this.$store.getters.currentWorkspace()
-          const workspaces = this.$store.getters.workspaces()
-
-          await axios.deleteWorkspace(currentWorkspace.id)
+          const response = await axios.deleteWorkspace(currentWorkspace.id)
           
-          const index = workspaces.findIndex(
-            workspace => workspace.id === currentWorkspace.id
-          )
-          workspaces.splice(index, 1)
-          this.$store.dispatch("reset")
-          this.$router.push('/')
+          if (response.status == 204) {
+            this.reset()
+          }
         }
         catch(e) {}
       },

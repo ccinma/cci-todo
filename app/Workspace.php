@@ -64,6 +64,16 @@ class Workspace extends Model
     }
 
     /**
+     * Add a User to the members of the Workspace
+     * 
+     * @return void
+     */
+    public function removeMember(User $user) : void
+    {
+        $this->members()->detach($user->id);
+    }
+
+    /**
      * Set a new admin for the Workspace. The user must already be a member.
      * 
      * @param User $user The user to set admin
