@@ -20,8 +20,6 @@
 </template>
 
 <script>
-import { set } from 'vue/types/umd';
-
   import TodoAxios from '../Axios'
 
   export default {

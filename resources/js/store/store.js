@@ -162,7 +162,6 @@ const todoStore = new Vuex.Store({
     reset( {commit} ) {
       commit('resetCurrents')
       commit('closeSidebar')
-      this.$router.push("/")
     },
     async init( {commit, dispatch, state}, {workspaceId, boardId} ) {
       const userResponse = await axios.getUser()
