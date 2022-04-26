@@ -20,7 +20,13 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('user')->as('user.')->middleware(['auth'])->group(function() {
+
+    // READ
     Route::name('show')->middleware('ajax')->get('/', 'User\ReadUserController@show');
+
+    // UPDATe
+    Route::name('update')->middleware('ajax')->post('{user}/update', 'User\UpdateUserController@update');
+
 });
 
 /**
