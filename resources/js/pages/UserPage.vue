@@ -37,7 +37,7 @@ export default {
   name: 'UserPage',
   data() {
     return {
-      imageSrc: "https://img-19.commentcamarche.net/cI8qqj-finfDcmx6jMK6Vr-krEw=/1500x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg",
+      imageSrc: null,
       userName: this.$store.getters.user().name,
       userId: this.$store.getters.user().id,
       userNameForm: false,
@@ -77,6 +77,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('reset')
+    this.setupImage()
   },
   unmounted() {
     this.$store.commit('openSidebar')
@@ -117,6 +118,7 @@ export default {
       .profile-pic-container {
         width: 10rem;
         height: 10rem;
+        background: $white;
 
         border-radius: 99rem;
         overflow: hidden;
