@@ -24,8 +24,9 @@ Route::prefix('user')->as('user.')->middleware(['auth'])->group(function() {
     // READ
     Route::name('show')->middleware('ajax')->get('/', 'User\ReadUserController@show');
 
-    // UPDATe
+    // UPDATE
     Route::name('updateImage')->middleware('ajax')->post('{user}/updateImage', 'User\UpdateUserController@updateImage');
+    Route::name('updateInfos')->middleware(['ajax', 'xxs.sanitize'])->put('{user}/updateInfos', 'User\UpdateUserController@updateInfos');
 
 });
 

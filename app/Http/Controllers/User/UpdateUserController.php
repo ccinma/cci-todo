@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserImageRequest;
+use App\Http\Requests\UpdateUserInfosRequest;
 use Auth;
 
 class UpdateUserController extends Controller
@@ -28,5 +29,21 @@ class UpdateUserController extends Controller
         return response()->json([
             'message' => 'Image en ligne !'
         ]);
+    }
+
+    public function updateInfos(UpdateUserInfosRequest $request) {
+        $user = Auth::user();
+        $validated = $request->validated();
+
+        if (empty($validated)) {
+            return response()->json(['message' => 'Champs non valides'], 422);
+        }
+
+        if ($validated['name'] === $user->name) {
+            return response()->json([], 304);
+        }
+
+        $user->update($validated);
+        return response()->json(['data' => $user], 200);
     }
 }
