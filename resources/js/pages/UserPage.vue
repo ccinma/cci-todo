@@ -12,7 +12,9 @@
         <div class="profile-pic-container">
           <img :src="imageSrc" alt="Photo de profile">
         </div>
-        <p>{{ userName}}</p>
+        <p v-if="!userNameForm" v-on:click="openFormUserName()">{{ userName}}</p>
+        <input v-if="userNameForm" class="todo-form-text" type="text" v-model="userName">
+        <button v-if="userNameForm" class="todo-btn-round" v-on:click="send">Modifier le nom</button>
       </div>
 
       <h3>Liste des espaces de travail</h3>
@@ -37,6 +39,8 @@ export default {
     return {
       imageSrc: "https://img-19.commentcamarche.net/cI8qqj-finfDcmx6jMK6Vr-krEw=/1500x/smart/b829396acc244fd484c5ddcdcb2b08f3/ccmcms-commentcamarche/20494859.jpg",
       userName: this.$store.getters.user().name,
+      userId: this.$store.getters.user().id,
+      userNameForm: false,
 
       workspaces: this.$store.getters.workspaces(),
       currentWorkspace: this.$store.getters.currentWorkspace(),
@@ -79,7 +83,7 @@ export default {
   },
   destroyed() {
     this.$store.commit('openSidebar')
-  }
+  },
 }
 </script>
 
@@ -132,6 +136,10 @@ export default {
         margin-top: 0.5rem;
 
         cursor: pointer;
+      }
+
+      input, button{
+        margin-top: 0.5rem;
       }
     }
 
