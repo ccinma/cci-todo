@@ -63,15 +63,17 @@
 
       async deleteWorkspace() {
         try {
-          const index = this.$store.state.workspaces.findIndex(
+          const workspaces = this.$store.getters.workspaces()
+          const currentWorkspace = this.$store.getters.currentWorkspace()
+          const index = workspaces.findIndex(
             workspace => workspace.id === currentWorkspace.id
           )
-          const workspaces = this.$store.getters.workspaces()
           workspaces.splice(index, 1)
           this.$store.dispatch("reset")
           this.$router.push('/')
         }
         catch(e) {
+          console.log("rip")
         }
       },
     },
