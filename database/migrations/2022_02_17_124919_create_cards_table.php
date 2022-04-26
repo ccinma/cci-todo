@@ -27,8 +27,8 @@ class CreateCardsTable extends Migration
         });
 
         Schema::table('cards', function (Blueprint $table) {
-            $table->foreign('previous_id')->references('id')->on('cards');
-            $table->foreign('next_id')->references('id')->on('cards');
+            $table->foreign('previous_id')->references('id')->on('cards')->onDelete('SET NULL');
+            $table->foreign('next_id')->references('id')->on('cards')->onDelete('SET NULL');
         });
 
     }

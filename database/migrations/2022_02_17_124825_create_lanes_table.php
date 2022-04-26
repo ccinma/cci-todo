@@ -26,8 +26,8 @@ class CreateLanesTable extends Migration
         });
 
         Schema::table('lanes', function (Blueprint $table) {
-            $table->foreign('previous_id')->references('id')->on('lanes');
-            $table->foreign('next_id')->references('id')->on('lanes');
+            $table->foreign('previous_id')->references('id')->on('lanes')->onDelete("NO ACTION");
+            $table->foreign('next_id')->references('id')->on('lanes')->onDelete("NO ACTION");
         });
 
     }

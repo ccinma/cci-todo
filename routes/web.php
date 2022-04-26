@@ -20,7 +20,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('user')->as('user.')->middleware(['auth'])->group(function() {
+
+    // READ
     Route::name('show')->middleware('ajax')->get('/', 'User\ReadUserController@show');
+
+    // UPDATE
+    Route::name('updateImage')->middleware('ajax')->post('{user}/updateImage', 'User\UpdateUserController@updateImage');
+    Route::name('updateInfos')->middleware(['ajax', 'xxs.sanitize'])->put('{user}/updateInfos', 'User\UpdateUserController@updateInfos');
+
 });
 
 /**
@@ -74,8 +81,8 @@ Route::prefix('lane')->as('lane.')->middleware(['auth'])->group(function() {
     Route::name('show')->middleware('ajax')->get('{lane}', 'Lane\ReadLaneController@show');
     
     // UPDATE
-    Route::name('update')->middleware(['ajax', 'xxs.sanitize'])->put('{lane}', 'Lane\UpdateLaneController@update');
-    Route::name('move')->middleware(['ajax', 'xxs.sanitize'])->put('{lane}/move', 'Lane\UpdateLaneController@move');
+    Route::name('update')->middleware(['ajax'])->put('{lane}', 'Lane\UpdateLaneController@update');
+    Route::name('move')->middleware(['ajax'])->put('{lane}/move', 'Lane\UpdateLaneController@move');
 
     // DELETE
     Route::name('delete')->middleware('ajax')->delete('{lane}', 'Lane\DeleteLaneController@delete');
@@ -86,14 +93,14 @@ Route::prefix('lane')->as('lane.')->middleware(['auth'])->group(function() {
 Route::prefix('card')->as('card.')->middleware(['auth'])->group(function() {
 
     // CREATE
-    Route::name('store')->middleware(['ajax', 'xxs.sanitize'])->post('/', 'Card\CreateCardController@store');
+    Route::name('store')->middleware(['ajax'])->post('/', 'Card\CreateCardController@store');
 
     // READ
     Route::name('show')->middleware('ajax')->get('{card}', 'Card\ReadCardController@show');
 
     // UPDATE
-    Route::name('update')->middleware(['ajax', 'xxs.sanitize'])->put('{card}', 'Card\UpdateCardController@update');
-    Route::name('move')->middleware(['ajax', 'xxs.sanitize'])->put('{card}/move', 'Card\UpdateCardController@move');
+    Route::name('update')->middleware(['ajax'])->put('{card}', 'Card\UpdateCardController@update');
+    Route::name('move')->middleware(['ajax'])->put('{card}/move', 'Card\UpdateCardController@move');
 
     // DELETE
     Route::name('delete')->middleware('ajax')->delete('{card}', 'Card\DeleteCardController@delete');
