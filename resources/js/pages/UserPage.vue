@@ -89,6 +89,8 @@ export default {
 
         border-radius: 99rem;
         overflow: hidden;
+
+        cursor: pointer;
         img {
           width: 100%;
           height: 100%;
@@ -101,6 +103,8 @@ export default {
       p {
         font-size: 1.5rem;
         margin-top: 0.5rem;
+
+        cursor: pointer;
       }
     }
 
