@@ -11,14 +11,18 @@ class UpdateUserController extends Controller
     public function update(UpdateUserRequest $request) {
         $imageName = time().'.'.$request->image->extension();
 
-        $publicPath = public_path('images').DIRECTORY_SEPARATOR;
+        $publicPath = public_path('images');
 
         $user = Auth::user();
         if ($user->picture) {
-            if (!unlink($publicPath.$user->picture)) {}
+            if (file_exists($publicPath.DIRECTORY_SEPARATOR.$user->picture)) {
+                unlink($publicPath.DIRECTORY_SEPARATOR.$user->picture);
+            }
         }
 
-        $user->update(['image' => $publicPath.$imageName]);
+        $user->picture = $imageName;
+        $user->save();
+
         $request->image->move(public_path('images'), $imageName);
    
         return response()->json([
