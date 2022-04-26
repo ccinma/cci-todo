@@ -56,15 +56,17 @@
           this.$store.dispatch("reset")
           this.$router.push('/')
         }
-        catch(e) {
-
-        }
+        catch(e) {}
       },
 
       async deleteWorkspace() {
         try {
-          const workspaces = this.$store.getters.workspaces()
+          const axios = this.$store.getters.axios()
           const currentWorkspace = this.$store.getters.currentWorkspace()
+          const workspaces = this.$store.getters.workspaces()
+
+          await axios.deleteWorkspace(currentWorkspace.id)
+          
           const index = workspaces.findIndex(
             workspace => workspace.id === currentWorkspace.id
           )
@@ -72,9 +74,7 @@
           this.$store.dispatch("reset")
           this.$router.push('/')
         }
-        catch(e) {
-          console.log("rip")
-        }
+        catch(e) {}
       },
     },
   }
