@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 import Dashboard from '../js/components/Dashboard.vue'
-import ChooseWorkspace from '../js/pages/ChooseWorkspace.vue'
+import UserPage from '../js/pages/UserPage.vue'
 import WorkspaceDashboard from '../js/pages/WorkspaceDashboard.vue'
 import BoardPage from '../js/pages/BoardPage.vue'
 import App from '../js/App.vue'
@@ -24,7 +24,7 @@ if ( !! document.querySelector('#app') ) {
   Vue.use(VueRouter);
   
   const routes = [
-    {path: '/', component: ChooseWorkspace},
+    {path: '/', component: UserPage},
     {path: '/workspace/:workspace', component: WorkspaceDashboard},
     {path: '/workspace/:workspace/board/:board', component: BoardPage},
     {path: '/workspace/:workspace/settings', component: Settings},
