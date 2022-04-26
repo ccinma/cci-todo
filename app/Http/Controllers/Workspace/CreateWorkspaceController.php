@@ -16,7 +16,7 @@ class CreateWorkspaceController extends Controller
         $attributes['user_id'] = Auth::user()->id;
 
         $workspace = Workspace::create($attributes);
-        $workspace->addMember(Auth::user());
+        $workspace->addMember(Auth::user(), true);
 
         return response()->json([
             'data' => $workspace

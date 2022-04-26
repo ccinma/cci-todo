@@ -3,7 +3,7 @@
 
     <SideBarWithInfos v-if=" !! workspace " />
     <SideBarEmpty v-if=" ! workspace" />
-    <SideBarChangeWorkspace v-if=" !! workspace" />
+    <SideBarBottom v-if=" !! workspace" />
 
     <button id="toggle-side-bar" :class=" isOpen ? '' : 'flip' " v-on:click.prevent="toggleSidebar">
       <div>
@@ -75,23 +75,6 @@ export default {
     .workspace {
       &-name {
         text-align: center;
-      }
-    }
-
-    .change {
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      padding-bottom: 0.5rem;
-
-      svg {
-        width: auto;
-        height: 1rem;
-        margin-right: 1rem;
-
-        fill: $royalbluedark;
       }
     }
 

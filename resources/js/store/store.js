@@ -8,6 +8,8 @@ const axios = new TodoAxios()
 
 const todoStore = new Vuex.Store({
   state: {
+    axios,
+
     workspaces: [],
     currentWorkspace: null,
     currentBoard: null,
@@ -22,9 +24,16 @@ const todoStore = new Vuex.Store({
     newWorkspacePopupIsOpen: false,
     newLaneFormIsOpen: false,
     sidebarIsOpen: true,
+    loggedUser: null,
   },
 
   getters: {
+    axios: (state) => () => {
+      return state.axios
+    },
+    user: (state) => () => {
+      return state.user
+    },
     workspaces: (state) => () => {
       return state.workspaces
     },
@@ -155,6 +164,9 @@ const todoStore = new Vuex.Store({
       commit('closeSidebar')
     },
     async init( {commit, dispatch, state}, {workspaceId, boardId} ) {
+      const userResponse = await axios.getUser()
+      commit('setUser', {user: userResponse.data.data})
+      
       const response = await axios.getUserWorkspaces()
       if (response.status == 200) {
         const workspaces = response.data.data
@@ -211,6 +223,9 @@ const todoStore = new Vuex.Store({
     storeLane (state, {lane}) {
       state.currentBoard.lanes.push(lane)
       state.currentLanes.push(lane)
+    },
+    setUser(state, { user }) {
+      state.user = user
     },
     setCurrentWorkspace (state, { workspace }) {
       state.currentWorkspace = workspace
