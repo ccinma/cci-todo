@@ -120,10 +120,11 @@ export default {
     },
     sortCards(cards) {
       const sortedArray = []
-      
+
       for (let i = 0; i < cards.length; i++) {
         const previous_id = (i === 0) ? null : sortedArray[sortedArray.length - 1].id
-        const nextCard = cards.find(card => card.previous_id === previous_id)
+
+        const nextCard = cards.find(card => card.previous_id == previous_id)
 
         sortedArray.push(nextCard)
       }
