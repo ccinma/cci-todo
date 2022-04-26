@@ -63,7 +63,7 @@ export default {
       
       const formData = new FormData()
       formData.append('image', image)
-      const response = axios.updateUserImage(formData)
+      const response = axios.updateUserImage(this.$store.getters.user().id, formData)
     },
 
     send() {

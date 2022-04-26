@@ -70,7 +70,7 @@ export default class TodoAxios {
     return response
   }
 
-  async updateUserImage(data) {
+  async updateUserImage(id, data) {
     const response = await this.post(this.routes.user.updateImage(id), data)
     return response
   }
