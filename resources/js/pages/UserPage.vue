@@ -24,7 +24,7 @@
 
       <content-divider />
 
-      <h3>Liste des espaces de travail</h3>
+      <h3>Vos espaces de travail</h3>
       <ul v-if=" workspaces && workspaces.length > 0 ">
         <li v-for="(workspace, index) in workspaces" v-bind:key="'workspace-list-element-'+index" v-on:click.prevent="setWorkspace(workspace.id)">
           <router-link :to="'/workspace/'+workspace.id">
@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     imageSrc() {
-      return this.user.picture ? 'images/' + this.user.picture : null
+      return this.user.picture ? 'images/' + this.user.picture : "/assets/images/logo.png"
     }
   },
   methods: {
@@ -77,11 +77,6 @@ export default {
     },
     chooseFile() {
       this.$el.querySelector('#pp-input').click()
-    },
-    setupImage() {
-      if(this.imageSrc == null) {
-        this.imageSrc = "/assets/images/logo.png"
-      }
     },
     send() {
       this.userNameForm = false;
@@ -115,7 +110,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('reset')
-    this.setupImage()
   },
   unmounted() {
     this.$store.commit('openSidebar')

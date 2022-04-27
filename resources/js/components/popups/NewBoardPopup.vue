@@ -8,7 +8,7 @@
         Nouveau tableau
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
-        <td-input-text name="name" placeholder="Nom du tableau" />
+        <td-input-text id="new-board-input" name="name" placeholder="Nom du tableau" />
         <td-input-submit value="Envoyer" />
       </form>
     </div>
@@ -26,12 +26,17 @@ export default {
     post(e) {
       const name = e.target.elements.name.value
       const workspace = this.$store.getters.currentWorkspace()
-      this.$store.dispatch('storeBoard', { name, workspace_id: workspace.id })      
+      this.$store.dispatch('storeBoard', { name, workspace_id: workspace.id })   
     },
     closePopup() {
       this.$store.commit('closeNewBoardPopup')
     }
   },
+  mounted() {
+    setTimeout(() => {
+      this.$el.querySelector('#new-board-input').focus()
+    }, 100)
+  }
 }
 </script>
 
