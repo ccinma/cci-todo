@@ -3,12 +3,6 @@
     <div class="container">
       <h2>Page de profile</h2>
       <div class="profile">
-        
-        <form @submit.prevent="updatePic">
-          <input type="file" name="image" accept="image/png, image/gif, image/jpeg" id="profile-pic-input" />
-          <input type="submit" value="Valider">
-        </form>
-        
         <div class="profile-pic-container">
           <img :src="imageSrc" alt="Photo de profile">
         </div>
@@ -37,7 +31,7 @@ export default {
   name: 'UserPage',
   data() {
     return {
-      imageSrc: this.$store.getters.user().picture_url,
+      imageSrc: null,
       userName: this.$store.getters.user().name,
       userId: this.$store.getters.user().id,
       userNameForm: false,
@@ -61,18 +55,6 @@ export default {
         this.imageSrc = "/assets/images/logo.png"
       }
     },
-    async updatePic() {
-      const axios = this.$store.getters.axios()
-      const image = this.$el.querySelector('#profile-pic-input').files[0]
-      
-      const formData = new FormData()
-      formData.append('image', image)
-      const response = await axios.updateUserImage(this.$store.getters.user().id, formData)
-
-      this.$store.state.user.picture_url = response.data.data.picture_url
-      
-    },
-
     send() {
 
       this.userNameForm = false;
