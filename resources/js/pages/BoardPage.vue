@@ -19,7 +19,7 @@ export default {
       return this.$store.getters.currentBoard()
     },
     lanes() {
-      return this.$store.getters.currentLanes()
+      return this.board.lanes
     }
   },
   methods: {

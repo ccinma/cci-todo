@@ -31,11 +31,11 @@ class DeleteLaneController extends Controller
         $next = null;
 
         if ( $lane->previous_id ) {
-            $previous = Lane::find($lane->previous_id);
+            $previous = Lane::with('cards')->find($lane->previous_id);
         }
 
         if ( $lane->next_id ) {
-            $next = Lane::find($lane->next_id);
+            $next = Lane::with('cards')->find($lane->next_id);
         }
 
         if ( $previous && $next ) { // Has lanes around
@@ -49,6 +49,11 @@ class DeleteLaneController extends Controller
 
         $lane->delete();
 
-        return response()->json([], 204);
+        return response()->json([
+            'data' => [
+                'previous' => $previous,
+                'next' => $next,
+            ]
+        ], 200);
     }
 }

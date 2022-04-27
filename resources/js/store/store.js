@@ -13,7 +13,6 @@ const todoStore = new Vuex.Store({
     workspaces: [],
     currentWorkspace: null,
     currentBoard: null,
-    currentLanes: null,
 
     initialLoading: true,
     apiCallsQueue: 0,
@@ -42,9 +41,6 @@ const todoStore = new Vuex.Store({
     },
     currentBoard: (state) => () => {
       return state.currentBoard
-    },
-    currentLanes: (state) => () => {
-      return state.currentLanes
     },
     sidebarIsOpen: (state) => () => {
       return state.sidebarIsOpen
@@ -77,18 +73,6 @@ const todoStore = new Vuex.Store({
       const currentBoard = (found) ? await (await axios.getBoard(boardId)).data.data : null
       if (currentBoard) {
         commit('setCurrentBoard', {board: currentBoard})
-        const rawLanesArray = currentBoard.lanes ?? []
-        const sortedLanesArray = []
-        let last_id = null
-        for (let i = 0; i < rawLanesArray.length; i++) {
-          let lane = rawLanesArray.find(lane => lane.previous_id === last_id)
-          if (lane) {
-            last_id = lane.id
-            sortedLanesArray.push(lane)
-            if (!lane.next_id) break
-          }
-        }
-        commit('setCurrentLanes', {lanes: sortedLanesArray})
       }
       commit('decrementApiCallsQueue')
     },
@@ -122,8 +106,8 @@ const todoStore = new Vuex.Store({
       commit('incrementApiCallsQueue')
       const response = await axios.editLane(lane_id, {name})
       if (response.status == 200) {
-        const index = state.currentLanes.findIndex((element) => element.id == lane_id)
-        const currentLanes = state.currentLanes
+        const index = state.currentBoard.lanes.findIndex((element) => element.id == lane_id)
+        const currentLanes = state.currentBoard.lanes
         currentLanes.splice(index, 1, response.data.data)
       }
       commit('decrementApiCallsQueue')
@@ -132,16 +116,26 @@ const todoStore = new Vuex.Store({
       commit('incrementApiCallsQueue')
       const response = await axios.deleteLane(lane_id)
       if (response.status = 200) {
-        const index = state.currentLanes.findIndex((element) => element.id == lane_id)
-        const currentLanes = state.currentLanes
+        const currentLanes = state.currentBoard.lanes
+        const responseData = response.data.data
+        const data = [responseData.previous, responseData.next]
+        data.map((newLane) => {
+          if (newLane) {
+            const index = currentLanes.findIndex(oldLane => oldLane.id == newLane.id)
+            currentLanes.splice(index, 1, newLane)
+          }
+        })
+        const index = currentLanes.findIndex((element) => element.id == lane_id)
         currentLanes.splice(index, 1)
-        commit('setCurrentLanes', {lanes: currentLanes})
+        state.currentBoard.lanes = currentLanes
       }
       commit('decrementApiCallsQueue')
     },
     async moveLane ({commit}, {lane_id, previous_id}) {
       commit('incrementApiCallsQueue')
-      await axios.moveLane(lane_id, {previous_id})
+      try {
+        await axios.moveLane(lane_id, {previous_id})
+      } catch(e) {}
       commit('decrementApiCallsQueue')
     },
     async storeCard ({commit}, {lane, name, description}) {
@@ -149,7 +143,7 @@ const todoStore = new Vuex.Store({
       const response = await axios.storeCard({name, description, lane_id: lane.id})
       if (response.status == 201) {
         const createdCard = response.data.data
-        const currentLane = this.state.currentLanes.find(currentLane => currentLane.id === lane.id)
+        const currentLane = this.state.currentBoard.lanes.find(currentLane => currentLane.id === lane.id)
         currentLane.cards.push(createdCard)
       }
       commit('decrementApiCallsQueue')
@@ -222,7 +216,6 @@ const todoStore = new Vuex.Store({
     },
     storeLane (state, {lane}) {
       state.currentBoard.lanes.push(lane)
-      state.currentLanes.push(lane)
     },
     setUser(state, { user }) {
       state.user = user
@@ -232,9 +225,6 @@ const todoStore = new Vuex.Store({
     },
     setCurrentBoard (state, {board}) {
       state.currentBoard = board
-    },
-    setCurrentLanes (state, {lanes}) {
-      state.currentLanes = lanes
     },
     openNewBoardPopup (state) {
       state.newBoardPopupIsOpen = true

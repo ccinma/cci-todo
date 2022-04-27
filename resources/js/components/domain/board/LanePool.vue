@@ -3,7 +3,7 @@
   <div class="lane-pool-container" v-on:click.prevent="closeForm">
 
     <ul id="lane-pool" class="lane-pool">
-      <li class="lane-pool-element draggable-lane" v-for="lane in lanes" :data-id="lane.id" v-bind:key="'lane-' + lane.id">
+      <li class="lane-pool-element draggable-lane" v-for="lane in sortedLanes" :data-id="lane.id" v-bind:key="'lane-' + lane.id">
         <lane :lane="lane" />
       </li>
     </ul>
@@ -42,12 +42,18 @@ export default {
     dispForm() {
       return this.$store.getters.newLaneFormIsOpen()
     },
+    sortedLanes() {
+      return this.sortLanes(this.lanes)
+    }
   },
   mounted() {
-    this.dragNdrop(this.$store)
+    this.dragNdrop(this.moveLane)
   },
   methods: {
-    dragNdrop(store) {
+    moveLane(lane_id, previous_id) {
+      this.$store.dispatch('moveLane', {lane_id, previous_id: previous_id})
+    },
+    dragNdrop(move) {
       let pool = document.querySelector('#lane-pool')
       new Sortable(pool, {
         handle: '.draggable-lane',
@@ -60,6 +66,7 @@ export default {
           const newIndex = e.newIndex
           const clone = e.clone
           const lane_id = clone.dataset.id
+          
           let previousEl = null
           let previous_id = null
           if (newIndex != 0) {
@@ -68,9 +75,21 @@ export default {
           if (previousEl) {
             previous_id = previousEl.dataset.id
           }
-          store.dispatch('moveLane', {lane_id, previous_id: previous_id})
+          move(lane_id, previous_id)
         }
       })
+    },
+    sortLanes(lanes) {
+      const sortedArray = []
+
+      for (let i = 0; i < lanes.length; i++) {
+        const previous_id = (i === 0) ? null : sortedArray[sortedArray.length - 1].id
+
+        const nextLane = lanes.find(card => card.previous_id == previous_id)
+
+        sortedArray.push(nextLane)
+      }
+      return sortedArray
     },
     toggleForm() {
       if (this.dispForm) {

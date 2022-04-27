@@ -28,6 +28,7 @@ class CreateBoardController extends Controller
         $attributes['user_id'] = Auth::user()->id;
         
         $board = Board::create($attributes);
+        $board->load('lanes');
 
         return response()->json([
             'data' => $board,

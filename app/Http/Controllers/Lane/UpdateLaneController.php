@@ -50,11 +50,8 @@ class UpdateLaneController extends Controller
     }
 
 
-    public function move($lane_id, MoveLaneRequest $request)
-    {
-        $previous = null;
-        $next = null;
 
+    public function move($lane_id, MoveLaneRequest $request) {
         if ( ! Str::isUuid($lane_id) ) {
             return response()->json([], 400);
         }
@@ -67,70 +64,64 @@ class UpdateLaneController extends Controller
 
         $attributes = $request->validated();
 
-        if ( empty($attributes) ) {
+        if ( empty($attributes) || $attributes['previous_id'] == $lane->previous_id ) {
             return response()->json([], 304);
         }
 
-        $data = [];
+        // Fills the gap left by the moved lane
+        if ($lane->previous_id || $lane->next_id) {
+            $previous = ($lane->previous_id) ? Lane::find($lane->previous_id) : null;
+            $next = ($lane->next_id) ? Lane::find($lane->next_id) : null;
+            
+            $previous_id = $previous ? $previous->id : null;
+            $next_id = $next ? $next->id : null;
 
-        // Fills the gap left by the moved lane by connecting the lanes
-        $previousIdBeforeMove = $lane->previous_id;
-        $nextIdBeforeMove = $lane->next_id;
-        $previousBeforeMove = null;
-        $nextBeforeMove = null;
-        if ($previousIdBeforeMove) {
-            $previousBeforeMove = Lane::findOrFail($previousIdBeforeMove);
-            $previousBeforeMove->update(['next_id' => $nextIdBeforeMove]);
-        }
-        if ($nextIdBeforeMove) {
-            $nextBeforeMove = Lane::findOrFail($nextIdBeforeMove);
-            $nextBeforeMove->update(['previous_id' => $previousIdBeforeMove]);
+            if ($previous) $previous->update(['next_id' => $next_id]);
+            if ($next) $next->update(['previous_id' => $previous_id]);
         }
 
-        // Update the new next and previous lanes
-        $previous_id = isset($attributes['previous_id']) ? $attributes['previous_id'] : null;
-
+        // Create new link after moved
+        
+        // Find previous
+        
         $previous = null;
         $next = null;
 
-        // Find the previous and next lanes
-        if ( $previous_id ) {
-            $previous = Lane::findOrFail($previous_id);
-            if ( $previous->next_id ) {
+        if (isset($attributes['previous_id'])) {
+            $previous = Lane::findOrFail($attributes['previous_id']);
+        }
+
+        // Find next if exists
+        if ($previous) {
+            if ($previous->next_id) {
                 $next = Lane::find($previous->next_id);
             }
         } else {
-            $next = Lane::where('previous_id', '=', null)->firstOrFail();
+            $next = Lane::where('board_id', '=', $lane->board->id)->where('previous_id', '=', null)->first();
         }
 
-        $order = [];
-
-        if ( $previous ) {
-            $previous->update([
-                'next_id' => $lane->id,
-            ]);
-            $order['previous_id'] = $previous->id;
-            $data['previous'] = $previous->withoutRelations();
+        // Place the moved lane between the previous and the next ones
+        if ( $previous && $next ) {
+            $previous->update(['next_id' => $lane->id]);
+            $next->update(['previous_id' => $lane->id]);
+            $lane->update(['previous_id' => $previous->id, 'next_id' => $next->id]);
+        } elseif ( $previous ) {
+            $previous->update(['next_id' => $lane->id]);
+            $lane->update(['previous_id' => $previous->id, 'next_id' => null]);
+        } elseif ( $next ) {
+            $next->update(['previous_id' => $lane->id]);
+            $lane->update(['previous_id' => null, 'next_id' => $next->id]);
         } else {
-            $order['previous_id'] = null;
+            $lane->update(['previous_id' => null, 'next_id' => null]);
         }
-
-        if ( $next ) {
-            $next->update([
-                'previous_id' => $lane->id,
-            ]);
-            $order['next_id'] = $next->id;
-            $data['next'] = $next->withoutRelations();
-        } else {
-            $order['next_id'] = null;
-        }
-
-        $lane->update($order);
-        $data['moved'] = $lane->withoutRelations();
 
         return response()->json([
-            'data' => $data
-        ], 200);
+            'data' => [
+                'previous' => $previous,
+                'moved' => $lane,
+                'next' => $next,
+            ],
+        ]);
     }
 
 }
