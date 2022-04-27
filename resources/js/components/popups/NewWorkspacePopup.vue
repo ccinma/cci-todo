@@ -8,7 +8,7 @@
         Nouvel espace de travail
       </h2>
       <form v-on:submit.prevent="post" class="popup-form">
-        <td-input-text name="name" placeholder="Nom du workspace" />
+        <td-input-text id="new-workspace-input" name="name" placeholder="Nom du workspace" />
         <td-input-submit value="Envoyer" />
       </form>
     </div>
@@ -30,7 +30,12 @@ export default {
     closePopup() {
       this.$store.commit('closeNewWorkspacePopup')
     }
-  }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.$el.querySelector('#new-workspace-input').focus()
+    }, 100)
+  },
 }
 </script>
 

@@ -22,12 +22,15 @@ class UpdateUserController extends Controller
         }
 
         $user->picture = $imageName;
+        $user->picture_url = $publicPath.DIRECTORY_SEPARATOR.$imageName;
         $user->save();
 
         $request->image->move(public_path('images'), $imageName);
    
         return response()->json([
-            'message' => 'Image en ligne !'
+            'data' => [
+                'picture' => $user->picture
+            ],
         ]);
     }
 
