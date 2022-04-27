@@ -29,7 +29,7 @@ class UpdateUserController extends Controller
    
         return response()->json([
             'data' => [
-                'picture_url' => $user->picture_url
+                'picture' => $user->picture
             ],
         ]);
     }

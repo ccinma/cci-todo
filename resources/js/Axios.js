@@ -10,7 +10,8 @@ export default class TodoAxios {
   routes = {
     user: {
       show: '/user',
-      updateImage: (id) => {return '/user/' + id + '/updateImage'}
+      updateImage: (id) => {return '/user/' + id + '/updateImage'},
+      updateInfos: (id) => {return '/user/' + id + '/updateInfos'},
     },
     workspace: {
       index: '/workspace',
@@ -72,6 +73,11 @@ export default class TodoAxios {
 
   async updateUserImage(id, data) {
     const response = await this.post(this.routes.user.updateImage(id), data)
+    return response
+  }
+
+  async updateUserInfos(id, data) {
+    const response = await this.put(this.routes.user.updateInfos(id), data)
     return response
   }
   

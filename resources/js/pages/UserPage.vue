@@ -1,15 +1,28 @@
 <template>
   <div id="choose-workspace">
     <div class="container">
-      <h2>Page de profile</h2>
+      <h2 class="text-center">Votre profil</h2>
       <div class="profile">
-        <div class="profile-pic-container">
+
+        <div class="pp-form-container">
+          <form @submit.prevent >
+            <input type="file" name="image" id="pp-input" @change="updatePP">
+          </form>
+        </div>
+        <div class="profile-pic-container" @click.prevent="chooseFile" title="Changer image de profil">
           <img :src="imageSrc" alt="Photo de profile">
         </div>
-        <p v-if="!userNameForm" v-on:click="openFormUserName()">{{ userName}}</p>
-        <input v-if="userNameForm" class="todo-form-text" type="text" v-model="userName">
-        <button v-if="userNameForm" class="todo-btn-round" v-on:click="send">Modifier le nom</button>
+
+        <p v-if="!userNameForm" v-on:click="openFormUserName()">{{ user.name}}</p>
+        <form v-if="userNameForm" @submit.prevent="changeUserName">
+
+          <td-input-text :value="user.name" id="username-input" />
+          <td-input-submit class="todo-btn-round" value="Modifier le nom" />
+
+        </form>
       </div>
+
+      <content-divider />
 
       <h3>Liste des espaces de travail</h3>
       <ul v-if=" workspaces && workspaces.length > 0 ">
@@ -27,17 +40,26 @@
 </template>
 
 <script>
+import ContentDivider from '../components/UI/ContentDivider.vue'
+import TdInputSubmit from '../components/UI/TdInputSubmit.vue'
+import TdInputText from '../components/UI/TdInputText.vue'
+
 export default {
+  components: { ContentDivider, TdInputText, TdInputSubmit },
   name: 'UserPage',
   data() {
     return {
-      imageSrc: null,
-      userName: this.$store.getters.user().name,
+      user: this.$store.getters.user(),
       userId: this.$store.getters.user().id,
       userNameForm: false,
 
       workspaces: this.$store.getters.workspaces(),
       currentWorkspace: this.$store.getters.currentWorkspace(),
+    }
+  },
+  computed: {
+    imageSrc() {
+      return this.user.picture ? 'images/' + this.user.picture : null
     }
   },
   methods: {
@@ -50,14 +72,45 @@ export default {
     openFormUserName() {
       this.userNameForm = true;
     },
+    closeFormUserName() {
+      this.userNameForm = false;
+    },
+    chooseFile() {
+      this.$el.querySelector('#pp-input').click()
+    },
     setupImage() {
       if(this.imageSrc == null) {
         this.imageSrc = "/assets/images/logo.png"
       }
     },
     send() {
-
       this.userNameForm = false;
+    },
+    async updatePP() {
+      const axios = this.$store.getters.axios()
+      const image = this.$el.querySelector('#pp-input').files[0]
+      
+      const formData = new FormData()
+      formData.append('image', image)
+      const response = await axios.updateUserImage(this.$store.getters.user().id, formData)
+
+      if (response.status === 200) {
+        const user = this.$store.getters.user()
+        user.picture = response.data.data.picture
+        this.$store.state.user = user
+      }
+    },
+    async changeUserName() {
+      const axios = this.$store.getters.axios()
+      const name = this.$el.querySelector('#username-input').value
+
+      const response = await axios.updateUserInfos(this.user.id, {name})
+      if (response.status === 200) {
+        const user = this.$store.getters.user()
+        user.name = name
+        this.$store.state.user = user
+        this.closeFormUserName()
+      }
     },
   },
   mounted() {
@@ -73,7 +126,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "resources/sass/_breakpoints.scss";
 @import "resources/sass/_variables.scss";
 @import "resources/sass/_colors.scss";
@@ -83,6 +136,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .text-center {
+    text-align: center;
+  }
+
+  .pp-form-container {
+    display: none;
+  }
 
   .container {
     background: rgba( 255, 255, 255, 0.5 );
