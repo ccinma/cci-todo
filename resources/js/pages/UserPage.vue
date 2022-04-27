@@ -37,7 +37,7 @@ export default {
   name: 'UserPage',
   data() {
     return {
-      imageSrc: null,
+      imageSrc: this.$store.getters.user().picture_url,
       userName: this.$store.getters.user().name,
       userId: this.$store.getters.user().id,
       userNameForm: false,
@@ -61,13 +61,16 @@ export default {
         this.imageSrc = "/assets/images/logo.png"
       }
     },
-    updatePic() {
+    async updatePic() {
       const axios = this.$store.getters.axios()
       const image = this.$el.querySelector('#profile-pic-input').files[0]
       
       const formData = new FormData()
       formData.append('image', image)
-      const response = axios.updateUserImage(this.$store.getters.user().id, formData)
+      const response = await axios.updateUserImage(this.$store.getters.user().id, formData)
+
+      this.$store.state.user.picture_url = response.data.data.picture_url
+      
     },
 
     send() {
